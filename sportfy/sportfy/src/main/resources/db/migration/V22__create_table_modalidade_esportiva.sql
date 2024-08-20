@@ -1,0 +1,8 @@
+CREATE TABLE modalidade_esportiva (
+	id_modalidade_esportiva INT AUTO_INCREMENT PRIMARY KEY,
+	nome VARCHAR(50) NOT NULL,
+	descricao VARCHAR(255) NOT NULL,
+	foto VARCHAR(255),
+	data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	ativo BOOLEAN DEFAULT TRUE
+);
