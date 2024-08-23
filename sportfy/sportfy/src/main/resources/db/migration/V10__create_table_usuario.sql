@@ -9,5 +9,7 @@ CREATE TABLE usuario (
 	data_nascimento DATE,
 	foto VARCHAR(255),
 	data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	ativo BOOLEAN DEFAULT TRUE
+	ativo BOOLEAN DEFAULT TRUE,
+	id_permissao INT NOT NULL,
+	CONSTRAINT fk_usuario_permissao FOREIGN KEY (id_permissao) REFERENCES usuario(id_permissao),
 );

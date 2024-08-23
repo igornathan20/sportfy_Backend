@@ -1,3 +1,4 @@
+// PARTE DO IGOR // // PARTE DO IGOR // // PARTE DO IGOR // // PARTE DO IGOR // // PARTE DO IGOR //
 package com.sportfy.sportfy.models;
 
 import jakarta.persistence.*;
@@ -66,3 +67,80 @@ public class Usuario implements UserDetails, Serializable {
         return UserDetails.super.isEnabled();
     }
 }
+// PARTE DO IGOR // // PARTE DO IGOR // // PARTE DO IGOR // // PARTE DO IGOR // // PARTE DO IGOR //
+// PARTE DO MATHEUS // // PARTE DO MATHEUS // // PARTE DO MATHEUS // // PARTE DO MATHEUS // // PARTE DO MATHEUS //
+// package com.sportfy.sportfy.models;
+
+// import java.io.Serializable;
+// import jakarta.persistence.*;
+
+// import lombok.AllArgsConstructor;
+// import lombok.Getter;
+// import lombok.NoArgsConstructor;
+// import lombok.Setter;
+
+// import java.time.LocalDate;
+// import java.time.OffsetDateTime;
+
+// import org.hibernate.annotations.CreationTimestamp;
+
+// @Entity
+// @Table(name="usuario")
+// @NoArgsConstructor
+// @AllArgsConstructor
+// public class Usuario implements Serializable {
+//     @Id
+//     @GeneratedValue(strategy=GenerationType.IDENTITY)
+//     @Column(name="id_usuario")
+//     @Setter @Getter
+//     private Long idUsuario;
+
+//     @Column(name="nome_usuario", unique = true)
+//     @Setter @Getter
+//     private String nomeUsuario;
+
+//     @Column(name="email", unique = true)
+//     @Setter @Getter
+//     private String email;
+
+//     @Column(name="senha", nullable = false)
+//     @Setter @Getter
+//     private String senha;
+
+//     @Column(name="nome", nullable = false)
+//     @Setter @Getter
+//     private String nome;
+
+//     @Column(name="cpf", unique = true)
+//     @Setter @Getter
+//     private String cpf;
+
+//     @Column(name="telefone")
+//     @Setter @Getter
+//     private String telefone;
+
+//     @Temporal(TemporalType.DATE)
+//     @Column(name="data_nascimento", nullable = false)
+//     @Setter @Getter
+//     private LocalDate dataNascimento;
+
+//     @Column(name="foto")
+//     @Setter @Getter
+//     private String foto;
+
+//     @CreationTimestamp
+//     @Temporal(TemporalType.TIMESTAMP)
+//     @Column(name="data_criacao", insertable = false, updatable = false, nullable = false)
+//     @Setter @Getter
+//     private OffsetDateTime dataCriacao;
+
+//     @Column(name="ativo", insertable = false)
+//     @Setter @Getter
+//     private boolean ativo;
+
+//     @ManyToOne(fetch=FetchType.EAGER)
+//     @JoinColumn(name="id_permissao")
+//     @Setter @Getter
+//     private Permissao permissao;
+// }
+// PARTE DO MATHEUS // // PARTE DO MATHEUS // // PARTE DO MATHEUS // // PARTE DO MATHEUS // // PARTE DO MATHEUS //
