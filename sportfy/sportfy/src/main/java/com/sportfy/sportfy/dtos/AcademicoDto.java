@@ -1,6 +1,6 @@
 package com.sportfy.sportfy.dtos;
 
-import com.sportfy.sportfy.models.Roles;
+import com.sportfy.sportfy.enums.TipoPermissao;
 import java.time.LocalDate;
 
 public record AcademicoDto(
@@ -12,6 +12,6 @@ public record AcademicoDto(
     String cpf,
     String telefone,
     LocalDate dataCriacao,
-    Roles userRole
+    TipoPermissao permissao
 ) {
 }

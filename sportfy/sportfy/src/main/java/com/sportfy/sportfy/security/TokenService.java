@@ -24,7 +24,7 @@ public class TokenService {
             String token = JWT.create()
                     .withIssuer("sportfy")
                     .withSubject(usuario.getUsername())
-                    .withClaim("role", usuario.getUserRole().name())
+                    .withClaim("role", usuario.getPermissao().getTipoPermissao().name())
                     .withExpiresAt(dataExpiracao())
                     .sign(algoritmo);
             return token;

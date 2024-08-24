@@ -1,5 +1,9 @@
 package com.sportfy.sportfy.dtos;
 
+import java.time.LocalDate;
+
+import com.sportfy.sportfy.enums.TipoPermissao;
+
 public record AdministradorDto(
     Long id,
     String username,
@@ -8,5 +12,7 @@ public record AdministradorDto(
     String nome,
     String cpf,
     String telefone,
-    int userRole
+    LocalDate dataNascimento,
+    String foto,
+    TipoPermissao permissao
 ){}

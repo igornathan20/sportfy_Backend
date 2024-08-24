@@ -1,15 +1,15 @@
 package com.sportfy.sportfy.controllers;
 
 import com.sportfy.sportfy.dtos.AdministradorDto;
+import com.sportfy.sportfy.exeptions.PermissaoNaoExisteException;
 import com.sportfy.sportfy.exeptions.RoleNaoPermitidaException;
 import com.sportfy.sportfy.exeptions.UsuarioJaExisteException;
 import com.sportfy.sportfy.services.AdministradorService;
 import jakarta.annotation.security.PermitAll;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +33,9 @@ public class AdministradorController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         } catch (RoleNaoPermitidaException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        } catch (Exception e) {
+        } catch(PermissaoNaoExisteException e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        } catch(Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
