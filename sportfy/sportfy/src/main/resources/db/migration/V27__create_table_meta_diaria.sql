@@ -2,7 +2,7 @@ CREATE TABLE meta_diaria (
 	id_meta_diaria INT AUTO_INCREMENT PRIMARY KEY,
 	titulo VARCHAR(50) NOT NULL,
 	objetivo VARCHAR(50) NOT NULL,
-	quantidade_concluido INT NOT NULL,
+	quantidade_concluido INT DEFAULT 0,
 	progresso_atual INT DEFAULT 0,
 	progresso_maximo INT NOT NULL,
 	progresso_item VARCHAR(30) NOT NULL,
