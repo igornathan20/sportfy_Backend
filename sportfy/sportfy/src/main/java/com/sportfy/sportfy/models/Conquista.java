@@ -1,6 +1,7 @@
 package com.sportfy.sportfy.models;
 
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -10,32 +11,30 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.OffsetDateTime;
-
 @Entity
-@Table(name="curtida_publicacao")
+@Table(name="conquista")
 @NoArgsConstructor
 @AllArgsConstructor
-public class CurtidaPublicacao implements Serializable {
+public class Conquista implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name="id_curtida_publicacao")
+    @Column(name="id_conquista")
     @Setter @Getter
-    private Long idCurtidaPublicacao;
+    private Long idConquista;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="data_curtida", insertable = false, updatable = false, nullable = false)
+    @Column(name="data_conquista", insertable = false, updatable = false, nullable = false)
     @Setter @Getter
-    private OffsetDateTime dataCurtida;
+    private OffsetDateTime dataConquista;
 
     @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="id_publicacao", updatable = false, nullable = false)
+    @JoinColumn(name="id_academico", updatable = false, nullable = false)
     @Setter @Getter
-    private Publicacao publicacao;
+    private Academico academico;
 
     @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="id_usuario", updatable = false, nullable = false)
+    @JoinColumn(name="id_meta_esportiva", updatable = false, nullable = false)
     @Setter @Getter
-    private Usuario usuario;
+    private MetaEsportiva metaEsportiva;
 }

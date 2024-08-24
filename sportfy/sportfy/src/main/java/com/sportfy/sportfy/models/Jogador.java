@@ -9,23 +9,31 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name="academico_notificacao")
+@Table(name="jogador")
 @NoArgsConstructor
 @AllArgsConstructor
-public class AcademicoNotificacao implements Serializable {
+public class Jogador implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name="id_academico_notificacao")
+    @Column(name="id_jogador")
     @Setter @Getter
-    private Long idAcademicoNotificacao;
+    private Long idJogador;
 
-    @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="id_notificacao", updatable = false, nullable = false)
+    @Column(name="pontuacao", insertable = false)
     @Setter @Getter
-    private Notificacao notificacao;
+    private int pontuacao;
+
+    @Column(name="melhor_jogador", insertable = false)
+    @Setter @Getter
+    private int melhorJogador;
 
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="id_academico", updatable = false, nullable = false)
     @Setter @Getter
     private Academico academico;
+
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="id_time_partida", updatable = false, nullable = false)
+    @Setter @Getter
+    private TimePartida timePartida;
 }

@@ -1,6 +1,7 @@
 package com.sportfy.sportfy.models;
 
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -10,43 +11,36 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.OffsetDateTime;
-
 @Entity
-@Table(name="apoio_saude")
+@Table(name="modalidade_esportiva")
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApoioSaude implements Serializable {
+public class ModalidadeEsportiva implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name="id_apoio_saude")
+    @Column(name="id_modalidade_esportiva")
     @Setter @Getter
-    private Long idApoioSaude;
+    private Long idModalidadeEsportiva;
 
     @Column(name="nome", nullable = false)
     @Setter @Getter
     private String nome;
 
-    @Column(name="email")
-    @Setter @Getter
-    private String email;
-
-    @Column(name="telefone")
-    @Setter @Getter
-    private String telefone;
-
     @Column(name="descricao", nullable = false)
     @Setter @Getter
     private String descricao;
 
+    @Column(name="foto")
+    @Setter @Getter
+    private String foto;
+
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="data_publicacao", insertable = false, updatable = false, nullable = false)
+    @Column(name="data_criacao", insertable = false, updatable = false, nullable = false)
     @Setter @Getter
-    private OffsetDateTime dataPublicacao;
+    private OffsetDateTime dataCriacao;
 
-    @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="id_administrador", updatable = false, nullable = false)
+    @Column(name="ativo", insertable = false)
     @Setter @Getter
-    private Administrador administrador;
+    private boolean ativo;
 }
