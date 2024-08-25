@@ -7,7 +7,7 @@ public record EnderecoDto (
     String bairro,
     String rua
 ) {
-    public static EnderecoDto fromApiDto(EnderecoApiViaCepDto enderecoApiViaCepDto) {
+    public static EnderecoDto fromApiViaCepDto(EnderecoApiViaCepDto enderecoApiViaCepDto) {
         return new EnderecoDto(
             enderecoApiViaCepDto.cep(),
             enderecoApiViaCepDto.uf(),

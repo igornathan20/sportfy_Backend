@@ -52,10 +52,4 @@ public class Academico implements Serializable {
         this.usuario.setFoto(academicoDto.foto());
     }
 
-    public void inativarUsuario() {
-        if (this.usuario != null) {
-            this.usuario.inativar();
-        }
-    }
-
 }

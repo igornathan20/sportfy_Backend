@@ -50,10 +50,4 @@ public class Administrador implements Serializable {
         this.usuario.setFoto(administradorDto.foto());
     }
 
-    public void inativarUsuario() {
-        if (this.usuario != null) {
-            this.usuario.inativar();
-        }
-    }
-
 }

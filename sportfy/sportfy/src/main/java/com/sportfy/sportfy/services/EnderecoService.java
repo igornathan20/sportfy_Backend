@@ -35,7 +35,7 @@ public class EnderecoService {
             throw new CepNaoExisteException("CEP não existe!");
         } 
 
-        return EnderecoDto.fromApiDto(enderecoApiDto);
+        return EnderecoDto.fromApiViaCepDto(enderecoApiDto);
     }
 
 }

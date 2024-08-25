@@ -1,8 +1,8 @@
 package com.sportfy.sportfy.services;
 
 import com.sportfy.sportfy.dtos.AcademicoDto;
-import com.sportfy.sportfy.dtos.UserResponseDto;
 import com.sportfy.sportfy.enums.TipoPermissao;
+import com.sportfy.sportfy.exeptions.AcademicoNaoExisteException;
 import com.sportfy.sportfy.exeptions.EmailInvalidoException;
 import com.sportfy.sportfy.exeptions.PermissaoNaoExisteException;
 import com.sportfy.sportfy.exeptions.UsuarioJaExisteException;
@@ -38,7 +38,7 @@ public class AcademicoService {
     @Autowired
     private PermissaoRepository permissaoRepository;
 
-    public UserResponseDto cadastrar(AcademicoDto academicoDto) throws UsuarioJaExisteException, EmailInvalidoException, PermissaoNaoExisteException {
+    public AcademicoDto cadastrar(AcademicoDto academicoDto) throws UsuarioJaExisteException, EmailInvalidoException, PermissaoNaoExisteException {
         Optional<Usuario> existUsuario = usuarioRepository.findByUsernameOrEmailOrCpf(academicoDto.username().toLowerCase(), academicoDto.email().toLowerCase(), academicoDto.cpf());
         if (existUsuario.isPresent()) {
             throw new UsuarioJaExisteException("Usuario ja existe!");
@@ -62,13 +62,20 @@ public class AcademicoService {
                     System.err.println("Erro ao enviar email: " + e.getMessage());
                 }
                 
-                return new UserResponseDto(createdUser.getUsuario().getIdUsuario(), createdUser.getUsuario().getUsername(), "ROLE_" + createdUser.getUsuario().getPermissao().getTipoPermissao().name());
+                return AcademicoDto.fromAcademicoBD(createdUser);
             } else {
                 throw new PermissaoNaoExisteException(String.format("Permissao %s nao existe no banco de dados!", TipoPermissao.ACADEMICO));
             }
         } else {
             throw new EmailInvalidoException("Email invalido!");
         }
+    }
+
+    public AcademicoDto inativar(Long idAcademico) throws AcademicoNaoExisteException {
+        return academicoRepository.findById(idAcademico).map(academicoBD -> {
+            academicoBD.getUsuario().inativar();
+            return AcademicoDto.fromAcademicoBD(academicoRepository.save(academicoBD));
+        }).orElseThrow(() -> new AcademicoNaoExisteException("Academico não existe!"));
     }
 
     public boolean isEmailFromUfpr(String email) {

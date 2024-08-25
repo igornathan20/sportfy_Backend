@@ -3,6 +3,7 @@ package com.sportfy.sportfy.services;
 import com.sportfy.sportfy.dtos.AdministradorDto;
 import com.sportfy.sportfy.dtos.UserResponseDto;
 import com.sportfy.sportfy.enums.TipoPermissao;
+import com.sportfy.sportfy.exeptions.AdministradorNaoExisteException;
 import com.sportfy.sportfy.exeptions.PermissaoNaoExisteException;
 import com.sportfy.sportfy.exeptions.RoleNaoPermitidaException;
 import com.sportfy.sportfy.exeptions.UsuarioJaExisteException;
@@ -63,6 +64,13 @@ public class AdministradorService {
         } else {
             throw new PermissaoNaoExisteException(String.format("Permissao %s nao existe no banco de dados!", administradorDto.permissao()));
         }
+    }
+
+    public AdministradorDto inativar(Long idAdministrador) throws AdministradorNaoExisteException {
+        return administradorRepository.findById(idAdministrador).map(administradorBD -> {
+            administradorBD.getUsuario().inativar();
+            return AdministradorDto.fromAdministradorBD(administradorRepository.save(administradorBD));
+        }).orElseThrow(() -> new AdministradorNaoExisteException("Administrador não existe!"));
     }
 
 }
