@@ -4,6 +4,7 @@ import com.sportfy.sportfy.dtos.AcademicoDto;
 import com.sportfy.sportfy.enums.TipoPermissao;
 import com.sportfy.sportfy.exeptions.AcademicoNaoExisteException;
 import com.sportfy.sportfy.exeptions.EmailInvalidoException;
+import com.sportfy.sportfy.exeptions.ListaAcademicosVaziaException;
 import com.sportfy.sportfy.exeptions.PermissaoNaoExisteException;
 import com.sportfy.sportfy.exeptions.UsuarioJaExisteException;
 import com.sportfy.sportfy.models.Academico;
@@ -18,7 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AcademicoService {
@@ -52,8 +55,7 @@ public class AcademicoService {
                 novoAcademico.cadastrar(academicoDto);
                 novoAcademico.getUsuario().setPassword(passwordEncoder.encode(senha));
                 novoAcademico.getUsuario().setPermissao(permissao.get());
-                Academico createdUser = academicoRepository.save(novoAcademico);
-
+                Academico academicoCriado = academicoRepository.save(novoAcademico);
                 try {
                     String mensagem = "Bem vindo ao Sportfy! acesse a sua conta com o username cadastrado e a sua senha: \n\n" + senha +
                     "\n\n\nBora se movimentar e fazer amigos?\n o Sportfy irá te ajudar!";
@@ -61,8 +63,7 @@ public class AcademicoService {
                 } catch (Exception e) {
                     System.err.println("Erro ao enviar email: " + e.getMessage());
                 }
-                
-                return AcademicoDto.fromAcademicoBD(createdUser);
+                return AcademicoDto.fromAcademicoBD(academicoCriado);
             } else {
                 throw new PermissaoNaoExisteException(String.format("Permissao %s nao existe no banco de dados!", TipoPermissao.ACADEMICO));
             }
@@ -74,8 +75,19 @@ public class AcademicoService {
     public AcademicoDto inativar(Long idAcademico) throws AcademicoNaoExisteException {
         return academicoRepository.findById(idAcademico).map(academicoBD -> {
             academicoBD.getUsuario().inativar();
-            return AcademicoDto.fromAcademicoBD(academicoRepository.save(academicoBD));
+            Academico academicoInativado = academicoRepository.save(academicoBD);
+            return AcademicoDto.fromAcademicoBD(academicoInativado);
         }).orElseThrow(() -> new AcademicoNaoExisteException("Academico não existe!"));
+    }
+
+    public List<AcademicoDto> listar() throws ListaAcademicosVaziaException {
+        Optional<List<Academico>> listaAcademicoBD = academicoRepository.findByUsuarioAtivo(true);
+        if (listaAcademicoBD.isPresent()) {
+            List<AcademicoDto> listaAcademicoDto = listaAcademicoBD.get().stream().map(academicoBD -> AcademicoDto.fromAcademicoBD(academicoBD)).collect(Collectors.toList());
+            return listaAcademicoDto;
+        } else {
+            throw new ListaAcademicosVaziaException("Lista de acadêmicos vazia!");
+        }
     }
 
     public boolean isEmailFromUfpr(String email) {

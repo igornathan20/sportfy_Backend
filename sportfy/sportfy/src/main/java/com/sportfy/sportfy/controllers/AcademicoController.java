@@ -3,15 +3,20 @@ package com.sportfy.sportfy.controllers;
 import com.sportfy.sportfy.dtos.AcademicoDto;
 import com.sportfy.sportfy.exeptions.AcademicoNaoExisteException;
 import com.sportfy.sportfy.exeptions.EmailInvalidoException;
+import com.sportfy.sportfy.exeptions.ListaAcademicosVaziaException;
 import com.sportfy.sportfy.exeptions.PermissaoNaoExisteException;
 import com.sportfy.sportfy.exeptions.UsuarioJaExisteException;
 import com.sportfy.sportfy.services.AcademicoService;
 
 import lombok.*;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -52,6 +57,19 @@ public class AcademicoController {
         } catch (AcademicoNaoExisteException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch(Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/listar")
+    //@PreAuthorize("hasRole('ROLE_ACADEMICO')")
+    public ResponseEntity<?> listar() {
+        try {
+            List<AcademicoDto> academicoLista = academicoService.listar();
+            return ResponseEntity.status(HttpStatus.OK).body(academicoLista);
+        } catch (ListaAcademicosVaziaException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

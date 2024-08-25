@@ -1,5 +1,6 @@
 package com.sportfy.sportfy.repositories;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,4 +15,5 @@ public interface AcademicoRepository extends JpaRepository<Academico, Long> {
     Optional<Academico> findByUsuarioEmail(String email);
     Optional<Academico> findByUsuarioCpf(String cpf);
     Optional<Academico> findByUsuarioUsernameOrUsuarioEmailOrUsuarioCpf(String username, String email, String cpf);
+    Optional<List<Academico>> findByUsuarioAtivo(boolean ativo);
 }

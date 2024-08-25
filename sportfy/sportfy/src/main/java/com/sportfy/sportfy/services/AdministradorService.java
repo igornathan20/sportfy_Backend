@@ -1,9 +1,9 @@
 package com.sportfy.sportfy.services;
 
 import com.sportfy.sportfy.dtos.AdministradorDto;
-import com.sportfy.sportfy.dtos.UserResponseDto;
 import com.sportfy.sportfy.enums.TipoPermissao;
 import com.sportfy.sportfy.exeptions.AdministradorNaoExisteException;
+import com.sportfy.sportfy.exeptions.ListaAdministradoresVaziaException;
 import com.sportfy.sportfy.exeptions.PermissaoNaoExisteException;
 import com.sportfy.sportfy.exeptions.RoleNaoPermitidaException;
 import com.sportfy.sportfy.exeptions.UsuarioJaExisteException;
@@ -18,7 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AdministradorService {
@@ -35,7 +37,7 @@ public class AdministradorService {
     @Autowired
     private PermissaoRepository permissaoRepository;
 
-    public UserResponseDto cadastrar(AdministradorDto administradorDto) throws UsuarioJaExisteException, RoleNaoPermitidaException, PermissaoNaoExisteException {
+    public AdministradorDto cadastrar(AdministradorDto administradorDto) throws UsuarioJaExisteException, RoleNaoPermitidaException, PermissaoNaoExisteException {
         Optional<Usuario> existUsuario = usuarioRepository.findByUsernameOrEmailOrCpf(administradorDto.username().toLowerCase(), administradorDto.email().toLowerCase(), administradorDto.cpf());
         if (existUsuario.isPresent()) {
             throw new UsuarioJaExisteException("Usuario ja existe!");
@@ -58,9 +60,8 @@ public class AdministradorService {
             novoAdministrador.cadastrar(administradorDto);
             novoAdministrador.getUsuario().setPassword(passwordEncoder.encode(administradorDto.password()));
             novoAdministrador.getUsuario().setPermissao(permissao.get());
-            Administrador createdUser = administradorRepository.save(novoAdministrador);
-            
-            return new UserResponseDto(createdUser.getUsuario().getIdUsuario(), createdUser.getUsuario().getUsername(), "ROLE_" + createdUser.getUsuario().getPermissao().getTipoPermissao().name());
+            Administrador administradorCriado = administradorRepository.save(novoAdministrador);
+            return AdministradorDto.fromAdministradorBD(administradorCriado);
         } else {
             throw new PermissaoNaoExisteException(String.format("Permissao %s nao existe no banco de dados!", administradorDto.permissao()));
         }
@@ -69,8 +70,19 @@ public class AdministradorService {
     public AdministradorDto inativar(Long idAdministrador) throws AdministradorNaoExisteException {
         return administradorRepository.findById(idAdministrador).map(administradorBD -> {
             administradorBD.getUsuario().inativar();
-            return AdministradorDto.fromAdministradorBD(administradorRepository.save(administradorBD));
+            Administrador administradorInativado = administradorRepository.save(administradorBD);
+            return AdministradorDto.fromAdministradorBD(administradorInativado);
         }).orElseThrow(() -> new AdministradorNaoExisteException("Administrador não existe!"));
+    }
+
+    public List<AdministradorDto> listar() throws ListaAdministradoresVaziaException {
+        Optional<List<Administrador>> listaAdministradorBD = administradorRepository.findByUsuarioAtivo(true);
+        if (listaAdministradorBD.isPresent()) {
+            List<AdministradorDto> listaAdministradorDto = listaAdministradorBD.get().stream().map(administradorBD -> AdministradorDto.fromAdministradorBD(administradorBD)).collect(Collectors.toList());
+            return listaAdministradorDto;
+        } else {
+            throw new ListaAdministradoresVaziaException("Lista de administradores vazia!");
+        }
     }
 
 }

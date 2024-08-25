@@ -1,5 +1,6 @@
 package com.sportfy.sportfy.repositories;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,4 +15,5 @@ public interface AdministradorRepository extends JpaRepository<Administrador,Lon
     Optional<Administrador> findByUsuarioEmail(String email);
     Optional<Administrador> findByUsuarioCpf(String cpf);
     Optional<Administrador> findByUsuarioUsernameOrUsuarioEmailOrUsuarioCpf(String username, String email, String cpf);
+    Optional<List<Administrador>> findByUsuarioAtivo(boolean ativo);
 }
