@@ -2,19 +2,40 @@ package com.sportfy.sportfy.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.sportfy.sportfy.dtos.EnderecoApiDto;
+import com.sportfy.sportfy.dtos.EnderecoDto;
 import com.sportfy.sportfy.exeptions.CepInvalidoException;
 import com.sportfy.sportfy.exeptions.CepNaoExisteException;
-import com.sportfy.sportfy.util.ConsultarEndereco;
 
 @Service
 public class EnderecoService {
 
     @Autowired
-    private ConsultarEndereco consultarEndereco;
+    private RestTemplate restTemplate;
 
-    public EnderecoApiDto consultar(String cep) throws CepNaoExisteException, CepInvalidoException {
-        return consultarEndereco.consultarEndereco(cep);
+    private static final String CEP_PATTERN = "\\d{8}";
+    private static final String BASE_URL = "https://viacep.com.br/ws/";
+
+    public EnderecoDto consultar(String cep) throws CepNaoExisteException, CepInvalidoException {
+        if (!cep.matches(CEP_PATTERN)) {
+            throw new CepInvalidoException("CEP inválido!");
+        }
+        String url = BASE_URL + cep + "/json/";
+        EnderecoApiDto enderecoApiDto = null;
+
+        try {
+            enderecoApiDto = restTemplate.getForObject(url, EnderecoApiDto.class);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao consultar o serviço de CEP: " + e.getMessage(), e);
+        }
+
+        if (enderecoApiDto == null || enderecoApiDto.cep() == null || enderecoApiDto.cep().isEmpty()) {
+            throw new CepNaoExisteException("CEP não existe!");
+        } 
+
+        return EnderecoDto.fromApiDto(enderecoApiDto);
     }
+
 }

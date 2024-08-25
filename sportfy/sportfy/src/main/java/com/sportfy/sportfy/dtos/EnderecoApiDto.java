@@ -1,27 +1,12 @@
 package com.sportfy.sportfy.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+public record EnderecoApiDto (
+    @JsonProperty("cep") String cep,
+    @JsonProperty("uf") String uf,
+    @JsonProperty("localidade") String cidade,
+    @JsonProperty("bairro") String bairro,
+    @JsonProperty("logradouro") String rua
+) {
 
-import lombok.*;
-
-public class EnderecoApiDto {
-    @JsonProperty("cep")
-    @Setter @Getter
-    private String cep;
-
-    @JsonProperty("uf")
-    @Setter @Getter
-    private String uf;
-
-    @JsonProperty("localidade")
-    @Setter @Getter
-    private String cidade;
-
-    @JsonProperty("bairro")
-    @Setter @Getter
-    private String bairro;
-
-    @JsonProperty("logradouro")
-    @Setter @Getter
-    private String rua;
 }

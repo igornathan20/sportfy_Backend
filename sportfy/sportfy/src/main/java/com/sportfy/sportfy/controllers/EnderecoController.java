@@ -12,7 +12,6 @@ import com.sportfy.sportfy.exeptions.CepInvalidoException;
 import com.sportfy.sportfy.exeptions.CepNaoExisteException;
 import com.sportfy.sportfy.services.EnderecoService;
 
-import jakarta.annotation.security.PermitAll;
 import lombok.*;
 
 @RestController
@@ -23,18 +22,18 @@ public class EnderecoController {
     @Autowired
     EnderecoService enderecoService;
 
-    @PermitAll
     @GetMapping("/consultar/{cep}")
     public ResponseEntity<Object> consultar(@PathVariable("cep") String cep) {
         try {
             Object enderecoConsultado  = enderecoService.consultar(cep);
             return ResponseEntity.status(HttpStatus.CREATED).body(enderecoConsultado);
         } catch(CepNaoExisteException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch(CepInvalidoException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch(Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
 }

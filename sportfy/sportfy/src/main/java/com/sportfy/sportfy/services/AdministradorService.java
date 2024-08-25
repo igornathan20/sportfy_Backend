@@ -8,8 +8,11 @@ import com.sportfy.sportfy.exeptions.RoleNaoPermitidaException;
 import com.sportfy.sportfy.exeptions.UsuarioJaExisteException;
 import com.sportfy.sportfy.models.Administrador;
 import com.sportfy.sportfy.models.Permissao;
+import com.sportfy.sportfy.models.Usuario;
 import com.sportfy.sportfy.repositories.AdministradorRepository;
 import com.sportfy.sportfy.repositories.PermissaoRepository;
+import com.sportfy.sportfy.repositories.UsuarioRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,23 +23,25 @@ import java.util.Optional;
 public class AdministradorService {
 
     @Autowired
-    private AdministradorRepository administradorRepository;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private AdministradorRepository administradorRepository;
 
     @Autowired
     private PermissaoRepository permissaoRepository;
 
-    public UserResponseDto novoAdministrador(AdministradorDto admDto) throws UsuarioJaExisteException, RoleNaoPermitidaException, PermissaoNaoExisteException {
-        Administrador existAdm = administradorRepository.findByUsername(admDto.username());
-
-        if (existAdm != null) {
+    public UserResponseDto cadastrar(AdministradorDto administradorDto) throws UsuarioJaExisteException, RoleNaoPermitidaException, PermissaoNaoExisteException {
+        Optional<Usuario> existUsuario = usuarioRepository.findByUsernameOrEmailOrCpf(administradorDto.username().toLowerCase(), administradorDto.email().toLowerCase(), administradorDto.cpf());
+        if (existUsuario.isPresent()) {
             throw new UsuarioJaExisteException("Usuario ja existe!");
         }
 
         Optional<Permissao> permissao = Optional.empty();
-        switch (admDto.permissao()) {
+        switch (administradorDto.permissao()) {
             case TipoPermissao.ADMINISTRADOR:
                 permissao = permissaoRepository.findByTipoPermissao(TipoPermissao.ADMINISTRADOR);
                 break;
@@ -49,19 +54,14 @@ public class AdministradorService {
 
         if (permissao.isPresent()) {
             Administrador novoAdministrador = new Administrador();
-            novoAdministrador.setUsername(admDto.username());
-            novoAdministrador.setEmail(admDto.email());
-            novoAdministrador.setPassword(passwordEncoder.encode(admDto.password()));
-            novoAdministrador.setNome(admDto.nome());
-            novoAdministrador.setCpf(admDto.cpf());
-            novoAdministrador.setTelefone(admDto.telefone());
-            novoAdministrador.setDataNascimento(admDto.dataNascimento());
-            novoAdministrador.setFoto(admDto.foto());
-
+            novoAdministrador.cadastrar(administradorDto);
+            novoAdministrador.getUsuario().setPassword(passwordEncoder.encode(administradorDto.password()));
+            novoAdministrador.getUsuario().setPermissao(permissao.get());
             Administrador createdUser = administradorRepository.save(novoAdministrador);
-            return new UserResponseDto(createdUser.getIdUsuario(), createdUser.getUsername(), "ROLE_" + createdUser.getPermissao().getTipoPermissao().name());
+            
+            return new UserResponseDto(createdUser.getUsuario().getIdUsuario(), createdUser.getUsuario().getUsername(), "ROLE_" + createdUser.getUsuario().getPermissao().getTipoPermissao().name());
         } else {
-            throw new PermissaoNaoExisteException(String.format("Permissao %s nao existe no banco de dados!", admDto.permissao()));
+            throw new PermissaoNaoExisteException(String.format("Permissao %s nao existe no banco de dados!", administradorDto.permissao()));
         }
     }
 

@@ -23,15 +23,14 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http.csrf(csrf -> csrf.disable())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(request -> request
-                        .requestMatchers(HttpMethod.POST, "/login").permitAll()
-                        .requestMatchers("/adm").permitAll()
-                        .requestMatchers("/academico").permitAll()
-                        .anyRequest().authenticated())
-                .addFilterBefore(customBasicAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
+        return http.csrf(csrf -> csrf.disable()).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(request -> request
+                    .requestMatchers(HttpMethod.POST, "/login/**").permitAll()
+                    .requestMatchers("/administrador/**").permitAll()
+                    .requestMatchers("/academico/**").permitAll()
+                    .requestMatchers("/endereco/**").permitAll()
+                    .anyRequest().authenticated()
+            ).addFilterBefore(customBasicAuthenticationFilter, UsernamePasswordAuthenticationFilter.class).build();
     }
 
     @Bean
@@ -43,4 +42,5 @@ public class WebSecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new SHA256PasswordEncoder();
     }
+
 }

@@ -1,7 +1,7 @@
 package com.sportfy.sportfy.security;
 
-import com.sportfy.sportfy.repositories.AcademicoRepository;
-import com.sportfy.sportfy.repositories.AdministradorRepository;
+import com.sportfy.sportfy.repositories.UsuarioRepository;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,10 +17,10 @@ import java.io.IOException;
 
 @Component
 public class CustomBasicAuthenticationFilter extends OncePerRequestFilter {
-   @Autowired
-    AcademicoRepository academicoRepository;
+    
     @Autowired
-    AdministradorRepository administradorRepository;
+    UsuarioRepository usuarioRepository;
+
     @Autowired
     TokenService tokenService;
 
@@ -31,16 +31,14 @@ public class CustomBasicAuthenticationFilter extends OncePerRequestFilter {
 
         if (tokenJWT != null) {
             String subject = tokenService.getSubject(tokenJWT);
-            UserDetails usuario = academicoRepository.findByUsername(subject);
+            UserDetails usuario = usuarioRepository.findByUsername(subject);
 
-            if(usuario == null){
-                usuario = administradorRepository.findByUsername(subject);
-            }
             if (usuario != null) {
                 var authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
-              SecurityContextHolder.getContext().setAuthentication(authentication);
-           }
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
         }
+
        filterChain.doFilter(request, response);
     }
 
@@ -51,4 +49,5 @@ public class CustomBasicAuthenticationFilter extends OncePerRequestFilter {
         }
         return null;
     }
+
 }

@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sportfy.sportfy.services.AuthService;
 
 @RestController
-@RequestMapping(value = "login")
+@RequestMapping(value = "/login")
 public class AuthController {
 
     @Autowired
     AuthService authService;
 
-    @PostMapping
+    @PostMapping("/efetuarLogin")
     public ResponseEntity<Object> efetuarLogin(@RequestBody @Valid DadosAuthDto dados) {
         try {
             Object token = authService.efetuarLogin(dados);
@@ -30,4 +30,5 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
 }

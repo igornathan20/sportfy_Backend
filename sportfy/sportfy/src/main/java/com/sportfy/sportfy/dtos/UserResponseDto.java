@@ -1,4 +1,9 @@
 package com.sportfy.sportfy.dtos;
 
-public record UserResponseDto(Long id, String username, String role) {
+public record UserResponseDto(
+    Long idUsuario, 
+    String username, 
+    String role
+) {
+    
 }

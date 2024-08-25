@@ -3,8 +3,7 @@ package com.sportfy.sportfy.services;
 import com.sportfy.sportfy.dtos.DadosAuthDto;
 import com.sportfy.sportfy.dtos.DadosTokenJwtDto;
 import com.sportfy.sportfy.models.Usuario;
-import com.sportfy.sportfy.repositories.AcademicoRepository;
-import com.sportfy.sportfy.repositories.AdministradorRepository;
+import com.sportfy.sportfy.repositories.UsuarioRepository;
 import com.sportfy.sportfy.security.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +18,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public class AuthService implements UserDetailsService {
+
     @Autowired
     private ApplicationContext context;
-    @Autowired
-    private AdministradorRepository administradorRepository;
-    @Autowired
-    private AcademicoRepository academicoRepository;
+
     private AuthenticationManager manager;
+
     @Autowired
     private TokenService tokenService;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     public DadosTokenJwtDto efetuarLogin(@RequestBody @Valid DadosAuthDto dados) {
         manager = context.getBean(AuthenticationManager.class);
@@ -41,10 +42,8 @@ public class AuthService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserDetails usuario = academicoRepository.findByUsername(username);
-        if(usuario == null){
-            usuario = administradorRepository.findByUsername(username);
-        }
+        UserDetails usuario = usuarioRepository.findByUsername(username);
         return usuario;
     }
+    
 }
