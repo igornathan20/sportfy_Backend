@@ -7,13 +7,13 @@ public record EnderecoDto (
     String bairro,
     String rua
 ) {
-    public static EnderecoDto fromApiDto(EnderecoApiDto enderecoApiDto) {
+    public static EnderecoDto fromApiDto(EnderecoApiViaCepDto enderecoApiViaCepDto) {
         return new EnderecoDto(
-            enderecoApiDto.cep(),
-            enderecoApiDto.uf(),
-            enderecoApiDto.cidade(),
-            enderecoApiDto.bairro(),
-            enderecoApiDto.rua()
+            enderecoApiViaCepDto.cep(),
+            enderecoApiViaCepDto.uf(),
+            enderecoApiViaCepDto.cidade(),
+            enderecoApiViaCepDto.bairro(),
+            enderecoApiViaCepDto.rua()
         );
     }
 }

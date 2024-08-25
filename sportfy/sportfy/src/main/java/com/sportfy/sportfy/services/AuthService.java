@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Service
 public class AuthService implements UserDetailsService {
 
+    private AuthenticationManager manager;
+
     @Autowired
     private ApplicationContext context;
-
-    private AuthenticationManager manager;
 
     @Autowired
     private TokenService tokenService;

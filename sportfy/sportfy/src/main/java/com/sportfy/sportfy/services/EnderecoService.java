@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.sportfy.sportfy.dtos.EnderecoApiDto;
+import com.sportfy.sportfy.dtos.EnderecoApiViaCepDto;
 import com.sportfy.sportfy.dtos.EnderecoDto;
 import com.sportfy.sportfy.exeptions.CepInvalidoException;
 import com.sportfy.sportfy.exeptions.CepNaoExisteException;
@@ -23,10 +23,10 @@ public class EnderecoService {
             throw new CepInvalidoException("CEP inválido!");
         }
         String url = BASE_URL + cep + "/json/";
-        EnderecoApiDto enderecoApiDto = null;
+        EnderecoApiViaCepDto enderecoApiDto = null;
 
         try {
-            enderecoApiDto = restTemplate.getForObject(url, EnderecoApiDto.class);
+            enderecoApiDto = restTemplate.getForObject(url, EnderecoApiViaCepDto.class);
         } catch (Exception e) {
             throw new RuntimeException("Erro ao consultar o serviço de CEP: " + e.getMessage(), e);
         }
