@@ -10,9 +10,9 @@ import com.sportfy.sportfy.models.Administrador;
 
 @Repository
 public interface AdministradorRepository extends JpaRepository<Administrador,Long> {
-    Optional<Administrador> findByUsuarioUsername(String username);
-    Optional<Administrador> findByUsuarioEmail(String email);
-    Optional<Administrador> findByUsuarioCpf(String cpf);
+    Optional<Administrador> findByUsuarioUsernameAndUsuarioAtivo(String username, boolean ativo);
+    Optional<Administrador> findByUsuarioEmailAndUsuarioAtivo(String email, boolean ativo);
+    Optional<Administrador> findByUsuarioCpfAndUsuarioAtivo(String cpf, boolean ativo);
     Optional<Administrador> findByIdAdministradorAndUsuarioAtivo(Long idAdministrador, boolean ativo);
     Optional<Administrador> findByUsuarioIdUsuarioAndUsuarioAtivo(Long idUsuario, boolean ativo);
     Optional<Administrador> findByUsuarioUsernameOrUsuarioEmailOrUsuarioCpf(String username, String email, String cpf);

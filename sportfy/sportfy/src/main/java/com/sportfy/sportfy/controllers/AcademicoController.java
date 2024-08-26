@@ -84,8 +84,8 @@ public class AcademicoController {
     //@PreAuthorize("hasRole('ROLE_ACADEMICO')")
     public ResponseEntity<Object> consultar(@PathVariable("idUsuario") Long idUsuario) {
         try {
-            Object academicoInativado = academicoService.consultar(idUsuario);
-            return ResponseEntity.status(HttpStatus.OK).body(academicoInativado);
+            Object academicoConsultado = academicoService.consultar(idUsuario);
+            return ResponseEntity.status(HttpStatus.OK).body(academicoConsultado);
         } catch (AcademicoNaoExisteException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch(Exception e) {
@@ -97,8 +97,8 @@ public class AcademicoController {
     //@PreAuthorize("hasRole('ROLE_ACADEMICO')")
     public ResponseEntity<?> listar() {
         try {
-            List<AcademicoDto> academicoLista = academicoService.listar();
-            return ResponseEntity.status(HttpStatus.OK).body(academicoLista);
+            List<AcademicoDto> listaAcademico = academicoService.listar();
+            return ResponseEntity.status(HttpStatus.OK).body(listaAcademico);
         } catch (ListaAcademicosVaziaException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {

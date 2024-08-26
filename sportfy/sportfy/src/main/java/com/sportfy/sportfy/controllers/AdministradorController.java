@@ -60,12 +60,25 @@ public class AdministradorController {
         }
     }
 
+    @GetMapping("/consultar/{idUsuario}")
+    //@PreAuthorize("hasRole('ROLE_ADMINISTRADOR') or hasRole('ROLE_ADMINISTRADOR_MASTER')")
+    public ResponseEntity<Object> consultar(@PathVariable("idUsuario") Long idUsuario) {
+        try {
+            Object administradorConsultado = administradorService.consultar(idUsuario);
+            return ResponseEntity.status(HttpStatus.OK).body(administradorConsultado);
+        } catch (AdministradorNaoExisteException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch(Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
     @GetMapping("/listar")
     //@PreAuthorize("hasRole('ROLE_ADMINISTRADOR_MASTER')")
     public ResponseEntity<?> listar() {
         try {
-            List<AdministradorDto> administradorLista = administradorService.listar();
-            return ResponseEntity.status(HttpStatus.OK).body(administradorLista);
+            List<AdministradorDto> listaAdministrador = administradorService.listar();
+            return ResponseEntity.status(HttpStatus.OK).body(listaAdministrador);
         } catch (ListaAdministradoresVaziaException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {

@@ -74,6 +74,12 @@ public class AdministradorService {
         }).orElseThrow(() -> new AdministradorNaoExisteException("Administrador não existe!"));
     }
 
+    public AdministradorDto consultar(Long idUsuario) throws AdministradorNaoExisteException {
+        return administradorRepository.findByUsuarioIdUsuarioAndUsuarioAtivo(idUsuario, true).map(administradorBD -> {
+            return AdministradorDto.fromAdministradorBD(administradorBD);
+        }).orElseThrow(() -> new AdministradorNaoExisteException("Administrador não existe!"));
+    }
+
     public List<AdministradorDto> listar() throws ListaAdministradoresVaziaException {
         Optional<List<Administrador>> listaAdministradorBD = administradorRepository.findByUsuarioAtivo(true);
         if (listaAdministradorBD.isPresent()) {
