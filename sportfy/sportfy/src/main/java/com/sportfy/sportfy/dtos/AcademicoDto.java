@@ -21,6 +21,14 @@ public record AcademicoDto(
     boolean ativo,
     TipoPermissao permissao
 ) {
+    public AcademicoDto {
+        if (email != null) {
+            email = email.toLowerCase();
+        }
+        if (username != null) {
+            username = username.toLowerCase();
+        }
+    }
     public static AcademicoDto fromAcademicoBD(Academico academico) {
         return new AcademicoDto(
             academico.getIdAcademico(),

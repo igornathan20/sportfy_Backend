@@ -38,32 +38,31 @@ public class AdministradorService {
     private PermissaoRepository permissaoRepository;
 
     public AdministradorDto cadastrar(AdministradorDto administradorDto) throws UsuarioJaExisteException, RoleNaoPermitidaException, PermissaoNaoExisteException {
-        Optional<Usuario> existUsuario = usuarioRepository.findByUsernameOrEmailOrCpf(administradorDto.username().toLowerCase(), administradorDto.email().toLowerCase(), administradorDto.cpf());
-        if (existUsuario.isPresent()) {
-            throw new UsuarioJaExisteException("Usuario ja existe!");
-        }
-
-        Optional<Permissao> permissao = Optional.empty();
-        switch (administradorDto.permissao()) {
-            case TipoPermissao.ADMINISTRADOR:
-                permissao = permissaoRepository.findByTipoPermissao(TipoPermissao.ADMINISTRADOR);
-                break;
-            case TipoPermissao.ADMINISTRADOR_MASTER:
-                permissao = permissaoRepository.findByTipoPermissao(TipoPermissao.ADMINISTRADOR_MASTER);
-                break;
-            default:
-                throw new RoleNaoPermitidaException("Role não permitida!");
-        }
-
-        if (permissao.isPresent()) {
-            Administrador novoAdministrador = new Administrador();
-            novoAdministrador.cadastrar(administradorDto);
-            novoAdministrador.getUsuario().setPassword(passwordEncoder.encode(administradorDto.password()));
-            novoAdministrador.getUsuario().setPermissao(permissao.get());
-            Administrador administradorCriado = administradorRepository.save(novoAdministrador);
-            return AdministradorDto.fromAdministradorBD(administradorCriado);
+        Optional<Usuario> existUsuario = usuarioRepository.findByUsernameOrEmailOrCpf(administradorDto.username(), administradorDto.email(), administradorDto.cpf());
+        if (!existUsuario.isPresent()) {
+            Optional<Permissao> permissao = Optional.empty();
+            switch (administradorDto.permissao()) {
+                case TipoPermissao.ADMINISTRADOR:
+                    permissao = permissaoRepository.findByTipoPermissao(TipoPermissao.ADMINISTRADOR);
+                    break;
+                case TipoPermissao.ADMINISTRADOR_MASTER:
+                    permissao = permissaoRepository.findByTipoPermissao(TipoPermissao.ADMINISTRADOR_MASTER);
+                    break;
+                default:
+                    throw new RoleNaoPermitidaException("Role não permitida!");
+            }
+            if (permissao.isPresent()) {
+                Administrador novoAdministrador = new Administrador();
+                novoAdministrador.cadastrar(administradorDto);
+                novoAdministrador.getUsuario().setPassword(passwordEncoder.encode(administradorDto.password()));
+                novoAdministrador.getUsuario().setPermissao(permissao.get());
+                Administrador administradorCriado = administradorRepository.save(novoAdministrador);
+                return AdministradorDto.fromAdministradorBD(administradorCriado);
+            } else {
+                throw new PermissaoNaoExisteException(String.format("Permissao %s nao existe no banco de dados!", administradorDto.permissao()));
+            }
         } else {
-            throw new PermissaoNaoExisteException(String.format("Permissao %s nao existe no banco de dados!", administradorDto.permissao()));
+            throw new UsuarioJaExisteException("Usuario ja existe!");
         }
     }
 

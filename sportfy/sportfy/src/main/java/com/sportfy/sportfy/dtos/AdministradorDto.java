@@ -20,6 +20,14 @@ public record AdministradorDto(
     boolean ativo,
     TipoPermissao permissao
 ) {
+    public AdministradorDto {
+        if (email != null) {
+            email = email.toLowerCase();
+        }
+        if (username != null) {
+            username = username.toLowerCase();
+        }
+    }
     public static AdministradorDto fromAdministradorBD(Administrador administrador) {
         return new AdministradorDto(
             administrador.getIdAdministrador(),
