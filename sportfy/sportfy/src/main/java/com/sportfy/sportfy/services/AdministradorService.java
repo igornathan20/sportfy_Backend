@@ -67,7 +67,7 @@ public class AdministradorService {
     }
 
     public AdministradorDto inativar(Long idAdministrador) throws AdministradorNaoExisteException {
-        return administradorRepository.findById(idAdministrador).map(administradorBD -> {
+        return administradorRepository.findByIdAdministradorAndUsuarioAtivo(idAdministrador, true).map(administradorBD -> {
             administradorBD.getUsuario().inativar();
             Administrador administradorInativado = administradorRepository.save(administradorBD);
             return AdministradorDto.fromAdministradorBD(administradorInativado);

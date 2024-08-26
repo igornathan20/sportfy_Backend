@@ -75,7 +75,7 @@ public class AcademicoService {
 
     public AcademicoDto atualizar(Long idAcademico, AcademicoDto academicoDto) throws EmailInvalidoException, AcademicoNaoExisteException, OutroUsuarioComDadosJaExistentes {
         if (isEmailFromUfpr(academicoDto.email())) {
-            Optional<Academico> academicoBD = academicoRepository.findById(idAcademico);
+            Optional<Academico> academicoBD = academicoRepository.findByIdAcademicoAndUsuarioAtivo(idAcademico, true);
             if (academicoBD.isPresent()) {
                 Optional<Academico> academicoExistente = academicoRepository.findByUsuarioUsernameOrUsuarioEmailOrUsuarioCpf(academicoDto.username(), academicoDto.email(), academicoDto.cpf());
                 if (academicoExistente.isPresent() && academicoExistente.get().getUsuario().getIdUsuario().equals(academicoBD.get().getUsuario().getIdUsuario())) {
@@ -101,10 +101,16 @@ public class AcademicoService {
     }
 
     public AcademicoDto inativar(Long idAcademico) throws AcademicoNaoExisteException {
-        return academicoRepository.findById(idAcademico).map(academicoBD -> {
+        return academicoRepository.findByIdAcademicoAndUsuarioAtivo(idAcademico, true).map(academicoBD -> {
             academicoBD.getUsuario().inativar();
             Academico academicoInativado = academicoRepository.save(academicoBD);
             return AcademicoDto.fromAcademicoBD(academicoInativado);
+        }).orElseThrow(() -> new AcademicoNaoExisteException("Academico não existe!"));
+    }
+
+    public AcademicoDto consultar(Long idUsuario) throws AcademicoNaoExisteException {
+        return academicoRepository.findByUsuarioIdUsuarioAndUsuarioAtivo(idUsuario, true).map(academicoBD -> {
+            return AcademicoDto.fromAcademicoBD(academicoBD);
         }).orElseThrow(() -> new AcademicoNaoExisteException("Academico não existe!"));
     }
 
