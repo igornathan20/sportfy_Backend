@@ -3,6 +3,7 @@ package com.sportfy.sportfy.controllers;
 import com.sportfy.sportfy.dtos.AdministradorDto;
 import com.sportfy.sportfy.exeptions.AdministradorNaoExisteException;
 import com.sportfy.sportfy.exeptions.ListaAdministradoresVaziaException;
+import com.sportfy.sportfy.exeptions.OutroUsuarioComDadosJaExistentes;
 import com.sportfy.sportfy.exeptions.PermissaoNaoExisteException;
 import com.sportfy.sportfy.exeptions.RoleNaoPermitidaException;
 import com.sportfy.sportfy.exeptions.UsuarioJaExisteException;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,9 +42,28 @@ public class AdministradorController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         } catch (RoleNaoPermitidaException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch(PermissaoNaoExisteException e){
+        } catch (PermissaoNaoExisteException e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        } catch(Exception e){
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PutMapping("/atualizar/{idAdministrador}")
+    //@PreAuthorize("hasRole('ROLE_ADMINISTRADOR_MASTER')")
+    public ResponseEntity<Object> atualizar(@PathVariable("idAdministrador") Long idAdministrador, @RequestBody AdministradorDto administrador) {
+        try {
+            Object administradorAtualizado = administradorService.atualizar(idAdministrador, administrador);
+            return ResponseEntity.status(HttpStatus.OK).body(administradorAtualizado);
+        } catch (AdministradorNaoExisteException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (OutroUsuarioComDadosJaExistentes e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        } catch (RoleNaoPermitidaException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (PermissaoNaoExisteException e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -55,7 +76,7 @@ public class AdministradorController {
             return ResponseEntity.status(HttpStatus.OK).body(administradorInativado);
         } catch (AdministradorNaoExisteException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch(Exception e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -68,7 +89,7 @@ public class AdministradorController {
             return ResponseEntity.status(HttpStatus.OK).body(administradorConsultado);
         } catch (AdministradorNaoExisteException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch(Exception e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

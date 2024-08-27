@@ -44,8 +44,8 @@ public class AcademicoService {
 
     public AcademicoDto cadastrar(AcademicoDto academicoDto) throws EmailInvalidoException, UsuarioJaExisteException, PermissaoNaoExisteException {
         if (isEmailFromUfpr(academicoDto.email())) {
-            Optional<Usuario> existUsuario = usuarioRepository.findByUsernameOrEmailOrCpf(academicoDto.username(), academicoDto.email(), academicoDto.cpf());
-            if (!existUsuario.isPresent()) {
+            Optional<Usuario> existUsuarioBD = usuarioRepository.findByUsernameOrEmailOrCpf(academicoDto.username(), academicoDto.email(), academicoDto.cpf());
+            if (!existUsuarioBD.isPresent()) {
                 Optional<Permissao> permissao = permissaoRepository.findByTipoPermissao(TipoPermissao.ACADEMICO);
                 if (permissao.isPresent()) {
                     Academico novoAcademico = new Academico();
