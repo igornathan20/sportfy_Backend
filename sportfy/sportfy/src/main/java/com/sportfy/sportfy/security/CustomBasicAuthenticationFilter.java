@@ -31,7 +31,7 @@ public class CustomBasicAuthenticationFilter extends OncePerRequestFilter {
 
         if (tokenJWT != null) {
             String subject = tokenService.getSubject(tokenJWT);
-            UserDetails usuario = usuarioRepository.findByUsername(subject);
+            UserDetails usuario = usuarioRepository.findByUsernameAndAtivo(subject, true);
 
             if (usuario != null) {
                 var authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());

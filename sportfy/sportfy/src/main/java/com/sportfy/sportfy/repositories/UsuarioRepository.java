@@ -10,8 +10,7 @@ import com.sportfy.sportfy.models.Usuario;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-    Usuario findByUsername(String username);
-    Optional<Usuario> findByUsernameAndAtivo(String username, boolean ativo);
+    Usuario findByUsernameAndAtivo(String username, boolean ativo);
     Optional<Usuario> findByEmailAndAtivo(String email, boolean ativo);
     Optional<Usuario> findByCpfAndAtivo(String email, boolean ativo);
     Optional<Usuario> findByUsernameOrEmailOrCpf(String username, String email, String cpf);
