@@ -15,6 +15,6 @@ public interface AdministradorRepository extends JpaRepository<Administrador,Lon
     Optional<Administrador> findByUsuarioEmailAndUsuarioAtivo(String email, boolean ativo);
     Optional<Administrador> findByUsuarioCpfAndUsuarioAtivo(String cpf, boolean ativo);
     Optional<Administrador> findByIdAdministradorAndUsuarioAtivo(Long idAdministrador, boolean ativo);
-    Optional<Administrador> findByUsuarioUsernameOrUsuarioEmailOrUsuarioCpf(String username, String email, String cpf);
+    Optional<List<Administrador>> findByUsuarioUsernameOrUsuarioEmailOrUsuarioCpf(String username, String email, String cpf);
     Optional<List<Administrador>> findByUsuarioAtivo(boolean ativo);
 }

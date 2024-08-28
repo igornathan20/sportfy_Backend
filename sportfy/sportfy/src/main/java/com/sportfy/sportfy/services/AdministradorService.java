@@ -39,7 +39,7 @@ public class AdministradorService {
     private PermissaoRepository permissaoRepository;
 
     public AdministradorDto cadastrar(AdministradorDto administradorDto) throws UsuarioJaExisteException, RoleNaoPermitidaException, PermissaoNaoExisteException {
-        Optional<Usuario> existUsuarioBD = usuarioRepository.findByUsernameOrEmailOrCpf(administradorDto.username(), administradorDto.email(), administradorDto.cpf());
+        Optional<List<Usuario>> existUsuarioBD = usuarioRepository.findByUsernameOrEmailOrCpf(administradorDto.username(), administradorDto.email(), administradorDto.cpf());
         if (!existUsuarioBD.isPresent()) {
             Optional<Permissao> permissao = Optional.empty();
             switch (administradorDto.permissao()) {
@@ -70,8 +70,8 @@ public class AdministradorService {
     public AdministradorDto atualizar(Long idAdministrador, AdministradorDto administradorDto) throws AdministradorNaoExisteException, OutroUsuarioComDadosJaExistentes, RoleNaoPermitidaException, PermissaoNaoExisteException {
         Optional<Administrador> administradorBD = administradorRepository.findByIdAdministradorAndUsuarioAtivo(idAdministrador, true);
         if (administradorBD.isPresent()) {
-            Optional<Administrador> administradorExistente = administradorRepository.findByUsuarioUsernameOrUsuarioEmailOrUsuarioCpf(administradorDto.username(), administradorDto.email(), administradorDto.cpf());
-            if (administradorExistente.isPresent() && administradorExistente.get().getUsuario().getIdUsuario().equals(administradorBD.get().getUsuario().getIdUsuario())) {
+            Optional<List<Administrador>> administradorExistente = administradorRepository.findByUsuarioUsernameOrUsuarioEmailOrUsuarioCpf(administradorDto.username(), administradorDto.email(), administradorDto.cpf());
+            if (administradorExistente.isPresent() && administradorExistente.get().size() == 1 && administradorExistente.get().get(0).getUsuario().getIdUsuario().equals(administradorBD.get().getUsuario().getIdUsuario())) {
                 Optional<Permissao> permissao = Optional.empty();
                 switch (administradorDto.permissao()) {
                     case TipoPermissao.ADMINISTRADOR:

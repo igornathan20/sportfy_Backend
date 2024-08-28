@@ -13,6 +13,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     Usuario findByUsernameAndAtivo(String username, boolean ativo);
     Optional<Usuario> findByEmailAndAtivo(String email, boolean ativo);
     Optional<Usuario> findByCpfAndAtivo(String email, boolean ativo);
-    Optional<Usuario> findByUsernameOrEmailOrCpf(String username, String email, String cpf);
+    Optional<List<Usuario>> findByUsernameOrEmailOrCpf(String username, String email, String cpf);
     Optional<List<Usuario>> findByAtivo(boolean ativo);
 }

@@ -8,6 +8,8 @@ import com.sportfy.sportfy.exeptions.PermissaoNaoExisteException;
 import com.sportfy.sportfy.exeptions.RoleNaoPermitidaException;
 import com.sportfy.sportfy.exeptions.UsuarioJaExisteException;
 import com.sportfy.sportfy.services.AdministradorService;
+
+import jakarta.validation.Valid;
 import lombok.*;
 
 import java.util.List;
@@ -34,7 +36,7 @@ public class AdministradorController {
 
     @PostMapping("/cadastrar")
     //@PreAuthorize("hasRole('ROLE_ADMINISTRADOR_MASTER')")
-    public ResponseEntity<Object> cadastrar(@RequestBody AdministradorDto administrador) {
+    public ResponseEntity<Object> cadastrar(@RequestBody @Valid AdministradorDto administrador) {
         try {
             Object administradorCriado = administradorService.cadastrar(administrador);
             return ResponseEntity.status(HttpStatus.CREATED).body(administradorCriado);
@@ -51,7 +53,7 @@ public class AdministradorController {
 
     @PutMapping("/atualizar/{idAdministrador}")
     //@PreAuthorize("hasRole('ROLE_ADMINISTRADOR_MASTER')")
-    public ResponseEntity<Object> atualizar(@PathVariable("idAdministrador") Long idAdministrador, @RequestBody AdministradorDto administrador) {
+    public ResponseEntity<Object> atualizar(@PathVariable("idAdministrador") Long idAdministrador, @RequestBody @Valid AdministradorDto administrador) {
         try {
             Object administradorAtualizado = administradorService.atualizar(idAdministrador, administrador);
             return ResponseEntity.status(HttpStatus.OK).body(administradorAtualizado);

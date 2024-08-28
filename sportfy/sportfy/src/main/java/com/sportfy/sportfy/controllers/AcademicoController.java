@@ -9,6 +9,7 @@ import com.sportfy.sportfy.exeptions.PermissaoNaoExisteException;
 import com.sportfy.sportfy.exeptions.UsuarioJaExisteException;
 import com.sportfy.sportfy.services.AcademicoService;
 
+import jakarta.validation.Valid;
 import lombok.*;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public class AcademicoController {
 
     @PostMapping("/cadastrar")
     //@PreAuthorize("hasRole('ROLE_ACADEMICO')")
-    public ResponseEntity<Object> cadastrar(@RequestBody AcademicoDto academico) {
+    public ResponseEntity<Object> cadastrar(@RequestBody @Valid AcademicoDto academico) {
         try {
             Object academicoCriado = academicoService.cadastrar(academico);
             return ResponseEntity.status(HttpStatus.CREATED).body(academicoCriado);
@@ -52,7 +53,7 @@ public class AcademicoController {
 
     @PutMapping("/atualizar/{idAcademico}")
     //@PreAuthorize("hasRole('ROLE_ACADEMICO')")
-    public ResponseEntity<Object> atualizar(@PathVariable("idAcademico") Long idAcademico, @RequestBody AcademicoDto academico) {
+    public ResponseEntity<Object> atualizar(@PathVariable("idAcademico") Long idAcademico, @RequestBody @Valid AcademicoDto academico) {
         try {
             Object academicoAtualizado = academicoService.atualizar(idAcademico, academico);
             return ResponseEntity.status(HttpStatus.OK).body(academicoAtualizado);

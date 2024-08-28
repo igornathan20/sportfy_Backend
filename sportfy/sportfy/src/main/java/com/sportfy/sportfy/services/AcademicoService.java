@@ -44,7 +44,7 @@ public class AcademicoService {
 
     public AcademicoDto cadastrar(AcademicoDto academicoDto) throws EmailInvalidoException, UsuarioJaExisteException, PermissaoNaoExisteException {
         if (isEmailFromUfpr(academicoDto.email())) {
-            Optional<Usuario> existUsuarioBD = usuarioRepository.findByUsernameOrEmailOrCpf(academicoDto.username(), academicoDto.email(), academicoDto.cpf());
+            Optional<List<Usuario>> existUsuarioBD = usuarioRepository.findByUsernameOrEmailOrCpf(academicoDto.username(), academicoDto.email(), academicoDto.cpf());
             if (!existUsuarioBD.isPresent()) {
                 Optional<Permissao> permissao = permissaoRepository.findByTipoPermissao(TipoPermissao.ACADEMICO);
                 if (permissao.isPresent()) {
@@ -77,8 +77,8 @@ public class AcademicoService {
         if (isEmailFromUfpr(academicoDto.email())) {
             Optional<Academico> academicoBD = academicoRepository.findByIdAcademicoAndUsuarioAtivo(idAcademico, true);
             if (academicoBD.isPresent()) {
-                Optional<Academico> academicoExistente = academicoRepository.findByUsuarioUsernameOrUsuarioEmailOrUsuarioCpf(academicoDto.username(), academicoDto.email(), academicoDto.cpf());
-                if (academicoExistente.isPresent() && academicoExistente.get().getUsuario().getIdUsuario().equals(academicoBD.get().getUsuario().getIdUsuario())) {
+                Optional<List<Academico>> academicoExistente = academicoRepository.findByUsuarioUsernameOrUsuarioEmailOrUsuarioCpf(academicoDto.username(), academicoDto.email(), academicoDto.cpf());
+                if (academicoExistente.isPresent() && academicoExistente.get().size() == 1 && academicoExistente.get().get(0).getUsuario().getIdUsuario().equals(academicoBD.get().getUsuario().getIdUsuario())) {
                     Academico academicoAtualizado = new Academico();
                     academicoAtualizado.atualizar(academicoBD.get().getIdAcademico(), academicoBD.get().getUsuario().getIdUsuario(), academicoDto);
                     academicoAtualizado.getUsuario().setPermissao(academicoBD.get().getUsuario().getPermissao());
