@@ -5,15 +5,13 @@ import com.sportfy.sportfy.enums.TipoPermissao;
 import com.sportfy.sportfy.exeptions.AdministradorNaoExisteException;
 import com.sportfy.sportfy.exeptions.ListaAdministradoresVaziaException;
 import com.sportfy.sportfy.exeptions.OutroUsuarioComDadosJaExistentes;
+import com.sportfy.sportfy.exeptions.PasswordInvalidoException;
 import com.sportfy.sportfy.exeptions.PermissaoNaoExisteException;
 import com.sportfy.sportfy.exeptions.RoleNaoPermitidaException;
-import com.sportfy.sportfy.exeptions.UsuarioJaExisteException;
 import com.sportfy.sportfy.models.Administrador;
 import com.sportfy.sportfy.models.Permissao;
-import com.sportfy.sportfy.models.Usuario;
 import com.sportfy.sportfy.repositories.AdministradorRepository;
 import com.sportfy.sportfy.repositories.PermissaoRepository;
-import com.sportfy.sportfy.repositories.UsuarioRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,17 +28,18 @@ public class AdministradorService {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
-
-    @Autowired
     private AdministradorRepository administradorRepository;
 
     @Autowired
     private PermissaoRepository permissaoRepository;
 
-    public AdministradorDto cadastrar(AdministradorDto administradorDto) throws UsuarioJaExisteException, RoleNaoPermitidaException, PermissaoNaoExisteException {
-        Optional<List<Usuario>> existUsuarioBD = usuarioRepository.findByUsernameOrEmailOrCpf(administradorDto.username(), administradorDto.email(), administradorDto.cpf());
-        if (!existUsuarioBD.isPresent()) {
+    public AdministradorDto cadastrar(AdministradorDto administradorDto) throws PasswordInvalidoException, OutroUsuarioComDadosJaExistentes, RoleNaoPermitidaException, PermissaoNaoExisteException {
+        if (isPasswordValid(administradorDto.password())) {
+            throw new PasswordInvalidoException("Password não pode ser nulo ou vazio!");
+        }
+
+        Optional<Administrador> existAdministradorBD = administradorRepository.findByUsuarioUsername(administradorDto.username());
+        if (!existAdministradorBD.isPresent() || !existAdministradorBD.get().getUsuario().isAtivo()) {
             Optional<Permissao> permissao = Optional.empty();
             switch (administradorDto.permissao()) {
                 case TipoPermissao.ADMINISTRADOR:
@@ -53,25 +52,38 @@ public class AdministradorService {
                     throw new RoleNaoPermitidaException("Role não permitida!");
             }
             if (permissao.isPresent()) {
-                Administrador novoAdministrador = new Administrador();
-                novoAdministrador.cadastrar(administradorDto);
-                novoAdministrador.getUsuario().setPassword(passwordEncoder.encode(administradorDto.password()));
-                novoAdministrador.getUsuario().setPermissao(permissao.get());
-                Administrador administradorCriado = administradorRepository.save(novoAdministrador);
-                return AdministradorDto.fromAdministradorBD(administradorCriado);
+                if (!existAdministradorBD.isPresent()) {
+                    Administrador novoAdministrador = new Administrador();
+                    novoAdministrador.cadastrar(administradorDto);
+                    novoAdministrador.getUsuario().setPassword(passwordEncoder.encode(administradorDto.password()));
+                    novoAdministrador.getUsuario().setPermissao(permissao.get());
+                    Administrador administradorCriado = administradorRepository.save(novoAdministrador);
+                    return AdministradorDto.fromAdministradorBD(administradorCriado);
+                } else {
+                    Administrador administradorAtualizado = new Administrador();
+                    administradorAtualizado.atualizar(existAdministradorBD.get().getIdAdministrador(), existAdministradorBD.get().getUsuario().getIdUsuario(), administradorDto);
+                    administradorAtualizado.getUsuario().setPermissao(permissao.get());
+                    if (administradorDto.password() == null || administradorDto.password().isEmpty()) {
+                        administradorAtualizado.getUsuario().setPassword(existAdministradorBD.get().getUsuario().getPassword());
+                    } else {
+                        administradorAtualizado.getUsuario().setPassword(passwordEncoder.encode(administradorDto.password()));
+                    }
+                    Administrador administradorSalvo = administradorRepository.save(administradorAtualizado);
+                    return AdministradorDto.fromAdministradorBD(administradorSalvo);
+                }
             } else {
                 throw new PermissaoNaoExisteException(String.format("Permissao %s nao existe no banco de dados!", administradorDto.permissao()));
             }
         } else {
-            throw new UsuarioJaExisteException("Usuario ja existe!");
+            throw new OutroUsuarioComDadosJaExistentes("Outro usuário com username já existente!");
         }
     }
 
     public AdministradorDto atualizar(Long idAdministrador, AdministradorDto administradorDto) throws AdministradorNaoExisteException, OutroUsuarioComDadosJaExistentes, RoleNaoPermitidaException, PermissaoNaoExisteException {
         Optional<Administrador> administradorBD = administradorRepository.findByIdAdministradorAndUsuarioAtivo(idAdministrador, true);
         if (administradorBD.isPresent()) {
-            Optional<List<Administrador>> administradorExistente = administradorRepository.findByUsuarioUsernameOrUsuarioEmailOrUsuarioCpf(administradorDto.username(), administradorDto.email(), administradorDto.cpf());
-            if (administradorExistente.isPresent() && administradorExistente.get().size() == 1 && administradorExistente.get().get(0).getUsuario().getIdUsuario().equals(administradorBD.get().getUsuario().getIdUsuario())) {
+            Optional<Administrador> administradorExistente = administradorRepository.findByUsuarioUsername(administradorDto.username());
+            if (administradorExistente.isPresent() && administradorExistente.get().getUsuario().getIdUsuario().equals(administradorBD.get().getUsuario().getIdUsuario())) {
                 Optional<Permissao> permissao = Optional.empty();
                 switch (administradorDto.permissao()) {
                     case TipoPermissao.ADMINISTRADOR:
@@ -98,7 +110,7 @@ public class AdministradorService {
                     throw new PermissaoNaoExisteException(String.format("Permissao %s nao existe no banco de dados!", administradorDto.permissao()));
                 }
             } else {
-                throw new OutroUsuarioComDadosJaExistentes("Outro usuário com esses dados já existente!");
+                throw new OutroUsuarioComDadosJaExistentes("Outro usuário com username já existente!");
             }
         } else {
             throw new AdministradorNaoExisteException("Administrador não existe!");
@@ -127,6 +139,10 @@ public class AdministradorService {
         } else {
             throw new ListaAdministradoresVaziaException("Lista de administradores vazia!");
         }
+    }
+
+    public boolean isPasswordValid(String password) {
+        return password != null && password.isBlank();
     }
 
 }

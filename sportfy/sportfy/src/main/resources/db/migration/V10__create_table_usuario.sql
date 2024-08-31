@@ -1,10 +1,8 @@
 CREATE TABLE usuario (
 	id_usuario INT AUTO_INCREMENT PRIMARY KEY,
 	username VARCHAR(30) NOT NULL UNIQUE,
-	email VARCHAR(100) NOT NULL UNIQUE,
 	password VARCHAR(100) NOT NULL,
 	nome VARCHAR(100) NOT NULL,
-	cpf VARCHAR(11) NOT NULL UNIQUE,
 	telefone VARCHAR(11),
 	data_nascimento DATE,
 	foto VARCHAR(255),

@@ -29,9 +29,7 @@ public class Administrador implements Serializable {
         this.usuario = new Usuario();
         this.usuario.setIdUsuario(0L);
         this.usuario.setUsername(administradorDto.username().toLowerCase());
-        this.usuario.setEmail(administradorDto.email().toLowerCase());
         this.usuario.setNome(administradorDto.nome());
-        this.usuario.setCpf(administradorDto.cpf());
         this.usuario.setTelefone(administradorDto.telefone());
         this.usuario.setDataNascimento(administradorDto.dataNascimento());
         this.usuario.setFoto(administradorDto.foto());
@@ -42,9 +40,7 @@ public class Administrador implements Serializable {
         this.usuario = new Usuario();
         this.usuario.setIdUsuario(idUsuario);
         this.usuario.setUsername(administradorDto.username().toLowerCase());
-        this.usuario.setEmail(administradorDto.email().toLowerCase());
         this.usuario.setNome(administradorDto.nome());
-        this.usuario.setCpf(administradorDto.cpf());
         this.usuario.setTelefone(administradorDto.telefone());
         this.usuario.setDataNascimento(administradorDto.dataNascimento());
         this.usuario.setFoto(administradorDto.foto());

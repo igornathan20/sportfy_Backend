@@ -3,8 +3,6 @@ package com.sportfy.sportfy.dtos;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
-import org.hibernate.validator.constraints.br.*;
-
 import com.sportfy.sportfy.enums.TipoPermissao;
 import com.sportfy.sportfy.models.Administrador;
 
@@ -18,22 +16,12 @@ public record AdministradorDto(
     @Pattern(regexp = "^[a-zA-Z0-9._-]+$", message = "Username deve conter apenas letras, números, sublinhados (_), hífens (-), e pontos (.)")
     String username,
 
-    @Email(message = "Email inválido")
-    @Size(min = 9, max = 100, message = "Email deve ter entre 9 e 100 caracteres")
-    @Pattern(regexp = "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$", message = "Email deve conter apenas letras minúsculas, números, sublinhados (_), hífens (-), e pontos (.)")
-    String email,
-
-    @NotBlank(message = "Senha é obrigatória")
-    @Size(min = 4, max = 100, message = "Senha deve ter entre 4 e 100 caracteres")
     String password,
 
     @NotBlank(message = "Nome é obrigatório")
     @Pattern(regexp = "^[a-zA-Z\\u00C0-\\u00FF\\s]+$", message = "Nome inválido")
     @Size(min = 4, max = 100, message = "Nome deve ter entre 4 e 100 caracteres")
     String nome,
-
-    @CPF(message = "CPF inválido")
-    String cpf,
 
     @Size(min = 11, max = 11, message = "Telefone deve ter 11 caracteres: 'XX XXXXX-XXXX'")
     String telefone,
@@ -54,10 +42,8 @@ public record AdministradorDto(
         return new AdministradorDto(
             administrador.getIdAdministrador(),
             administrador.getUsuario().getUsername(),
-            administrador.getUsuario().getEmail(),
             null,
             administrador.getUsuario().getNome(),
-            administrador.getUsuario().getCpf(),
             administrador.getUsuario().getTelefone(),
             administrador.getUsuario().getDataNascimento(),
             administrador.getUsuario().getFoto(),

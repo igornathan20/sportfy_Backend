@@ -6,7 +6,6 @@ import com.sportfy.sportfy.exeptions.EmailInvalidoException;
 import com.sportfy.sportfy.exeptions.ListaAcademicosVaziaException;
 import com.sportfy.sportfy.exeptions.OutroUsuarioComDadosJaExistentes;
 import com.sportfy.sportfy.exeptions.PermissaoNaoExisteException;
-import com.sportfy.sportfy.exeptions.UsuarioJaExisteException;
 import com.sportfy.sportfy.services.AcademicoService;
 
 import jakarta.validation.Valid;
@@ -42,7 +41,7 @@ public class AcademicoController {
             return ResponseEntity.status(HttpStatus.CREATED).body(academicoCriado);
         } catch(EmailInvalidoException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (UsuarioJaExisteException e) {
+        } catch (OutroUsuarioComDadosJaExistentes e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         } catch (PermissaoNaoExisteException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());

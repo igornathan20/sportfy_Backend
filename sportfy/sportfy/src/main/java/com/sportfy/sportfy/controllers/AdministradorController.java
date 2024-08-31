@@ -4,9 +4,9 @@ import com.sportfy.sportfy.dtos.AdministradorDto;
 import com.sportfy.sportfy.exeptions.AdministradorNaoExisteException;
 import com.sportfy.sportfy.exeptions.ListaAdministradoresVaziaException;
 import com.sportfy.sportfy.exeptions.OutroUsuarioComDadosJaExistentes;
+import com.sportfy.sportfy.exeptions.PasswordInvalidoException;
 import com.sportfy.sportfy.exeptions.PermissaoNaoExisteException;
 import com.sportfy.sportfy.exeptions.RoleNaoPermitidaException;
-import com.sportfy.sportfy.exeptions.UsuarioJaExisteException;
 import com.sportfy.sportfy.services.AdministradorService;
 
 import jakarta.validation.Valid;
@@ -40,7 +40,9 @@ public class AdministradorController {
         try {
             Object administradorCriado = administradorService.cadastrar(administrador);
             return ResponseEntity.status(HttpStatus.CREATED).body(administradorCriado);
-        } catch (UsuarioJaExisteException e) {
+        } catch (PasswordInvalidoException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        } catch (OutroUsuarioComDadosJaExistentes e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         } catch (RoleNaoPermitidaException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

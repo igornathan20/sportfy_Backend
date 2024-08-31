@@ -28,10 +28,6 @@ public class Usuario implements UserDetails {
     @Setter @Getter
     private String username;
 
-    @Column(name="email", unique = true)
-    @Setter @Getter
-    private String email;
-
     @Column(name="password", nullable = false)
     @Setter @Getter
     private String password;
@@ -39,10 +35,6 @@ public class Usuario implements UserDetails {
     @Column(name="nome", nullable = false)
     @Setter @Getter
     private String nome;
-
-    @Column(name="cpf", unique = true)
-    @Setter @Getter
-    private String cpf;
 
     @Column(name="telefone")
     @Setter @Getter
@@ -65,7 +57,7 @@ public class Usuario implements UserDetails {
 
     @Column(name="ativo", insertable = false)
     @Setter @Getter
-    private boolean ativo;
+    private boolean ativo = true;
 
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="id_permissao")

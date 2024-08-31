@@ -10,11 +10,16 @@ import com.sportfy.sportfy.models.Academico;
 
 @Repository
 public interface AcademicoRepository extends JpaRepository<Academico, Long> {
-    Optional<Academico> findByUsuarioIdUsuarioAndUsuarioAtivo(Long idUsuario, boolean ativo);
-    Optional<Academico> findByUsuarioUsernameAndUsuarioAtivo(String username, boolean ativo);
-    Optional<Academico> findByUsuarioEmailAndUsuarioAtivo(String email, boolean ativo);
-    Optional<Academico> findByUsuarioCpfAndUsuarioAtivo(String cpf, boolean ativo);
     Optional<Academico> findByIdAcademicoAndUsuarioAtivo(Long idAcademico, boolean ativo);
-    Optional<List<Academico>> findByUsuarioUsernameOrUsuarioEmailOrUsuarioCpf(String username, String email, String cpf);
+    Optional<Academico> findByEmail(String email);
+    Optional<Academico> findByEmailAndUsuarioAtivo(String email, boolean ativo);
+    Optional<Academico> findByUsuarioIdUsuario(Long idUsuario);
+    Optional<Academico> findByUsuarioIdUsuarioAndUsuarioAtivo(Long idUsuario, boolean ativo);
+    Optional<Academico> findByUsuarioUsername(String username);
+    Optional<Academico> findByUsuarioUsernameAndUsuarioAtivo(String username, boolean ativo);
     Optional<List<Academico>> findByUsuarioAtivo(boolean ativo);
+    Optional<List<Academico>> findByUsuarioUsernameOrEmail(String username, String email);
+    Optional<List<Academico>> findByUsuarioNomeContainingIgnoreCase(String nome);
+    Optional<List<Academico>> findByUsuarioUsernameContainingIgnoreCase(String username);
+    Optional<List<Academico>> findByUsuarioNomeContainingIgnoreCaseOrUsuarioUsernameContainingIgnoreCase(String nome, String username);
 }
