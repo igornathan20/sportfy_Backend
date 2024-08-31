@@ -1,0 +1,15 @@
+INSERT INTO usuario (username, password, nome, telefone, data_nascimento, id_permissao) VALUES ('math_aa', 'pass', 'Matheus Antônio Augusto', '41987213343', '2002-03-03', 1);
+INSERT INTO usuario (username, password, nome, telefone, data_nascimento, id_permissao) VALUES ('maria_gn', 'pass', 'Maria Gabriela Naste', '41988762901', '1999-07-16', 1);
+INSERT INTO usuario (username, password, nome, telefone, data_nascimento, id_permissao) VALUES ('murilo_scn', 'pass', 'Murilo Souza Costa Neto', '41987690103', '2000-01-26', 1);
+INSERT INTO usuario (username, password, nome, telefone, data_nascimento, id_permissao) VALUES ('michele_as', 'pass', 'Michele Antoneli Silva', '41988906580', '1999-10-30', 1);
+INSERT INTO usuario (username, password, nome, telefone, data_nascimento, id_permissao) VALUES ('michael_ac', 'pass', 'Michael Andrew Curry', '41987665901', '1990-05-25', 1);
+INSERT INTO usuario (username, password, nome, telefone, data_nascimento, id_permissao) VALUES ('maira_sm', 'pass', 'Maíra Silverado Mendes', '41987665391', '2004-11-04', 1);
+INSERT INTO usuario (username, password, nome, telefone, data_nascimento, id_permissao) VALUES ('marcelo_ls', 'pass', 'Marcelo Leite Silveira', '41988778690', '1995-12-07', 1);
+INSERT INTO usuario (username, password, nome, telefone, data_nascimento, id_permissao) VALUES ('muriel_ln', 'pass', 'Muriel Leon Nogueira', '41987990809', '1991-06-28', 1);
+INSERT INTO usuario (username, password, nome, telefone, data_nascimento, id_permissao) VALUES ('michaela_ac', 'pass', 'Michaela Antonela Churatto', '41987676759', '2004-11-04', 1);
+INSERT INTO usuario (username, password, nome, telefone, data_nascimento, id_permissao) VALUES ('mauro_vm', 'pass', 'Mauro Vieira Marçal', '41988908780', '2003-12-13', 1);
+INSERT INTO usuario (username, password, nome, telefone, data_nascimento, id_permissao) VALUES ('joao_nm', 'pass', 'Joao Nunes Moura', '41988876161', '1990-02-05', 3);
+INSERT INTO usuario (username, password, nome, telefone, data_nascimento, id_permissao) VALUES ('jose_rm', 'pass', 'José Ricardo Moraes', '41989716532', '2005-10-14', 3);
+INSERT INTO usuario (username, password, nome, telefone, data_nascimento, id_permissao) VALUES ('junior_bd', 'pass', 'Junior Bento Diniz', '41988915757', '2004-07-04', 2);
+INSERT INTO usuario (username, password, nome, telefone, data_nascimento, id_permissao) VALUES ('jessica_cr', 'pass', 'Jessica Cristina Rocha', '41988980179', '2000-03-19', 2);
+INSERT INTO usuario (username, password, nome, telefone, data_nascimento, id_permissao) VALUES ('jeronimo_cn', 'pass', 'Jerônimo Claudino Neves', '41987615454', '2002-04-21', 2);
