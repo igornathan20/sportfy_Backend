@@ -3,8 +3,8 @@ API em desenvolvimento para os sistema de gerenciamento de eventos esportivos da
 
 
 ## 1. Downloads necessários:
-Java: JDK V21.0.4+7 - https://adoptium.net/
-MySQL: V8.0.39 - https://dev.mysql.com/downloads/installer/
+- Java: JDK V21.0.4+7 - https://adoptium.net/
+- MySQL: V8.0.39 - https://dev.mysql.com/downloads/installer/
 
 ## 2. Noções básicas do projeto:
 - \config: Contém classes de configuração do Spring, como configuração de beans, segurança, etc;
