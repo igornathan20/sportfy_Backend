@@ -53,3 +53,19 @@ CREATE TABLE privacidade (
     CONSTRAINT fk_academico_privacidade FOREIGN KEY (id_academico) REFERENCES academico(id_academico)
 );
 
+CREATE TABLE modalidade_esportiva (
+	id_modalidade_esportiva INT AUTO_INCREMENT PRIMARY KEY,
+	nome VARCHAR(50) NOT NULL,
+	descricao VARCHAR(255) NOT NULL,
+	foto VARCHAR(255),
+	data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	ativo BOOLEAN DEFAULT TRUE
+);
+
+CREATE TABLE academico_modalidade_esportiva (
+	id_academico_modalidade_esportiva INT AUTO_INCREMENT PRIMARY KEY,
+	id_academico INT NOT NULL,
+	id_modalidade_esportiva INT NOT NULL,
+	CONSTRAINT fk_academico_modalidade_esportiva_academico FOREIGN KEY (id_academico) REFERENCES academico(id_academico),
+	CONSTRAINT fk_academico_modalidade_esportiva_modalidade_esportiva FOREIGN KEY (id_modalidade_esportiva) REFERENCES modalidade_esportiva(id_modalidade_esportiva)
+);

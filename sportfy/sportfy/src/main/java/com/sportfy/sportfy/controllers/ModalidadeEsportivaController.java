@@ -1,0 +1,81 @@
+package com.sportfy.sportfy.controllers;
+
+import com.sportfy.sportfy.dtos.ModalidadeEsportivaDto;
+import com.sportfy.sportfy.exeptions.ModalidadeJaExisteException;
+import com.sportfy.sportfy.exeptions.ModalidadeNaoExistenteException;
+import com.sportfy.sportfy.models.ModalidadeEsportiva;
+import com.sportfy.sportfy.services.ModalidadeEsportivaService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping(value = "/modalidadeEsportiva")
+public class ModalidadeEsportivaController {
+    @Autowired
+    ModalidadeEsportivaService modalidadeEsportivaService;
+
+    @PostMapping()
+    public ResponseEntity<ModalidadeEsportiva> criarModalidade(@RequestBody ModalidadeEsportivaDto modalidade) {
+        try {
+            ModalidadeEsportiva novaModalidade = modalidadeEsportivaService.criarModalidade(modalidade);
+            return ResponseEntity.status(HttpStatus.CREATED).body(novaModalidade);
+        } catch (ModalidadeJaExisteException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        }
+    }
+
+    @PutMapping()
+    public ResponseEntity<ModalidadeEsportiva> editarModalidade(@RequestBody ModalidadeEsportivaDto modalidade) {
+        try {
+            ModalidadeEsportiva modalidadeEditada = modalidadeEsportivaService.editarModalidade(modalidade);
+            return ResponseEntity.status(HttpStatus.OK).body(modalidadeEditada);
+        } catch (ModalidadeNaoExistenteException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    @GetMapping("/listar")
+    public ResponseEntity<List<ModalidadeEsportiva>> listarModalidades() {
+        try {
+            List<ModalidadeEsportiva> modalidades = modalidadeEsportivaService.listarModalidades();
+            return ResponseEntity.status(HttpStatus.OK).body(modalidades);
+        } catch (ModalidadeNaoExistenteException e) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        }
+    }
+
+    @GetMapping("/buscar/{nome}")
+    public ResponseEntity<Optional<ModalidadeEsportiva>> buscarModalidade(@PathVariable String nome) {
+        try {
+            Optional<ModalidadeEsportiva> modalidade = modalidadeEsportivaService.buscarModalidades(nome);
+            return ResponseEntity.status(HttpStatus.OK).body(modalidade);
+        } catch (ModalidadeNaoExistenteException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    @DeleteMapping("/remover/{id}")
+    public ResponseEntity<ModalidadeEsportiva> removerModalidade(@PathVariable Long id) {
+        try {
+            Optional<ModalidadeEsportiva> modalidadeRemovida = modalidadeEsportivaService.removerModalidade(id);
+            return modalidadeRemovida.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        } catch (ModalidadeNaoExistenteException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    @PutMapping("/desativar/{id}")
+    public ResponseEntity<ModalidadeEsportiva> desativarModalidade(@PathVariable Long id) {
+        try {
+            ModalidadeEsportiva modalidadeDesativada = modalidadeEsportivaService.desativarModalidade(id);
+            return ResponseEntity.status(HttpStatus.OK).body(modalidadeDesativada);
+        } catch (ModalidadeNaoExistenteException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+}
