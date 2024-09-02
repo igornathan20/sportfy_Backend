@@ -1,29 +1,20 @@
 package com.sportfy.sportfy.controllers;
 
 import com.sportfy.sportfy.dtos.AcademicoDto;
-import com.sportfy.sportfy.exeptions.AcademicoNaoExisteException;
-import com.sportfy.sportfy.exeptions.EmailInvalidoException;
-import com.sportfy.sportfy.exeptions.ListaAcademicosVaziaException;
-import com.sportfy.sportfy.exeptions.OutroUsuarioComDadosJaExistentes;
-import com.sportfy.sportfy.exeptions.PermissaoNaoExisteException;
+import com.sportfy.sportfy.dtos.NotificacaoDto;
+import com.sportfy.sportfy.dtos.PrivacidadeDto;
+import com.sportfy.sportfy.exeptions.*;
+import com.sportfy.sportfy.models.Notificacao;
+import com.sportfy.sportfy.models.Privacidade;
 import com.sportfy.sportfy.services.AcademicoService;
-
 import jakarta.validation.Valid;
-import lombok.*;
-
-import java.util.List;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/academico")
@@ -103,6 +94,47 @@ public class AcademicoController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+    @GetMapping("/notificacoes/{idAcademico}/{tipoNotificacao}")
+    public ResponseEntity<Boolean> retornaPreferenciaNotificacao(@PathVariable Long idAcademico, @PathVariable String tipoNotificacao){
+        try {
+            boolean notificar = academicoService.retornaNotificacao(idAcademico, tipoNotificacao);
+            return ResponseEntity.status(HttpStatus.OK).body(notificar);
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PostMapping ("/notificacao")
+    public ResponseEntity<NotificacaoDto> alteraNotificacao(@RequestBody NotificacaoDto userNotificacao){
+        try {
+            Notificacao notificacao = academicoService.alteraNotificacao(userNotificacao);
+            return ResponseEntity.status(HttpStatus.OK).body(NotificacaoDto.fromNotificacao(notificacao));
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @GetMapping("/privacidade/{idAcademico}/{tipoPrivacidade}")
+    public ResponseEntity<Boolean> retornaPrivacidade(@PathVariable Long idAcademico, @PathVariable String tipoPrivacidade){
+        try {
+            boolean privacidade = academicoService.retornaPrivacidade(idAcademico, tipoPrivacidade);
+            return ResponseEntity.status(HttpStatus.OK).body(privacidade);
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PostMapping ("/privacidade")
+    public ResponseEntity<PrivacidadeDto> alteraPrivacidade(@RequestBody PrivacidadeDto userPrivacidade){
+        try {
+            Privacidade privacidade = academicoService.alteraPrivacidade(userPrivacidade);
+            return ResponseEntity.status(HttpStatus.OK).body(PrivacidadeDto.fromPrivacidade(privacidade));
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 

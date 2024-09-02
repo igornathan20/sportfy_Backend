@@ -1,16 +1,18 @@
 package com.sportfy.sportfy.services;
 
 import com.sportfy.sportfy.dtos.AcademicoDto;
+import com.sportfy.sportfy.dtos.NotificacaoDto;
+import com.sportfy.sportfy.dtos.PrivacidadeDto;
 import com.sportfy.sportfy.enums.TipoPermissao;
-import com.sportfy.sportfy.exeptions.AcademicoNaoExisteException;
-import com.sportfy.sportfy.exeptions.EmailInvalidoException;
-import com.sportfy.sportfy.exeptions.ListaAcademicosVaziaException;
-import com.sportfy.sportfy.exeptions.OutroUsuarioComDadosJaExistentes;
-import com.sportfy.sportfy.exeptions.PermissaoNaoExisteException;
+import com.sportfy.sportfy.exeptions.*;
 import com.sportfy.sportfy.models.Academico;
+import com.sportfy.sportfy.models.Notificacao;
 import com.sportfy.sportfy.models.Permissao;
+import com.sportfy.sportfy.models.Privacidade;
 import com.sportfy.sportfy.repositories.AcademicoRepository;
+import com.sportfy.sportfy.repositories.NotificacaoRepository;
 import com.sportfy.sportfy.repositories.PermissaoRepository;
+import com.sportfy.sportfy.repositories.PrivacidadeRepository;
 import com.sportfy.sportfy.util.EnviarEmail;
 import com.sportfy.sportfy.util.GeraSenha;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,11 @@ public class AcademicoService {
 
     @Autowired
     private PermissaoRepository permissaoRepository;
+    @Autowired
+    private PrivacidadeRepository privacidadeRepository;
+    @Autowired
+    private NotificacaoRepository notificacaoRepository;
+
 
     public AcademicoDto cadastrar(AcademicoDto academicoDto) throws EmailInvalidoException, OutroUsuarioComDadosJaExistentes, PermissaoNaoExisteException {
         if (!isEmailFromUfpr(academicoDto.email())) {
@@ -69,13 +76,22 @@ public class AcademicoService {
             throw new PermissaoNaoExisteException(String.format("Permissao %s nao existe no banco de dados!", TipoPermissao.ACADEMICO));
         }
     
-        if (!existAcademicoBD.isPresent()) {
+        if (existAcademicoBD.get().size() == 0) {
             Academico novoAcademico = new Academico();
             String senha = GeraSenha.generatePassword();
             novoAcademico.cadastrar(academicoDto);
             novoAcademico.getUsuario().setPassword(passwordEncoder.encode(senha));
             novoAcademico.getUsuario().setPermissao(permissao.get());
             Academico academicoCriado = academicoRepository.save(novoAcademico);
+
+            Privacidade privacidadeUser = new Privacidade();
+            privacidadeUser.setIdAcademico(academicoCriado.getIdAcademico());
+            privacidadeRepository.save(privacidadeUser);
+
+            Notificacao notificacaoUser = new Notificacao();
+            notificacaoUser.setIdAcademico(academicoCriado.getIdAcademico());
+            notificacaoRepository.save(notificacaoUser);
+
             try {
                 String mensagem = "Bem vindo ao Sportfy! Acesse a sua conta com o username cadastrado e a sua senha: \n\n" + senha +
                 "\n\n\nBora se movimentar e fazer amigos?\n O Sportfy irá te ajudar!";
@@ -166,4 +182,53 @@ public class AcademicoService {
         return email != null && email.endsWith("@ufpr.br");
     }
 
+    public boolean retornaNotificacao(Long idAcademico, String tipo){
+        Notificacao notificacao = notificacaoRepository.findByIdAcademico(idAcademico);
+
+        switch (tipo){
+            case "notificarModalidadesEsportiva":
+                return notificacao.isModalidadeEsportivas();
+            case "notificarCampeonatos":
+                return notificacao.isCampeonatos();
+            default:
+                return true;
+        }
+    }
+
+    public Notificacao alteraNotificacao(NotificacaoDto userNotificacao){
+        Notificacao notificacao = notificacaoRepository.findByIdAcademico(userNotificacao.idAcademico());
+
+        notificacao.setModalidadeEsportivas(userNotificacao.modalidadeEsportivas());
+        notificacao.setCampeonatos(userNotificacao.campeonatos());
+
+        return notificacaoRepository.save(notificacao);
+    }
+
+    public boolean retornaPrivacidade(Long idAcademico, String tipo){
+        Privacidade privacidade = privacidadeRepository.findByIdAcademico(idAcademico);
+
+        switch (tipo){
+            case "mostrarModalidadesEsportivas":
+                return privacidade.isMostrarModalidadesEsportivas();
+            case "mostrarHistoricoCampeonatos":
+                return privacidade.isMostrarHistoricoCampeonatos();
+            case "mostrarEstatisticasModalidadesEsportivas":
+                return privacidade.isMostrarEstatisticasModalidadesEsportivas();
+            case "mostrarConquistas":
+                return privacidade.isMostrarConquistas();
+            default:
+                return true;
+        }
+    }
+
+    public Privacidade alteraPrivacidade(PrivacidadeDto userPrivacidade){
+        Privacidade privacidade = privacidadeRepository.findByIdAcademico(userPrivacidade.idAcademico());
+
+        privacidade.setMostrarConquistas(userPrivacidade.mostrarConquistas());
+        privacidade.setMostrarHistoricoCampeonatos(userPrivacidade.mostrarHistoricoCampeonatos());
+        privacidade.setMostrarModalidadesEsportivas(userPrivacidade.mostrarModalidadesEsportivas());
+        privacidade.setMostrarEstatisticasModalidadesEsportivas(userPrivacidade.mostrarEstatisticasModalidadesEsportivas());
+
+        return privacidadeRepository.save(privacidade);
+    }
 }

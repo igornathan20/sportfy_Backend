@@ -1,4 +1,0 @@
-CREATE TABLE permissao (
-	id_permissao INT AUTO_INCREMENT PRIMARY KEY,
-	tipo_permissao VARCHAR(100) NOT NULL UNIQUE
-);

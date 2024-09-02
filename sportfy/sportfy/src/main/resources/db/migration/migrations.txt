@@ -1,0 +1,243 @@
+
+CREATE TABLE privacidade_campeonato (
+	id_privacidade_campeonato INT AUTO_INCREMENT PRIMARY KEY,
+	tipo_privacidade_campeonato VARCHAR(100) NOT NULL UNIQUE
+);
+
+CREATE TABLE situacao_campeonato (
+	id_situacao_campeonato INT AUTO_INCREMENT PRIMARY KEY,
+	tipo_situacao_campeonato VARCHAR(100) NOT NULL UNIQUE
+);
+
+CREATE TABLE resultado_time_partida (
+	id_resultado_time_partida INT AUTO_INCREMENT PRIMARY KEY,
+	tipo_resultado_time_partida VARCHAR(100) NOT NULL UNIQUE
+);
+
+CREATE TABLE situacao_meta_diaria (
+	id_situacao_meta_diaria INT AUTO_INCREMENT PRIMARY KEY,
+	tipo_situacao_meta_diaria VARCHAR(100) NOT NULL UNIQUE
+);
+
+CREATE TABLE administrador (
+	id_administrador INT AUTO_INCREMENT PRIMARY KEY,
+	id_usuario INT NOT NULL,
+	CONSTRAINT fk_administrador_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
+);
+
+CREATE TABLE usuario_canal (
+	id_usuario_canal INT AUTO_INCREMENT PRIMARY KEY,
+	id_canal INT NOT NULL,
+	id_usuario INT NOT NULL,
+	CONSTRAINT fk_usuario_canal_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
+);
+
+CREATE TABLE apoio_saude (
+	id_apoio_saude INT AUTO_INCREMENT PRIMARY KEY,
+	nome VARCHAR(50) NOT NULL,
+	email VARCHAR(100),
+	telefone VARCHAR(11),
+	descricao TEXT NOT NULL,
+	data_publicacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	id_administrador INT NOT NULL,
+	CONSTRAINT fk_apoio_saude_administrador FOREIGN KEY (id_administrador) REFERENCES administrador(id_administrador)
+);
+
+CREATE TABLE publicacao (
+	id_publicacao INT AUTO_INCREMENT PRIMARY KEY,
+	descricao TEXT NOT NULL,
+	data_publicacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	id_canal INT NOT NULL,
+	id_usuario INT NOT NULL,
+	CONSTRAINT fk_publicacao_canal FOREIGN KEY (id_canal) REFERENCES canal(id_canal),
+	CONSTRAINT fk_publicacao_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
+);
+
+CREATE TABLE curtida_publicacao (
+	id_curtida_publicacao INT AUTO_INCREMENT PRIMARY KEY,
+	data_curtida TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	id_publicacao INT NOT NULL,
+	id_usuario INT NOT NULL,
+	CONSTRAINT fk_curtida_publicacao_publicacao FOREIGN KEY (id_publicacao) REFERENCES publicacao(id_publicacao),
+	CONSTRAINT fk_curtida_publicacao_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
+);
+
+CREATE TABLE comentario (
+	id_comentario INT AUTO_INCREMENT PRIMARY KEY,
+	descricao TEXT NOT NULL,
+	data_comentario TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	id_publicacao INT NOT NULL,
+	id_usuario INT NOT NULL,
+	CONSTRAINT fk_comentario_publicacao FOREIGN KEY (id_publicacao) REFERENCES publicacao(id_publicacao),
+	CONSTRAINT fk_comentario_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
+);
+
+CREATE TABLE curtida_comentario (
+	id_curtida_comentario INT AUTO_INCREMENT PRIMARY KEY,
+	data_curtida TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	id_comentario INT NOT NULL,
+	id_usuario INT NOT NULL,
+	CONSTRAINT fk_curtida_comentario_comentario FOREIGN KEY (id_comentario) REFERENCES comentario(id_comentario),
+	CONSTRAINT fk_curtida_comentario_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
+);
+
+CREATE TABLE academico_notificacao (
+	id_academico_notificacao INT AUTO_INCREMENT PRIMARY KEY,
+	id_notificacao INT NOT NULL,
+	id_academico INT NOT NULL,
+	CONSTRAINT fk_academico_notificacao_notificacao FOREIGN KEY (id_notificacao) REFERENCES notificacao(id_notificacao),
+	CONSTRAINT fk_academico_notificacao_academico FOREIGN KEY (id_academico) REFERENCES academico(id_academico)
+);
+
+CREATE TABLE academico_privacidade (
+	id_academico_privacidade INT AUTO_INCREMENT PRIMARY KEY,
+	id_privacidade INT NOT NULL,
+	id_academico INT NOT NULL,
+	CONSTRAINT fk_academico_privacidade_privacidade FOREIGN KEY (id_privacidade) REFERENCES privacidade(id_privacidade),
+	CONSTRAINT fk_academico_privacidade_academico FOREIGN KEY (id_academico) REFERENCES academico(id_academico)
+);
+
+CREATE TABLE modalidade_esportiva (
+	id_modalidade_esportiva INT AUTO_INCREMENT PRIMARY KEY,
+	nome VARCHAR(50) NOT NULL,
+	descricao VARCHAR(255) NOT NULL,
+	foto VARCHAR(255),
+	data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	ativo BOOLEAN DEFAULT TRUE
+);
+
+CREATE TABLE academico_modalidade_esportiva (
+	id_academico_modalidade_esportiva INT AUTO_INCREMENT PRIMARY KEY,
+	id_academico INT NOT NULL,
+	id_modalidade_esportiva INT NOT NULL,
+	CONSTRAINT fk_academico_modalidade_esportiva_academico FOREIGN KEY (id_academico) REFERENCES academico(id_academico),
+	CONSTRAINT fk_academico_modalidade_esportiva_modalidade_esportiva FOREIGN KEY (id_modalidade_esportiva) REFERENCES modalidade_esportiva(id_modalidade_esportiva)
+);
+
+CREATE TABLE regra (
+	id_regra INT AUTO_INCREMENT PRIMARY KEY,
+	titulo VARCHAR(50) NOT NULL,
+	descricao VARCHAR(255) NOT NULL,
+	id_modalidade_esportiva INT NOT NULL,
+	CONSTRAINT fk_regra_modalidade_esportiva FOREIGN KEY (id_modalidade_esportiva) REFERENCES modalidade_esportiva(id_modalidade_esportiva)
+);
+
+CREATE TABLE meta_esportiva (
+	id_meta_esportiva INT AUTO_INCREMENT PRIMARY KEY,
+	titulo VARCHAR(50) NOT NULL,
+	descricao VARCHAR(255) NOT NULL,
+	foto VARCHAR(255),
+	id_modalidade_esportiva INT NOT NULL,
+	CONSTRAINT fk_meta_esportiva_modalidade_esportiva FOREIGN KEY (id_modalidade_esportiva) REFERENCES modalidade_esportiva(id_modalidade_esportiva)
+);
+
+CREATE TABLE conquista (
+	id_conquista INT AUTO_INCREMENT PRIMARY KEY,
+	data_conquista TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	id_academico INT NOT NULL,
+	id_meta_esportiva INT NOT NULL,
+	CONSTRAINT fk_conquista_academico FOREIGN KEY (id_academico) REFERENCES academico(id_academico),
+	CONSTRAINT fk_conquista_meta_esportiva FOREIGN KEY (id_meta_esportiva) REFERENCES meta_esportiva(id_meta_esportiva)
+);
+
+CREATE TABLE meta_diaria (
+	id_meta_diaria INT AUTO_INCREMENT PRIMARY KEY,
+	titulo VARCHAR(50) NOT NULL,
+	objetivo VARCHAR(50) NOT NULL,
+	quantidade_concluido INT DEFAULT 0,
+	progresso_atual INT DEFAULT 0,
+	progresso_maximo INT NOT NULL,
+	progresso_item VARCHAR(30) NOT NULL,
+	id_academico INT NOT NULL,
+	id_situacao_meta_diaria INT NOT NULL,
+	CONSTRAINT fk_meta_diaria_academico FOREIGN KEY (id_academico) REFERENCES academico(id_academico),
+	CONSTRAINT fk_meta_diaria_situacao_meta_diaria FOREIGN KEY (id_situacao_meta_diaria) REFERENCES situacao_meta_diaria(id_situacao_meta_diaria)
+);
+
+CREATE TABLE endereco (
+	id_endereco INT AUTO_INCREMENT PRIMARY KEY,
+	cep VARCHAR(8) NOT NULL,
+	uf CHAR(2) NOT NULL,
+	cidade VARCHAR(50) NOT NULL,
+	bairro VARCHAR(50) NOT NULL,
+	rua VARCHAR(100) NOT NULL,
+	numero VARCHAR(50) NOT NULL,
+	complemento VARCHAR(50)
+);
+
+CREATE TABLE campeonato (
+	id_campeonato INT AUTO_INCREMENT PRIMARY KEY,
+	codigo VARCHAR(10) NOT NULL UNIQUE,
+	titulo VARCHAR(50) NOT NULL,
+	descricao VARCHAR(255) NOT NULL,
+	aposta VARCHAR(100),
+	data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	data_inicio TIMESTAMP NOT NULL,
+	data_fim TIMESTAMP NOT NULL,
+	limite_times INT NOT NULL,
+	limite_participantes INT NOT NULL,
+	ativo BOOLEAN DEFAULT TRUE,
+	id_endereco INT NOT NULL,
+	id_privacidade_campeonato INT NOT NULL,
+	id_academico INT NOT NULL,
+	id_modalidade_esportiva INT NOT NULL,
+	id_situacao_campeonato INT NOT NULL,
+	CONSTRAINT fk_campeonato_endereco FOREIGN KEY (id_endereco) REFERENCES endereco(id_endereco),
+	CONSTRAINT fk_campeonato_privacidade_campeonato FOREIGN KEY (id_privacidade_campeonato) REFERENCES privacidade_campeonato(id_privacidade_campeonato),
+	CONSTRAINT fk_campeonato_academico FOREIGN KEY (id_academico) REFERENCES academico(id_academico),
+	CONSTRAINT fk_campeonato_modalidade_esportiva FOREIGN KEY (id_modalidade_esportiva) REFERENCES modalidade_esportiva(id_modalidade_esportiva),
+	CONSTRAINT fk_campeonato_situacao_campeonato FOREIGN KEY (id_situacao_campeonato) REFERENCES situacao_campeonato(id_situacao_campeonato)
+);
+
+CREATE TABLE time (
+	id_time INT AUTO_INCREMENT PRIMARY KEY,
+	nome VARCHAR(50) NOT NULL,
+	id_campeonato INT NOT NULL,
+	CONSTRAINT fk_time_campeonato FOREIGN KEY (id_campeonato) REFERENCES campeonato(id_campeonato)
+);
+
+CREATE TABLE partida (
+	id_partida INT AUTO_INCREMENT PRIMARY KEY,
+	data_partida TIMESTAMP NOT NULL,
+	id_campeonato INT NOT NULL,
+	id_fase_partida INT NOT NULL,
+	CONSTRAINT fk_partida_campeonato FOREIGN KEY (id_campeonato) REFERENCES campeonato(id_campeonato),
+	CONSTRAINT fk_partida_fase_partida FOREIGN KEY (id_fase_partida) REFERENCES fase_partida(id_fase_partida)
+);
+
+CREATE TABLE time_partida (
+	id_time_partida INT AUTO_INCREMENT PRIMARY KEY,
+	pontuacao INT DEFAULT 0,
+	id_time INT NOT NULL,
+	id_partida INT NOT NULL,
+	id_resultado_time_partida INT NOT NULL,
+	CONSTRAINT fk_time_partida_time FOREIGN KEY (id_time) REFERENCES time(id_time),
+	CONSTRAINT fk_time_partida_partida FOREIGN KEY (id_partida) REFERENCES partida(id_partida),
+	CONSTRAINT fk_time_partida_resultado_time_partida FOREIGN KEY (id_resultado_time_partida) REFERENCES resultado_time_partida(id_resultado_time_partida)
+);
+
+CREATE TABLE jogador (
+	id_jogador INT AUTO_INCREMENT PRIMARY KEY,
+	pontuacao INT DEFAULT 0,
+	melhor_jogador INT DEFAULT 0,
+	id_academico INT NOT NULL,
+	id_time_partida INT NOT NULL,
+	CONSTRAINT fk_jogador_academico FOREIGN KEY (id_academico) REFERENCES academico(id_academico),
+	CONSTRAINT fk_jogador_time_partida FOREIGN KEY (id_time_partida) REFERENCES time_partida(id_time_partida)
+);
+
+CREATE TABLE academico_campeonato (
+	id_academico_campeonato INT AUTO_INCREMENT PRIMARY KEY,
+	id_academico INT NOT NULL,
+	id_campeonato INT NOT NULL,
+	CONSTRAINT fk_academico_campeonato_academico FOREIGN KEY (id_academico) REFERENCES academico(id_academico),
+	CONSTRAINT fk_academico_campeonato_campeonato FOREIGN KEY (id_campeonato) REFERENCES campeonato(id_campeonato)
+);
+
+CREATE TABLE academico_time (
+	id_academico_time INT AUTO_INCREMENT PRIMARY KEY,
+	id_academico INT NOT NULL,
+	id_time INT NOT NULL,
+	CONSTRAINT fk_academico_time_academico FOREIGN KEY (id_academico) REFERENCES academico(id_academico),
+	CONSTRAINT fk_academico_time_time FOREIGN KEY (id_time) REFERENCES time(id_time)
+);
