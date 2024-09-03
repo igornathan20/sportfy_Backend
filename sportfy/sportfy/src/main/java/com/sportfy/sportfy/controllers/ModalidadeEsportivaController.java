@@ -93,9 +93,9 @@ public class ModalidadeEsportivaController {
     }
 
     @DeleteMapping("/remover/{idAcademico}/{idModalidade}")
-    public ResponseEntity<Void> removerModalidade(@PathVariable Long idAcademico, @PathVariable Long idModalidade) {
+    public ResponseEntity<Void> cancelarInscricaoModalidade(@PathVariable Long idAcademico, @PathVariable Long idModalidade) {
         try {
-            modalidadeEsportivaService.removerModalidade(idAcademico, idModalidade);
+            modalidadeEsportivaService.cancelarInscricaoModalidade(idAcademico, idModalidade);
             return ResponseEntity.status(HttpStatus.OK).body(null);
         } catch (ModalidadeNaoExistenteException | AcademicoNaoExisteException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);

@@ -2,51 +2,65 @@ package com.sportfy.sportfy.models;
 
 import java.io.Serializable;
 
+import com.sportfy.sportfy.dtos.MetaDiariaDto;
+import com.sportfy.sportfy.enums.TipoSituacaoMetaDiaria;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
 @Table(name="meta_diaria")
+@Setter @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class MetaDiaria implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id_meta_diaria")
-    @Setter @Getter
     private Long idMetaDiaria;
 
     @Column(name="titulo", nullable = false)
-    @Setter @Getter
     private String titulo;
 
     @Column(name="objetivo", nullable = false)
-    @Setter @Getter
     private String objetivo;
 
     @Column(name="quantidade_concluido", insertable = false)
-    @Setter @Getter
     private int quantidadeConcluido;
 
     @Column(name="progresso_atual", insertable = false)
-    @Setter @Getter
     private int progressoAtual;
 
     @Column(name="progresso_maximo", nullable = false)
-    @Setter @Getter
     private int progressoMaximo;
 
     @Column(name="progresso_item", nullable = false)
-    @Setter @Getter
     private String progressoItem;
 
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="id_academico", updatable = false, nullable = false)
-    @Setter @Getter
     private Academico academico;
 
-    @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="id_situacao_meta_diaria", nullable = false)
-    @Setter @Getter
-    private SituacaoMetaDiaria situacaoMetaDiaria;
+    @Enumerated(EnumType.STRING)
+    @Column(name="tipo_situacao_meta_diaria", nullable = false)
+    private TipoSituacaoMetaDiaria tipoSituacaoMetaDiaria;
+
+    public void updateFromDto(MetaDiariaDto dto) {
+        this.titulo = dto.titulo();
+        this.objetivo = dto.objetivo();
+        this.quantidadeConcluido = dto.quantidadeConcluido();
+        this.progressoAtual = dto.progressoAtual();
+        this.progressoMaximo = dto.progressoMaximo();
+        this.progressoItem = dto.progressoItem();
+
+        switch (dto.situacaoMetaDiaria()){
+            case 1:
+                this.tipoSituacaoMetaDiaria = TipoSituacaoMetaDiaria.CONCLUIDA;
+            case 2:
+                this.tipoSituacaoMetaDiaria = TipoSituacaoMetaDiaria.EM_ANDAMENTO;
+            default:
+                this.tipoSituacaoMetaDiaria = TipoSituacaoMetaDiaria.EM_ANDAMENTO;
+        }
+
+    }
+
 }

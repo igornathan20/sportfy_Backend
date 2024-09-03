@@ -31,6 +31,7 @@ public class WebSecurityConfig {
                     .requestMatchers("/academico/**").permitAll()
                     .requestMatchers("/endereco/**").permitAll()
                     .requestMatchers("/modalidadeEsportiva/**").permitAll()
+                    .requestMatchers("/**").permitAll()
                     .anyRequest().authenticated()
             ).addFilterBefore(customBasicAuthenticationFilter, UsernamePasswordAuthenticationFilter.class).build();
     }
