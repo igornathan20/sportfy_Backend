@@ -37,14 +37,12 @@ public class ModalidadeEsportiva implements Serializable {
 
     @Column(name="ativo", insertable = false)
     @Getter
-    private boolean ativo;
+    private boolean ativo = true;
 
-    public ModalidadeEsportiva toEntity(ModalidadeEsportivaDto dto) {
-        ModalidadeEsportiva modalidadeEsportiva = new ModalidadeEsportiva();
-        modalidadeEsportiva.setNome(dto.nome());
-        modalidadeEsportiva.setDescricao(dto.descricao());
-        modalidadeEsportiva.setFoto(dto.foto());
-        modalidadeEsportiva.setAtivo(dto.ativo());
-        return modalidadeEsportiva;
+    public void updateFromDto(ModalidadeEsportivaDto dto) {
+        this.setNome(dto.nome());
+        this.setDescricao(dto.descricao());
+        this.setFoto(dto.foto());
+        this.setAtivo(dto.ativo());
     }
 }

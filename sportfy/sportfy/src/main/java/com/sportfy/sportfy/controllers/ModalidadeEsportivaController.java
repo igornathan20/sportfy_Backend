@@ -1,6 +1,7 @@
 package com.sportfy.sportfy.controllers;
 
 import com.sportfy.sportfy.dtos.ModalidadeEsportivaDto;
+import com.sportfy.sportfy.exeptions.AcademicoNaoExisteException;
 import com.sportfy.sportfy.exeptions.ModalidadeJaExisteException;
 import com.sportfy.sportfy.exeptions.ModalidadeNaoExistenteException;
 import com.sportfy.sportfy.models.ModalidadeEsportiva;
@@ -59,10 +60,10 @@ public class ModalidadeEsportivaController {
         }
     }
 
-    @DeleteMapping("/remover/{id}")
-    public ResponseEntity<ModalidadeEsportiva> removerModalidade(@PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ModalidadeEsportiva> excluirModalidade(@PathVariable Long id) {
         try {
-            Optional<ModalidadeEsportiva> modalidadeRemovida = modalidadeEsportivaService.removerModalidade(id);
+            Optional<ModalidadeEsportiva> modalidadeRemovida = modalidadeEsportivaService.excluirModalidade(id);
             return modalidadeRemovida.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
         } catch (ModalidadeNaoExistenteException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -75,6 +76,28 @@ public class ModalidadeEsportivaController {
             ModalidadeEsportiva modalidadeDesativada = modalidadeEsportivaService.desativarModalidade(id);
             return ResponseEntity.status(HttpStatus.OK).body(modalidadeDesativada);
         } catch (ModalidadeNaoExistenteException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    @PostMapping("/inscrever/{idAcademico}/{idModalidade}")
+    public ResponseEntity<Void> inscreverEmModalidade(@PathVariable Long idAcademico, @PathVariable Long idModalidade) {
+        try {
+            modalidadeEsportivaService.inscreverEmModalidade(idAcademico, idModalidade);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        } catch (ModalidadeNaoExistenteException | AcademicoNaoExisteException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        }
+    }
+
+    @DeleteMapping("/remover/{idAcademico}/{idModalidade}")
+    public ResponseEntity<Void> removerModalidade(@PathVariable Long idAcademico, @PathVariable Long idModalidade) {
+        try {
+            modalidadeEsportivaService.removerModalidade(idAcademico, idModalidade);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        } catch (ModalidadeNaoExistenteException | AcademicoNaoExisteException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
