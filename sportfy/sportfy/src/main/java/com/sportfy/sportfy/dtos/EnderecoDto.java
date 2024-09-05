@@ -5,7 +5,10 @@ public record EnderecoDto (
     String uf,
     String cidade,
     String bairro,
-    String rua
+    String rua,
+    int numero,
+    String complemento
+
 ) {
     public static EnderecoDto fromApiViaCepDto(EnderecoApiViaCepDto enderecoApiViaCepDto) {
         return new EnderecoDto(
@@ -13,7 +16,9 @@ public record EnderecoDto (
             enderecoApiViaCepDto.uf(),
             enderecoApiViaCepDto.cidade(),
             enderecoApiViaCepDto.bairro(),
-            enderecoApiViaCepDto.rua()
+            enderecoApiViaCepDto.rua(),
+            0,
+            null
         );
     }
 }

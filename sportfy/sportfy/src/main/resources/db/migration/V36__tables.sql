@@ -1,3 +1,9 @@
+CREATE TABLE administrador (
+	id_administrador INT AUTO_INCREMENT PRIMARY KEY,
+	id_usuario INT NOT NULL,
+	CONSTRAINT fk_administrador_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
+);
+
 CREATE TABLE meta_diaria (
 	id_meta_diaria INT AUTO_INCREMENT PRIMARY KEY,
 	titulo VARCHAR(50) NOT NULL,
