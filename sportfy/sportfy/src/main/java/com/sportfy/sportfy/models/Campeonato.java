@@ -11,6 +11,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Entity
 @Table(name="campeonato")
@@ -19,63 +20,68 @@ import java.time.OffsetDateTime;
 @AllArgsConstructor
 public class Campeonato implements Serializable {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name="id_campeonato")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_campeonato")
     private Long idCampeonato;
 
-    @Column(name="codigo", unique = true)
+    @Column(name = "codigo", unique = true)
     private String codigo;
 
-    @Column(name="titulo", nullable = false)
+    @Column(name = "titulo", nullable = false)
     private String titulo;
 
-    @Column(name="descricao", nullable = false)
+    @Column(name = "descricao", nullable = false)
     private String descricao;
 
-    @Column(name="aposta")
+    @Column(name = "aposta")
     private String aposta;
 
     @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="data_criacao", insertable = false, updatable = false, nullable = false)
+    @Column(name = "data_criacao", insertable = false, updatable = false, nullable = false)
     private OffsetDateTime dataCriacao;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="data_inicio", nullable = false)
+    @Column(name = "data_inicio", nullable = false)
     private OffsetDateTime dataInicio;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="data_fim", nullable = false)
+    @Column(name = "data_fim", nullable = false)
     private OffsetDateTime dataFim;
 
-    @Column(name="limite_times", nullable = false)
+    @Column(name = "limite_times", nullable = false)
     private int limiteTimes;
 
-    @Column(name="limite_participantes", nullable = false)
+    @Column(name = "limite_participantes", nullable = false)
     private int limiteParticipantes;
 
-    @Column(name="ativo", insertable = false)
+    @Column(name = "ativo", insertable = false)
     private boolean ativo;
 
-    @OneToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name="id_endereco", nullable = false)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_endereco", nullable = false)
     private Endereco endereco;
 
     @Enumerated(EnumType.STRING)
-    @Column(name="privacidade_campeonato", nullable = false)
+    @Column(name = "privacidade_campeonato", nullable = false)
     private TipoPrivacidadeCampeonato privacidadeCampeonato;
 
-    @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="id_academico", updatable = false, nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_academico", updatable = false, nullable = false)
     private Academico academico;
 
-    @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="id_modalidade_esportiva", updatable = false, nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_modalidade_esportiva", updatable = false, nullable = false)
     private ModalidadeEsportiva modalidadeEsportiva;
 
     @Enumerated(EnumType.STRING)
-    @Column(name="situacao_campeonato", nullable = false)
+    @Column(name = "situacao_campeonato", nullable = false)
     private TipoSituacaoCampeonato situacaoCampeonato;
+
+    @ManyToMany
+    @JoinTable(
+            name = "campeonato_partida",
+            joinColumns = @JoinColumn(name = "id_partida"),
+            inverseJoinColumns = @JoinColumn(name = "id_campeonato")
+    )
+    private List<Partida> partidas;
 
     public void toEntity(CampeonatoDto dto) throws Exception {
         setTitulo(dto.titulo());

@@ -4,6 +4,7 @@ import com.sportfy.sportfy.dtos.AcademicoDto;
 import com.sportfy.sportfy.dtos.NotificacaoDto;
 import com.sportfy.sportfy.dtos.PrivacidadeDto;
 import com.sportfy.sportfy.exeptions.*;
+import com.sportfy.sportfy.models.Academico;
 import com.sportfy.sportfy.models.Notificacao;
 import com.sportfy.sportfy.models.Privacidade;
 import com.sportfy.sportfy.services.AcademicoService;
@@ -96,7 +97,19 @@ public class AcademicoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
+/*
+    @GetMapping("/buscarUsuario")
+    public ResponseEntity<Object> consultar(@PathVariable("idUsuario") Long idUsuario) {
+        try {
+            Object academicoConsultado = academicoService.consultar(idUsuario);
+            return ResponseEntity.status(HttpStatus.OK).body(academicoConsultado);
+        } catch (AcademicoNaoExisteException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+*/
 
     @GetMapping("/notificacoes/{idAcademico}/{tipoNotificacao}")
     public ResponseEntity<Boolean> retornaPreferenciaNotificacao(@PathVariable Long idAcademico, @PathVariable String tipoNotificacao){
