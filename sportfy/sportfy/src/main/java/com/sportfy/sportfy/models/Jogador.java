@@ -23,7 +23,7 @@ public class Jogador implements Serializable {
     @Column(name="pontuacao")
     private int pontuacao;
 
-    @ManyToOne(fetch=FetchType.EAGER)
+    @ManyToOne(fetch=FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name="id_time", updatable = false, nullable = false)
     private Time time;
 

@@ -26,6 +26,8 @@ CREATE TABLE campeonato (
     id_academico int NOT NULL,
     id_modalidade_esportiva int NOT NULL,
     situacao_campeonato VARCHAR(50) NOT NULL,
+    fase_atual VARCHAR(50),
+
     CONSTRAINT fk_campeonato_endereco FOREIGN KEY (id_endereco) REFERENCES endereco(id_endereco),
     CONSTRAINT fk_campeonato_academico FOREIGN KEY (id_academico) REFERENCES academico(id_academico),
     CONSTRAINT fk_campeonato_modalidade_esportiva FOREIGN KEY (id_modalidade_esportiva) REFERENCES modalidade_esportiva(id_modalidade_esportiva)
@@ -65,8 +67,6 @@ CREATE TABLE partida (
     fase_partida VARCHAR(50),
     id_time1 int NOT NULL,
     id_time2 int NOT NULL,
-    pontuacao_time1 INT,
-    pontuacao_time2 INT,
     id_resultado int,
     CONSTRAINT fk_partida_campeonato FOREIGN KEY (id_campeonato) REFERENCES campeonato(id_campeonato),
     CONSTRAINT fk_partida_time1 FOREIGN KEY (id_time1) REFERENCES time(id_time),

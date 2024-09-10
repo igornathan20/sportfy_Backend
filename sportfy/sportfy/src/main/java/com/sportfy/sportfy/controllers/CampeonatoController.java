@@ -1,10 +1,12 @@
 package com.sportfy.sportfy.controllers;
 
 import com.sportfy.sportfy.dtos.CampeonatoDto;
-import com.sportfy.sportfy.exeptions.AcademicoNaoExisteException;
-import com.sportfy.sportfy.exeptions.ModalidadeNaoExistenteException;
-import com.sportfy.sportfy.exeptions.RegistroNaoEncontradoException;
+import com.sportfy.sportfy.dtos.TimeDto;
+import com.sportfy.sportfy.exeptions.*;
 import com.sportfy.sportfy.models.Campeonato;
+import com.sportfy.sportfy.models.Jogador;
+import com.sportfy.sportfy.models.Partida;
+import com.sportfy.sportfy.models.Time;
 import com.sportfy.sportfy.services.CampeonatoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -110,5 +112,64 @@ public class CampeonatoController {
         }
     }
 
+    @PostMapping("/times")
+    public ResponseEntity<Time> criarTime(@RequestBody TimeDto novoTime) {
+        try {
+            Time timeCriado = campeonatoService.criarTime(novoTime);
+            return ResponseEntity.status(HttpStatus.CREATED).body(timeCriado);
+        } catch (CampeonatoInvalidoException | TimeInvalidoException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
 
+    @PostMapping("/times/{idAcademico}")
+    public ResponseEntity<Jogador> adicionarJogadorTime(@RequestBody TimeDto timeDto, @PathVariable Long idAcademico) {
+        try {
+            Jogador jogador = campeonatoService.adicionarJogadorTime(timeDto, idAcademico);
+            return ResponseEntity.status(HttpStatus.CREATED).body(jogador);
+        } catch (CampeonatoInvalidoException | TimeInvalidoException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+
+    @PostMapping("/{idCampeonato}/times/{idAcademico}")
+    public ResponseEntity<Time> criarTimeComUmJogador(@PathVariable Long idCampeonato, @PathVariable Long idAcademico) {
+        try {
+            Time timeCriado = campeonatoService.criarTimeComUmJogador(idCampeonato, idAcademico);
+            return ResponseEntity.status(HttpStatus.CREATED).body(timeCriado);
+        } catch (CampeonatoInvalidoException | TimeInvalidoException | RegistroNaoEncontradoException e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+
+    @PostMapping("/{idCampeonato}/primeira-fase")
+    public ResponseEntity<List<Partida>> definirPrimeiraFase(@PathVariable Long idCampeonato) {
+        try {
+            campeonatoService.definirPrimeiraFase(idCampeonato);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }catch (RegistroNaoEncontradoException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @PostMapping("/{idCampeonato}/avancar-fase")
+    public ResponseEntity<Void> avancarDeFase(@PathVariable Long idCampeonato) {
+        try {
+            campeonatoService.avacarDeFase(idCampeonato);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }catch (RegistroNaoEncontradoException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @PutMapping("/partidas/{idPartida}/pontuacao")
+    public ResponseEntity<Partida> alterarPontuacaoPartida(@PathVariable Long idPartida, @RequestParam int pontuacaoTime1, @RequestParam int pontuacaoTime2) {
+        try {
+            Partida partida = campeonatoService.alterarPontuacaoPartida(idPartida, pontuacaoTime1, pontuacaoTime2);
+            return ResponseEntity.status(HttpStatus.OK).body(partida);
+        } catch (RegistroNaoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
 }

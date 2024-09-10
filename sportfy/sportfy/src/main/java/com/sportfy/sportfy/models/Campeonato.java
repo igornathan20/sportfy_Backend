@@ -3,6 +3,7 @@ package com.sportfy.sportfy.models;
 import java.io.Serializable;
 
 import com.sportfy.sportfy.dtos.CampeonatoDto;
+import com.sportfy.sportfy.enums.TipoFasePartida;
 import com.sportfy.sportfy.enums.TipoPrivacidadeCampeonato;
 import com.sportfy.sportfy.enums.TipoSituacaoCampeonato;
 import org.hibernate.annotations.CreationTimestamp;
@@ -74,6 +75,10 @@ public class Campeonato implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "situacao_campeonato", nullable = false)
     private TipoSituacaoCampeonato situacaoCampeonato;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "fase_atual")
+    private TipoFasePartida faseAtual;
 
     @ManyToMany
     @JoinTable(
