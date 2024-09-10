@@ -1,6 +1,7 @@
 package com.sportfy.sportfy.models;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.sportfy.sportfy.dtos.AcademicoDto;
 
@@ -10,27 +11,32 @@ import lombok.*;
 
 @Entity
 @Table(name = "academico")
+@Setter @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Academico implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id_academico")
-    @Setter @Getter
     private Long idAcademico;
 
     @Column(name="email", unique = true)
-    @Setter @Getter
     private String email;
 
     @Column(name="curso")
-    @Setter @Getter
     private String curso;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_usuario", nullable = false)
-    @Setter @Getter
     private Usuario usuario;
+
+    @ManyToMany
+    @JoinTable(
+            name = "academico_modalidade_esportiva",
+            joinColumns = @JoinColumn(name = "id_modalidade_esportiva"),
+            inverseJoinColumns = @JoinColumn(name = "id_academico")
+    )
+    private List<ModalidadeEsportiva> modalidadeEsportivas;
 
     public void toEntity(AcademicoDto academicoDto) {
         this.idAcademico = 0L;

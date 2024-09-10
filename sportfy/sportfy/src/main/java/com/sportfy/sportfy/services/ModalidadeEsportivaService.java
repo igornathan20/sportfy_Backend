@@ -117,6 +117,21 @@ public class ModalidadeEsportivaService {
         }
     }
 
+    public List<ModalidadeEsportiva> listarModalidadesInscritas(Long idAcademico) throws AcademicoNaoExisteException{
+        Optional<Academico>academico = academicoRepository.findById(idAcademico);
+        //Optional<AcademicoModalidadeEsportiva> academicoModalidade = academicoModalidadeEsportivaReposity.findByAcademicoIdAcademicoAndModalidadeEsportivaIdModalidadeEsportiva(idAcademico,idModalidade);
+
+       // if (academicoModalidade.isEmpty()) {
+            if (academico.isPresent()) {
+                return academico.get().getModalidadeEsportivas();
+            } else {
+                throw new AcademicoNaoExisteException("Usuario não encontrado!");
+            }
+       // }else {
+       //     throw new Exception("O usuario ja esta cadastrado na modalidade!");
+       // }
+    }
+
     public void cancelarInscricaoModalidade(Long idAcademico, Long idModalidade) throws ModalidadeNaoExistenteException, AcademicoNaoExisteException{
         Optional<ModalidadeEsportiva> modalidade = modalidadeEsportivaRepository.findById(idModalidade);
         Optional<Academico>academico = academicoRepository.findById(idAcademico);

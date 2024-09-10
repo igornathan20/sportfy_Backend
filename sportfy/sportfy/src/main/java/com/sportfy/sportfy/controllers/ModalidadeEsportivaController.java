@@ -92,6 +92,17 @@ public class ModalidadeEsportivaController {
         }
     }
 
+
+    @GetMapping("/listar/{idAcademico}")
+    public ResponseEntity<List<ModalidadeEsportiva>> listarModalidadesAcademico(@PathVariable Long idAcademico) {
+        try {
+            List<ModalidadeEsportiva> modalidadeAcademico = modalidadeEsportivaService.listarModalidadesInscritas(idAcademico);
+            return ResponseEntity.status(HttpStatus.OK).body(modalidadeAcademico);
+        } catch (AcademicoNaoExisteException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
     @DeleteMapping("/remover/{idAcademico}/{idModalidade}")
     public ResponseEntity<Void> cancelarInscricaoModalidade(@PathVariable Long idAcademico, @PathVariable Long idModalidade) {
         try {
