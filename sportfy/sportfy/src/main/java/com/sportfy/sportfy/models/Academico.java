@@ -32,13 +32,18 @@ public class Academico implements Serializable {
     @Setter @Getter
     private Usuario usuario;
 
-    public void cadastrar(AcademicoDto academicoDto) {
+    public void toEntity(AcademicoDto academicoDto) {
         this.idAcademico = 0L;
         this.email = academicoDto.email().toLowerCase();
+        this.curso = academicoDto.curso().toLowerCase();
         this.usuario = new Usuario();
         this.usuario.setIdUsuario(0L);
         this.usuario.setUsername(academicoDto.username().toLowerCase());
         this.usuario.setNome(academicoDto.nome());
+        this.usuario.setGenero(academicoDto.genero());
+        this.usuario.setTelefone(academicoDto.telefone());
+        this.usuario.setDataNascimento(academicoDto.dataNascimento());
+        this.usuario.setFoto(academicoDto.foto());
     }
 
     public void atualizar(Long idAcademico, Long idUsuario, AcademicoDto academicoDto) {
@@ -49,6 +54,7 @@ public class Academico implements Serializable {
         this.usuario.setIdUsuario(idUsuario);
         this.usuario.setUsername(academicoDto.username().toLowerCase());
         this.usuario.setNome(academicoDto.nome());
+        this.usuario.setGenero(academicoDto.genero());
         this.usuario.setTelefone(academicoDto.telefone());
         this.usuario.setDataNascimento(academicoDto.dataNascimento());
         this.usuario.setFoto(academicoDto.foto());

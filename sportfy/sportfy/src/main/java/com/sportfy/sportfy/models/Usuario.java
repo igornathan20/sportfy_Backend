@@ -14,6 +14,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name="usuario")
+@Setter @Getter
+
 @NoArgsConstructor
 @AllArgsConstructor
 public class Usuario implements UserDetails {
@@ -21,47 +23,39 @@ public class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id_usuario")
-    @Setter @Getter
     private Long idUsuario;
 
     @Column(name="username", unique = true)
-    @Setter @Getter
     private String username;
 
     @Column(name="password", nullable = false)
-    @Setter @Getter
     private String password;
 
     @Column(name="nome", nullable = false)
-    @Setter @Getter
     private String nome;
 
+    @Column(name="genero")
+    private String genero;
+
     @Column(name="telefone")
-    @Setter @Getter
     private String telefone;
 
-    @Temporal(TemporalType.DATE)
     @Column(name="data_nascimento", nullable = false)
-    @Setter @Getter
-    private LocalDate dataNascimento;
+    private OffsetDateTime dataNascimento;
 
     @Column(name="foto")
-    @Setter @Getter
     private String foto;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="data_criacao", insertable = false, updatable = false, nullable = false)
-    @Setter @Getter
     private OffsetDateTime dataCriacao;
 
     @Column(name="ativo", insertable = false)
-    @Setter @Getter
     private boolean ativo = true;
 
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="id_permissao")
-    @Setter @Getter
     private Permissao permissao;
 
     @Override

@@ -27,7 +27,7 @@ public record AdministradorDto(
     String telefone,
 
     @Past(message = "A data de nascimento deve estar no passado")
-    LocalDate dataNascimento,
+    OffsetDateTime dataNascimento,
 
     @Size(min = 0, max = 255, message = "Caminho da foto deve ter no máximo 255 caracteres")
     String foto,

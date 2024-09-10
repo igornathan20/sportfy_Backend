@@ -31,11 +31,13 @@ public record AcademicoDto(
     @Size(min = 4, max = 100, message = "Nome deve ter entre 4 e 100 caracteres")
     String nome,
 
+    String genero,
+
     @Size(min = 11, max = 11, message = "Telefone deve ter 11 caracteres: 'XX XXXXX-XXXX'")
     String telefone,
 
     @Past(message = "A data de nascimento deve estar no passado")
-    LocalDate dataNascimento,
+    OffsetDateTime dataNascimento,
 
     @Size(min = 0, max = 255, message = "Caminho da foto deve ter no máximo 255 caracteres")
     String foto,
@@ -50,10 +52,11 @@ public record AcademicoDto(
         return new AcademicoDto(
             academico.getIdAcademico(),
             academico.getCurso(),
-            academico.getEmail(),
             academico.getUsuario().getUsername(),
+            academico.getEmail(),
             null,
             academico.getUsuario().getNome(),
+            academico.getUsuario().getGenero(),
             academico.getUsuario().getTelefone(),
             academico.getUsuario().getDataNascimento(),
             academico.getUsuario().getFoto(),

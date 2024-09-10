@@ -19,6 +19,7 @@ CREATE TABLE usuario (
 	password VARCHAR(100) NOT NULL,
 	nome VARCHAR(100) NOT NULL,
 	telefone VARCHAR(11),
+	genero VARCHAR(11),
 	data_nascimento DATE,
 	foto VARCHAR(255),
 	data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
