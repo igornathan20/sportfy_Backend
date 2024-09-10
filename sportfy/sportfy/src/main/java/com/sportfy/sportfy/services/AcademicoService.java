@@ -143,6 +143,7 @@ public class AcademicoService {
     
         Academico academicoAtualizado = new Academico();
         academicoAtualizado.atualizar(academicoBD.get().getIdAcademico(), academicoBD.get().getUsuario().getIdUsuario(), academicoDto);
+        academicoAtualizado.getUsuario().setDataCriacao(academicoBD.get().getUsuario().getDataCriacao());
         academicoAtualizado.getUsuario().setPermissao(academicoBD.get().getUsuario().getPermissao());
         if (academicoDto.password() == null || academicoDto.password().isEmpty()) {
             academicoAtualizado.getUsuario().setPassword(academicoBD.get().getUsuario().getPassword());
@@ -186,20 +187,30 @@ public class AcademicoService {
         Notificacao notificacao = notificacaoRepository.findByIdAcademico(idAcademico);
 
         switch (tipo){
-            case "notificarModalidadesEsportiva":
-                return notificacao.isModalidadeEsportivas();
             case "notificarCampeonatos":
-                return notificacao.isCampeonatos();
+                return notificacao.isNotificarCampeonatos();
+            case "notificarPosts":
+                return notificacao.isNotificarPosts();
+            case "notificarComentarios":
+                return notificacao.isNotificarComentarios();
+            case "notificarLikes":
+                return notificacao.isNotificarLikes();
             default:
                 return true;
         }
     }
 
+    public Notificacao retornaTodasNotificacoes(Long idAcademico){
+       return notificacaoRepository.findByIdAcademico(idAcademico);
+    }
+
     public Notificacao alteraNotificacao(NotificacaoDto userNotificacao){
         Notificacao notificacao = notificacaoRepository.findByIdAcademico(userNotificacao.idAcademico());
 
-        notificacao.setModalidadeEsportivas(userNotificacao.modalidadeEsportivas());
-        notificacao.setCampeonatos(userNotificacao.campeonatos());
+        notificacao.setNotificarCampeonatos(userNotificacao.campeonatos());
+        notificacao.setNotificarPosts(userNotificacao.posts());
+        notificacao.setNotificarComentarios(userNotificacao.comentarios());
+        notificacao.setNotificarLikes(userNotificacao.likes());
 
         return notificacaoRepository.save(notificacao);
     }
@@ -219,6 +230,10 @@ public class AcademicoService {
             default:
                 return true;
         }
+    }
+
+    public Privacidade retornaTodasPrivacidade(Long idAcademico){
+        return privacidadeRepository.findByIdAcademico(idAcademico);
     }
 
     public Privacidade alteraPrivacidade(PrivacidadeDto userPrivacidade){

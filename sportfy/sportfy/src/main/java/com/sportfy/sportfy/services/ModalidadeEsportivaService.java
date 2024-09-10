@@ -32,6 +32,7 @@ public class ModalidadeEsportivaService {
         if (modalidadeExistente.isEmpty()){
             ModalidadeEsportiva novaModalidade = new ModalidadeEsportiva();
             novaModalidade.updateFromDto(modalidade);
+            novaModalidade.setAtivo(true);
             return modalidadeEsportivaRepository.save(novaModalidade);
         }else {
             throw new ModalidadeJaExisteException("A modalidade ja existe!");

@@ -14,7 +14,6 @@ public record AcademicoDto(
     @Size(min = 1, max = 50, message = "Curso deve ter entre 1 e 50 caracteres")
     String curso,
 
-    @NotBlank(message = "Username é obrigatório")
     @Size(min = 4, max = 30, message = "Username deve ter entre 4 e 30 caracteres")
     @Pattern(regexp = "^[a-zA-Z0-9._-]+$", message = "Username deve conter apenas letras, números, sublinhados (_), hífens (-), e pontos (.)")
     String username,
@@ -24,9 +23,9 @@ public record AcademicoDto(
     @Pattern(regexp = "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$", message = "Email deve conter apenas letras minúsculas, números, sublinhados (_), hífens (-), e pontos (.)")
     String email,
 
+    @Size(min = 4, max = 12, message = "A senha deve conter entre 4 a 12 caracteres")
     String password,
 
-    @NotBlank(message = "Nome é obrigatório")
     @Pattern(regexp = "^[a-zA-Z\\u00C0-\\u00FF\\s]+$", message = "Nome inválido")
     @Size(min = 4, max = 100, message = "Nome deve ter entre 4 e 100 caracteres")
     String nome,

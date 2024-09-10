@@ -59,7 +59,7 @@ public class AcademicoController {
         }
     }
 
-    @DeleteMapping("/inativar/{idAcademico}")
+    @PutMapping("/inativar/{idAcademico}")
     //@PreAuthorize("hasRole('ROLE_ACADEMICO')")
     public ResponseEntity<Object> inativar(@PathVariable("idAcademico") Long idAcademico) {
         try {
@@ -121,7 +121,17 @@ public class AcademicoController {
         }
     }
 
-    @PostMapping ("/notificacao")
+    @GetMapping("/notificacoes/{idAcademico}")
+    public ResponseEntity<Notificacao> retornaTodasPreferenciaNotificacao(@PathVariable Long idAcademico){
+        try {
+            Notificacao notificar = academicoService.retornaTodasNotificacoes(idAcademico);
+            return ResponseEntity.status(HttpStatus.OK).body(notificar);
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PutMapping ("/notificacoes")
     public ResponseEntity<NotificacaoDto> alteraNotificacao(@RequestBody NotificacaoDto userNotificacao){
         try {
             Notificacao notificacao = academicoService.alteraNotificacao(userNotificacao);
@@ -141,7 +151,17 @@ public class AcademicoController {
         }
     }
 
-    @PostMapping ("/privacidade")
+    @GetMapping("/privacidade/{idAcademico}")
+    public ResponseEntity<Privacidade> retornaTodasPrivacidade(@PathVariable Long idAcademico){
+        try {
+            Privacidade privacidade = academicoService.retornaTodasPrivacidade(idAcademico);
+            return ResponseEntity.status(HttpStatus.OK).body(privacidade);
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PutMapping ("/privacidade")
     public ResponseEntity<PrivacidadeDto> alteraPrivacidade(@RequestBody PrivacidadeDto userPrivacidade){
         try {
             Privacidade privacidade = academicoService.alteraPrivacidade(userPrivacidade);

@@ -39,8 +39,10 @@ CREATE TABLE academico (
 CREATE TABLE notificacao (
 	id_notificacao INT AUTO_INCREMENT PRIMARY KEY,
     id_academico INT NOT NULL,
-    modalidade_esportivas BOOLEAN NOT NULL,
     campeonatos BOOLEAN NOT NULL,
+    posts BOOLEAN NOT NULL,
+    comentarios BOOLEAN NOT NULL,
+    likes BOOLEAN NOT NULL,
     CONSTRAINT fk_academico_notificacao FOREIGN KEY (id_academico) REFERENCES academico(id_academico)
 );
 

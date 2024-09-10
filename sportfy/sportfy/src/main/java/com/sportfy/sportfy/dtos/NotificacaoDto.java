@@ -4,14 +4,19 @@ import com.sportfy.sportfy.models.Notificacao;
 
 public record NotificacaoDto(
      Long idAcademico,
-     boolean modalidadeEsportivas,
-     boolean campeonatos
+     boolean campeonatos,
+     boolean posts,
+     boolean comentarios,
+     boolean likes
+
 ) {
     public static NotificacaoDto fromNotificacao(Notificacao notificacao){
         return new NotificacaoDto(
                 notificacao.getIdAcademico(),
-                notificacao.isModalidadeEsportivas(),
-                notificacao.isCampeonatos()
+                notificacao.isNotificarCampeonatos(),
+                notificacao.isNotificarPosts(),
+                notificacao.isNotificarComentarios(),
+                notificacao.isNotificarLikes()
         );
     }
 }
