@@ -2,6 +2,8 @@ package com.sportfy.sportfy.models;
 
 import java.io.Serializable;
 
+import java.util.List;
+
 import com.sportfy.sportfy.enums.TipoCanal;
 
 import jakarta.persistence.*;
@@ -22,4 +24,12 @@ public class Canal implements Serializable {
     @Column(name="tipo_canal", insertable = false, updatable = false, nullable = false, unique = true)
     @Setter @Getter
     private TipoCanal tipoCanal;
+
+    @OneToMany(mappedBy="canal", fetch=FetchType.EAGER)
+    @Setter @Getter
+    private List<UsuarioCanal> listaUsuarioCanal;
+
+    @OneToMany(mappedBy="canal", fetch=FetchType.EAGER)
+    @Setter @Getter
+    private List<Publicacao> listaPublicacao;
 }

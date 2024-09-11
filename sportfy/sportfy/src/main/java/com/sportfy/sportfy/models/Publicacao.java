@@ -4,6 +4,10 @@ import java.io.Serializable;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.sportfy.sportfy.dtos.PublicacaoDto;
+
+import java.util.List;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -39,4 +43,21 @@ public class Publicacao implements Serializable {
     @JoinColumn(name="id_usuario", updatable = false, nullable = false)
     @Setter @Getter
     private Usuario usuario;
+
+    @OneToMany(mappedBy="publicacao", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+    @Setter @Getter
+    private List<CurtidaPublicacao> listaCurtidaPublicacao;
+
+    @OneToMany(mappedBy="publicacao", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+    @Setter @Getter
+    private List<Comentario> listaComentario;
+
+    public void cadastrar(PublicacaoDto publicacaoDto) {
+        this.idPublicacao = 0L;
+        this.descricao = publicacaoDto.descricao();
+        this.canal = new Canal();
+        this.canal.setIdCanal(publicacaoDto.idCanal());
+        this.usuario = new Usuario();
+        this.usuario.setIdUsuario(publicacaoDto.Usuario().idUsuario());
+    }
 }

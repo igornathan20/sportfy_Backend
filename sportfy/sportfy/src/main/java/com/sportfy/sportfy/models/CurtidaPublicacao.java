@@ -35,4 +35,12 @@ public class CurtidaPublicacao implements Serializable {
     @JoinColumn(name="id_usuario", updatable = false, nullable = false)
     @Setter @Getter
     private Usuario usuario;
+
+    public void cadastrar(Long idUsuario, Long idPublicacao) {
+        this.idCurtidaPublicacao = 0L;
+        this.publicacao = new Publicacao();
+        this.publicacao.setIdPublicacao(idPublicacao);
+        this.usuario = new Usuario();
+        this.usuario.setIdUsuario(idUsuario);
+    }
 }

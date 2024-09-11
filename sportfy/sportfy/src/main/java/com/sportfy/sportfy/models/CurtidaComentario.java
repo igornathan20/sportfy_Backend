@@ -35,4 +35,12 @@ public class CurtidaComentario implements Serializable {
     @JoinColumn(name="id_usuario", updatable = false, nullable = false)
     @Setter @Getter
     private Usuario usuario;
+
+    public void cadastrar(Long idUsuario, Long idComentario) {
+        this.idCurtidaComentario = 0L;
+        this.comentario = new Comentario();
+        this.comentario.setIdComentario(idComentario);
+        this.usuario = new Usuario();
+        this.usuario.setIdUsuario(idUsuario);
+    }
 }
