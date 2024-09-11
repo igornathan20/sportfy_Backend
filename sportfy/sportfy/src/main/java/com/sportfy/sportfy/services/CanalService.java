@@ -24,6 +24,8 @@ import com.sportfy.sportfy.repositories.CurtidaComentarioRepository;
 import com.sportfy.sportfy.repositories.CurtidaPublicacaoRepository;
 import com.sportfy.sportfy.repositories.PublicacaoRepository;
 
+import jakarta.transaction.Transactional;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -87,13 +89,14 @@ public class CanalService {
             throw new PublicacaoNaoExisteException("Publicacão não existe!");
         }
     }
-
+    
+    @Transactional
     public boolean removerCurtidaPublicacao(Long idUsuario, Long idPublicacao) throws UsuarioCurtidaPublicacaoNaoExisteException, PublicacaoNaoExisteException{
         Optional<Publicacao> publicacaoBD = publicacaoRepository.findById(idPublicacao);
         if (publicacaoBD.isPresent()) {
             for (CurtidaPublicacao curtidaPublicacao : publicacaoBD.get().getListaCurtidaPublicacao()) {
                 if (curtidaPublicacao.getUsuario().getIdUsuario() == idUsuario) {
-                    curtidaPublicacaoRepository.delete(curtidaPublicacao);
+                    curtidaPublicacaoRepository.deleteCurtidaById(curtidaPublicacao.getIdCurtidaPublicacao());
                     return true;
                 }
             }
@@ -121,11 +124,19 @@ public class CanalService {
             throw new ComentarioNaoExisteException("Comentario não existe!");
         }
     }
-
+    
+    @Transactional
     public ComentarioDto removerComentario(Long idComentario) throws ComentarioNaoExisteException {
         Comentario comentarioExistente = comentarioRepository.findById(idComentario).orElse(null);
         if (comentarioExistente != null) {
-            comentarioRepository.delete(comentarioExistente);
+            if (comentarioExistente.getListaCurtidaComentario() != null && !comentarioExistente.getListaCurtidaComentario().isEmpty()) {
+                List<Long> listaIdCurtidaComentario = new ArrayList<Long>();
+                for (CurtidaComentario curtidaComentario : comentarioExistente.getListaCurtidaComentario()) {
+                    listaIdCurtidaComentario.add(curtidaComentario.getIdCurtidaComentario());
+                }
+                curtidaComentarioRepository.deleteAllById(listaIdCurtidaComentario);
+            }
+            comentarioRepository.deleteComentarioById(comentarioExistente.getIdComentario());
             return ComentarioDto.fromComentarioBD(comentarioExistente);
         } else {
             throw new ComentarioNaoExisteException("Comentario não existe!");

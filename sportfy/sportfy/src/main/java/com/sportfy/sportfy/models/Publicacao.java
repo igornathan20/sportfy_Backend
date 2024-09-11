@@ -44,11 +44,11 @@ public class Publicacao implements Serializable {
     @Setter @Getter
     private Usuario usuario;
 
-    @OneToMany(mappedBy="publicacao", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+    @OneToMany(mappedBy="publicacao", fetch=FetchType.EAGER, cascade=CascadeType.REMOVE)
     @Setter @Getter
     private List<CurtidaPublicacao> listaCurtidaPublicacao;
 
-    @OneToMany(mappedBy="publicacao", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+    @OneToMany(mappedBy="publicacao", fetch=FetchType.EAGER, cascade=CascadeType.REMOVE)
     @Setter @Getter
     private List<Comentario> listaComentario;
 
