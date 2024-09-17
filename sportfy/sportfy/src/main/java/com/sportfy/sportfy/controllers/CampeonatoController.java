@@ -96,7 +96,7 @@ public class CampeonatoController {
     public ResponseEntity<Campeonato> excluirCampeonato(@PathVariable Long id) {
         try {
             Optional<Campeonato> campeonato = campeonatoService.excluirCampeonato(id);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(campeonato.get());
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } catch (RegistroNaoEncontradoException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }

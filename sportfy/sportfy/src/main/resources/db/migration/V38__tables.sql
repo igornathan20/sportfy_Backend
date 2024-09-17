@@ -62,7 +62,7 @@ CREATE TABLE resultado (
 
 CREATE TABLE partida (
     id_partida int AUTO_INCREMENT PRIMARY KEY,
-    data_partida TIMESTAMP NOT NULL,
+    data_partida TIMESTAMP,
     id_campeonato int NOT NULL,
     fase_partida VARCHAR(50),
     id_time1 int NOT NULL,
