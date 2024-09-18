@@ -1,24 +1,20 @@
 package com.sportfy.sportfy.services;
 
 import com.sportfy.sportfy.dtos.AcademicoDto;
+import com.sportfy.sportfy.dtos.EstatisticasPessoaisModalidadeDto;
 import com.sportfy.sportfy.dtos.NotificacaoDto;
 import com.sportfy.sportfy.dtos.PrivacidadeDto;
 import com.sportfy.sportfy.enums.TipoPermissao;
 import com.sportfy.sportfy.exeptions.*;
-import com.sportfy.sportfy.models.Academico;
-import com.sportfy.sportfy.models.Notificacao;
-import com.sportfy.sportfy.models.Permissao;
-import com.sportfy.sportfy.models.Privacidade;
-import com.sportfy.sportfy.repositories.AcademicoRepository;
-import com.sportfy.sportfy.repositories.NotificacaoRepository;
-import com.sportfy.sportfy.repositories.PermissaoRepository;
-import com.sportfy.sportfy.repositories.PrivacidadeRepository;
+import com.sportfy.sportfy.models.*;
+import com.sportfy.sportfy.repositories.*;
 import com.sportfy.sportfy.util.EnviarEmail;
 import com.sportfy.sportfy.util.GeraSenha;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,12 +24,14 @@ public class AcademicoService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
     @Autowired
     private EnviarEmail email;
-
     @Autowired
     AcademicoRepository academicoRepository;
+    @Autowired
+    ModalidadeEsportivaRepository modalidadeEsportivaRepository;
+    @Autowired
+    PartidaRepository partidaRepository;
 
     @Autowired
     private PermissaoRepository permissaoRepository;
@@ -246,4 +244,28 @@ public class AcademicoService {
 
         return privacidadeRepository.save(privacidade);
     }
+
+//    public EstatisticasPessoaisModalidadeDto estatisticasPessoais(Long idAcademico , Long idModalidade)throws AcademicoNaoExisteException, ModalidadeNaoExistenteException{
+//        Optional<ModalidadeEsportiva> modalidadeEsportiva = modalidadeEsportivaRepository.findById(idModalidade);
+//        Optional<Academico> academico = academicoRepository.findById(idAcademico);
+//
+//        if (academico.isPresent()){
+//            if (modalidadeEsportiva.isPresent()){
+//                List<Partida> partidas = partidaRepository
+//
+//
+//
+//
+//
+//
+//            }else {
+//                throw new AcademicoNaoExisteException("Academico nao encontrado!");
+//            }
+//        }else {
+//            throw new ModalidadeNaoExistenteException("Modalidade nao encontrada!");
+//        }
+//
+//
+//        EstatisticasPessoaisModalidadeDto estatisticas = new EstatisticasPessoaisModalidadeDto();
+//    }
 }

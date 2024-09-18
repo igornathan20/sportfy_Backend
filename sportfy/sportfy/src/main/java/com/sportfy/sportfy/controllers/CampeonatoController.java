@@ -3,10 +3,7 @@ package com.sportfy.sportfy.controllers;
 import com.sportfy.sportfy.dtos.CampeonatoDto;
 import com.sportfy.sportfy.dtos.TimeDto;
 import com.sportfy.sportfy.exeptions.*;
-import com.sportfy.sportfy.models.Campeonato;
-import com.sportfy.sportfy.models.Jogador;
-import com.sportfy.sportfy.models.Partida;
-import com.sportfy.sportfy.models.Time;
+import com.sportfy.sportfy.models.*;
 import com.sportfy.sportfy.services.CampeonatoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -172,4 +169,36 @@ public class CampeonatoController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
+
+    @PostMapping("/avaliar")
+    public ResponseEntity<AvaliacaoJogador> avaliarJogador(@RequestParam Long idAvaliador, @RequestParam Long idJogador, @RequestParam int nota) {
+        try {
+            AvaliacaoJogador avaliacao = campeonatoService.avaliarJogador(idAvaliador, idJogador, nota);
+            return ResponseEntity.ok(avaliacao);
+        } catch (AcademicoNaoExisteException | RegistroNaoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    @GetMapping("/avaliacao/campeonato")
+    public ResponseEntity<Float> recuperaAvaliacaoNoCampeonato(@RequestParam Long idCampeonato, @RequestParam Long idAcademico) {
+        try {
+            float media = campeonatoService.recuperaAvaliacaoNoCampeonato(idCampeonato, idAcademico);
+            return ResponseEntity.ok(media);
+        } catch (AcademicoNaoExisteException | CampeonatoInvalidoException | RegistroNaoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    @GetMapping("/avaliacao/modalidade")
+    public ResponseEntity<Float> recuperaAvaliacaoPorModalidade(@RequestParam Long idModalidade, @RequestParam Long idAcademico) {
+        try {
+            float media = campeonatoService.recuperaAvaliacaoPorModalidade(idModalidade, idAcademico);
+            return ResponseEntity.ok(media);
+        } catch (AcademicoNaoExisteException | ModalidadeNaoExistenteException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
 }
+

@@ -395,4 +395,89 @@ public class CampeonatoService {
         throw new RegistroNaoEncontradoException("nao foi encontrado registro da partida!");
     }
 
+    public AvaliacaoJogador avaliarJogador (Long idAvaliador, Long idJogador, int nota )throws AcademicoNaoExisteException, RegistroNaoEncontradoException{
+        Optional<Academico> avaliador = academicoRepository.findById(idAvaliador);
+        Optional<Jogador> jogador = jogadorRepository.findById(idJogador);
+
+        if(avaliador.isPresent()){
+            if (jogador.isPresent()){
+                AvaliacaoJogador avaliacao = new AvaliacaoJogador();
+                avaliacao.setJogador(jogador.get());
+                avaliacao.setAvaliador(avaliador.get());
+                avaliacao.setNota(nota);
+
+                jogador.get().getAvaliacoes().add(avaliacao);
+                jogadorRepository.save(jogador.get());
+
+                return avaliacao;
+            }else {
+                throw new RegistroNaoEncontradoException("Jogador não existente!");
+            }
+        }else {
+            throw new AcademicoNaoExisteException("Academico não encontrado!");
+        }
+    }
+
+    public float recuperaAvaliacaoNoCampeonato(Long idCampeonato, Long idAcademico) throws AcademicoNaoExisteException, CampeonatoInvalidoException, RegistroNaoEncontradoException{
+        Optional<Academico> academico = academicoRepository.findById(idAcademico);
+        Optional<Campeonato> campeonato = campeonatoRepository.findById(idCampeonato);
+
+        if (academico.isPresent()){
+            if (campeonato.isPresent()){
+                Optional<Jogador> jogador = jogadorRepository.findByAcademicoAndTimeCampeonato(academico.get(), campeonato.get());
+                if (jogador.isPresent()){
+                    float media = 0;
+                    int contador = 0;
+
+                    for(int i = 0; i < jogador.get().getAvaliacoes().size(); i++){
+                        if (jogador.get().getAvaliacoes().get(i).getNota() != 0){
+                            contador ++;
+                            media += jogador.get().getAvaliacoes().get(i).getNota();
+                        }
+                    }
+                    media = media / contador;
+                    return media;
+                }else {
+                    throw new RegistroNaoEncontradoException("Nenhum registro do jogador encontrado!");
+                }
+            }else {
+                throw new CampeonatoInvalidoException("Campeonato nao existente!");
+            }
+        }else {
+            throw new AcademicoNaoExisteException("Academico nao encontrado!");
+        }
+    }
+
+    public float recuperaAvaliacaoPorModalidade(Long idModalidade, Long idAcademico) throws AcademicoNaoExisteException, ModalidadeNaoExistenteException{
+        Optional<Academico> academico = academicoRepository.findById(idAcademico);
+        Optional<ModalidadeEsportiva> modalidadeEsportiva = modalidadeEsportivaRepository.findById(idModalidade);
+
+        if (academico.isPresent()){
+            if (modalidadeEsportiva.isPresent()){
+
+                List<Jogador> jogador = jogadorRepository.findByAcademicoAndTimeCampeonatoModalidadeEsportiva(academico.get(), modalidadeEsportiva.get());
+
+                float media = 0;
+                int contador = 0;
+
+                for(int x = 0; x < jogador.size(); x++){
+                    for (int y = 0; y < jogador.get(x).getAvaliacoes().size();y++ ){
+                        if (jogador.get(x).getAvaliacoes().get(y).getNota() != 0){
+                            contador ++;
+                            media += jogador.get(x).getAvaliacoes().get(y).getNota();
+                        }
+                    }
+                }
+                media = media / contador;
+                return media;
+            }else {
+                throw new ModalidadeNaoExistenteException("Modalidade esportiva nao existente!");
+            }
+        }else {
+            throw new AcademicoNaoExisteException("Academico nao encontrado!");
+        }
+    }
+
+
+
 }

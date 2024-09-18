@@ -81,3 +81,12 @@ CREATE TABLE campeonato_partida (
     CONSTRAINT fk_campeonato_partida_campeonato FOREIGN KEY (id_campeonato) REFERENCES campeonato(id_campeonato),
     CONSTRAINT fk_campeonato_partida_partida FOREIGN KEY (id_partida) REFERENCES partida(id_partida)
 );
+
+CREATE TABLE avaliacao (
+    id_avaliacao INT AUTO_INCREMENT PRIMARY KEY,
+    id_jogador int NOT NULL,
+    nota int,
+    id_academico_avaliador int NOT NULL,
+    CONSTRAINT fk_academico_avaliador FOREIGN KEY (id_academico_avaliador) REFERENCES academico(id_academico),
+    CONSTRAINT fk_avaliacao_jogador FOREIGN KEY (id_jogador) REFERENCES jogador(id_jogador)
+);

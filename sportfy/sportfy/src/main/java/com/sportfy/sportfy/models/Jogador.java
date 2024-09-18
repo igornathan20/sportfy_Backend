@@ -1,6 +1,7 @@
 package com.sportfy.sportfy.models;
 
 import java.io.Serializable;
+import java.util.List;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,6 +23,14 @@ public class Jogador implements Serializable {
 
     @Column(name="pontuacao")
     private int pontuacao;
+
+    @ManyToMany
+    @JoinTable(
+            name = "avaliacao",
+            joinColumns = @JoinColumn(name = "id_avaliacao"),
+            inverseJoinColumns = @JoinColumn(name = "id_jogador")
+    )
+    private List<AvaliacaoJogador> avaliacoes;
 
     @ManyToOne(fetch=FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name="id_time", updatable = false, nullable = false)
