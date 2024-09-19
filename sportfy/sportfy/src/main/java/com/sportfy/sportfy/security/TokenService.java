@@ -25,6 +25,7 @@ public class TokenService {
                     .withIssuer("sportfy")
                     .withSubject(usuario.getUsername())
                     .withClaim("role", usuario.getPermissao().getTipoPermissao().name())
+                    .withClaim("idUsuario", usuario.getIdUsuario())
                     .withExpiresAt(dataExpiracao())
                     .sign(algoritmo);
             return token;
