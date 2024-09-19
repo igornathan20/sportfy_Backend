@@ -2,10 +2,7 @@ package com.sportfy.sportfy.controllers;
 
 import com.sportfy.sportfy.dtos.EstatisticasGeraisModalidadeDto;
 import com.sportfy.sportfy.dtos.ModalidadeEsportivaDto;
-import com.sportfy.sportfy.exeptions.AcademicoNaoExisteException;
-import com.sportfy.sportfy.exeptions.ModalidadeJaExisteException;
-import com.sportfy.sportfy.exeptions.ModalidadeNaoExistenteException;
-import com.sportfy.sportfy.exeptions.RegistroNaoEncontradoException;
+import com.sportfy.sportfy.exeptions.*;
 import com.sportfy.sportfy.models.ModalidadeEsportiva;
 import com.sportfy.sportfy.services.ModalidadeEsportivaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,6 +99,18 @@ public class ModalidadeEsportivaController {
             return ResponseEntity.status(HttpStatus.OK).body(modalidadeAcademico);
         } catch (AcademicoNaoExisteException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    @GetMapping("/buscar/{idAcademico}/modalidade")
+    public ResponseEntity<List<ModalidadeEsportiva>> listarModalidadesOutroUsuario(@PathVariable Long idAcademico) {
+        try {
+            List<ModalidadeEsportiva> modalidadeAcademico = modalidadeEsportivaService.listarModalidadesOutroUsuario(idAcademico);
+            return ResponseEntity.status(HttpStatus.OK).body(modalidadeAcademico);
+        } catch (AcademicoNaoExisteException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }catch (ConteudoPrivadoException e){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         }
     }
 

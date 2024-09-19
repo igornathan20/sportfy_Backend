@@ -4,10 +4,7 @@ package com.sportfy.sportfy.services;
 import com.sportfy.sportfy.dtos.EstatisticasGeraisModalidadeDto;
 import com.sportfy.sportfy.dtos.EstatisticasPessoaisModalidadeDto;
 import com.sportfy.sportfy.dtos.ModalidadeEsportivaDto;
-import com.sportfy.sportfy.exeptions.AcademicoNaoExisteException;
-import com.sportfy.sportfy.exeptions.ModalidadeJaExisteException;
-import com.sportfy.sportfy.exeptions.ModalidadeNaoExistenteException;
-import com.sportfy.sportfy.exeptions.RegistroNaoEncontradoException;
+import com.sportfy.sportfy.exeptions.*;
 import com.sportfy.sportfy.models.*;
 import com.sportfy.sportfy.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +26,8 @@ public class ModalidadeEsportivaService {
     CampeonatoRepository campeonatoRepository;
     @Autowired
     PartidaRepository partidaRepository;
+    @Autowired
+    PrivacidadeRepository privacidadeRepository;
 
 
     public ModalidadeEsportiva criarModalidade(ModalidadeEsportivaDto modalidade) throws ModalidadeJaExisteException{
@@ -136,6 +135,22 @@ public class ModalidadeEsportivaService {
        // }
     }
 
+    public List<ModalidadeEsportiva> listarModalidadesOutroUsuario(Long idAcademico) throws AcademicoNaoExisteException, ConteudoPrivadoException{
+        Optional<Academico>academico = academicoRepository.findById(idAcademico);
+        Privacidade privacidade = privacidadeRepository.findByIdAcademico(idAcademico);
+
+
+            if (academico.isPresent()) {
+                if (privacidade.isMostrarModalidadesEsportivas()){
+                    return academico.get().getModalidadeEsportivas();
+                }else {
+                    throw new ConteudoPrivadoException("O usuario definiu como privado a visualizacao das modalidades!");
+                }
+            } else {
+                throw new AcademicoNaoExisteException("Usuario não encontrado!");
+            }
+    }
+git 
     public void cancelarInscricaoModalidade(Long idAcademico, Long idModalidade) throws ModalidadeNaoExistenteException, AcademicoNaoExisteException{
         Optional<ModalidadeEsportiva> modalidade = modalidadeEsportivaRepository.findById(idModalidade);
         Optional<Academico>academico = academicoRepository.findById(idAcademico);
