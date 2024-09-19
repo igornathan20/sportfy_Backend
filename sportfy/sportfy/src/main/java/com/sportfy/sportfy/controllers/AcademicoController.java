@@ -1,8 +1,6 @@
 package com.sportfy.sportfy.controllers;
 
-import com.sportfy.sportfy.dtos.AcademicoDto;
-import com.sportfy.sportfy.dtos.NotificacaoDto;
-import com.sportfy.sportfy.dtos.PrivacidadeDto;
+import com.sportfy.sportfy.dtos.*;
 import com.sportfy.sportfy.exeptions.*;
 import com.sportfy.sportfy.models.Academico;
 import com.sportfy.sportfy.models.Notificacao;
@@ -171,7 +169,29 @@ public class AcademicoController {
         }
     }
 
-    //@GetMapping
+    @GetMapping("/estatisticas/{idAcademico}/modalidade/{idModalidade}")
+    public ResponseEntity<EstatisticasPessoaisModalidadeDto> obterEstatisticasPessoaisPorModalidade(@PathVariable Long idAcademico, @PathVariable Long idModalidade) {
+        try {
+            EstatisticasPessoaisModalidadeDto estatisticas = academicoService.estatisticasPessoaisPorModalidade(idAcademico, idModalidade);
+            return ResponseEntity.ok(estatisticas);
+        } catch (AcademicoNaoExisteException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (ModalidadeNaoExistenteException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (RegistroNaoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 
-
+    @GetMapping("/uso/{idAcademico}")
+    public ResponseEntity<EstatisticasDeUsoDto> getEstatisticasDeUso(@PathVariable Long idAcademico) {
+        try {
+            EstatisticasDeUsoDto estatisticasDeUso = academicoService.estatisticasDeUso(idAcademico);
+            return ResponseEntity.ok(estatisticasDeUso);
+        } catch (AcademicoNaoExisteException | ModalidadeNaoExistenteException | RegistroNaoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
 }

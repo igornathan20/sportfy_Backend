@@ -1,9 +1,11 @@
 package com.sportfy.sportfy.controllers;
 
+import com.sportfy.sportfy.dtos.EstatisticasGeraisModalidadeDto;
 import com.sportfy.sportfy.dtos.ModalidadeEsportivaDto;
 import com.sportfy.sportfy.exeptions.AcademicoNaoExisteException;
 import com.sportfy.sportfy.exeptions.ModalidadeJaExisteException;
 import com.sportfy.sportfy.exeptions.ModalidadeNaoExistenteException;
+import com.sportfy.sportfy.exeptions.RegistroNaoEncontradoException;
 import com.sportfy.sportfy.models.ModalidadeEsportiva;
 import com.sportfy.sportfy.services.ModalidadeEsportivaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,6 +112,20 @@ public class ModalidadeEsportivaController {
             return ResponseEntity.status(HttpStatus.OK).body(null);
         } catch (ModalidadeNaoExistenteException | AcademicoNaoExisteException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    @GetMapping("/{idModalidade}/estatisticas")
+    public ResponseEntity<EstatisticasGeraisModalidadeDto> obterEstatisticasGeraisPorModalidade(@PathVariable Long idModalidade) {
+        try {
+            EstatisticasGeraisModalidadeDto estatisticas = modalidadeEsportivaService.estatisticasGeraisPorModalidade(idModalidade);
+            return ResponseEntity.ok(estatisticas);
+        } catch (ModalidadeNaoExistenteException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (RegistroNaoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 }

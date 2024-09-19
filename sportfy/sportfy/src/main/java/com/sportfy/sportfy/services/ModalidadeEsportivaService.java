@@ -1,19 +1,19 @@
 package com.sportfy.sportfy.services;
 
 
+import com.sportfy.sportfy.dtos.EstatisticasGeraisModalidadeDto;
+import com.sportfy.sportfy.dtos.EstatisticasPessoaisModalidadeDto;
 import com.sportfy.sportfy.dtos.ModalidadeEsportivaDto;
 import com.sportfy.sportfy.exeptions.AcademicoNaoExisteException;
 import com.sportfy.sportfy.exeptions.ModalidadeJaExisteException;
 import com.sportfy.sportfy.exeptions.ModalidadeNaoExistenteException;
-import com.sportfy.sportfy.models.Academico;
-import com.sportfy.sportfy.models.AcademicoModalidadeEsportiva;
-import com.sportfy.sportfy.models.ModalidadeEsportiva;
-import com.sportfy.sportfy.repositories.AcademicoModalidadeEsportivaReposity;
-import com.sportfy.sportfy.repositories.AcademicoRepository;
-import com.sportfy.sportfy.repositories.ModalidadeEsportivaRepository;
+import com.sportfy.sportfy.exeptions.RegistroNaoEncontradoException;
+import com.sportfy.sportfy.models.*;
+import com.sportfy.sportfy.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +25,10 @@ public class ModalidadeEsportivaService {
     AcademicoModalidadeEsportivaReposity academicoModalidadeEsportivaReposity;
     @Autowired
     AcademicoRepository academicoRepository;
+    @Autowired
+    CampeonatoRepository campeonatoRepository;
+    @Autowired
+    PartidaRepository partidaRepository;
 
 
     public ModalidadeEsportiva criarModalidade(ModalidadeEsportivaDto modalidade) throws ModalidadeJaExisteException{
@@ -145,6 +149,30 @@ public class ModalidadeEsportivaService {
             }
         }else {
             throw new AcademicoNaoExisteException("Usuario não encontrado!");
+        }
+    }
+
+    public EstatisticasGeraisModalidadeDto estatisticasGeraisPorModalidade(Long idModalidade)throws  ModalidadeNaoExistenteException, RegistroNaoEncontradoException {
+        Optional<ModalidadeEsportiva> modalidadeEsportiva = modalidadeEsportivaRepository.findById(idModalidade);
+        List<AcademicoModalidadeEsportiva> inscritosModalidade = academicoModalidadeEsportivaReposity.findByModalidadeEsportiva(modalidadeEsportiva.get());
+
+        if (modalidadeEsportiva.isPresent()){
+            List<Campeonato> campeonatos = campeonatoRepository.findByModalidadeEsportiva(modalidadeEsportiva.get());
+            int numeroDeCampeonatos = campeonatos.size();
+            int totalPartidas = 0;
+
+            if (campeonatos.isEmpty()){
+                throw new RegistroNaoEncontradoException("essa modalidade nao possui nenhum campeonato!");
+            }else {
+                for (int i = 0; i < campeonatos.size(); i++){
+                    List<Partida> partidasModalidades = partidaRepository.findByCampeonato(campeonatos.get(i));
+                    totalPartidas += partidasModalidades.size();
+                }
+                EstatisticasGeraisModalidadeDto estatisticas = new EstatisticasGeraisModalidadeDto(modalidadeEsportiva.get().getNome(), numeroDeCampeonatos, totalPartidas, inscritosModalidade.size());
+                return estatisticas;
+            }
+        }else {
+            throw new ModalidadeNaoExistenteException("Modalidade nao encontrada!");
         }
     }
 }

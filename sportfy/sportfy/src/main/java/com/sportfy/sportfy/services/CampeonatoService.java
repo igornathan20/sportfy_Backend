@@ -477,7 +477,4 @@ public class CampeonatoService {
             throw new AcademicoNaoExisteException("Academico nao encontrado!");
         }
     }
-
-
-
 }

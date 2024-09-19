@@ -1,9 +1,6 @@
 package com.sportfy.sportfy.services;
 
-import com.sportfy.sportfy.dtos.AcademicoDto;
-import com.sportfy.sportfy.dtos.EstatisticasPessoaisModalidadeDto;
-import com.sportfy.sportfy.dtos.NotificacaoDto;
-import com.sportfy.sportfy.dtos.PrivacidadeDto;
+import com.sportfy.sportfy.dtos.*;
 import com.sportfy.sportfy.enums.TipoPermissao;
 import com.sportfy.sportfy.exeptions.*;
 import com.sportfy.sportfy.models.*;
@@ -15,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,7 +30,10 @@ public class AcademicoService {
     ModalidadeEsportivaRepository modalidadeEsportivaRepository;
     @Autowired
     PartidaRepository partidaRepository;
-
+    @Autowired
+    JogadorRepository jogadorRepository;
+    @Autowired
+    AcademicoModalidadeEsportivaReposity academicoModalidadeEsportivaReposity;
     @Autowired
     private PermissaoRepository permissaoRepository;
     @Autowired
@@ -245,27 +246,68 @@ public class AcademicoService {
         return privacidadeRepository.save(privacidade);
     }
 
-//    public EstatisticasPessoaisModalidadeDto estatisticasPessoais(Long idAcademico , Long idModalidade)throws AcademicoNaoExisteException, ModalidadeNaoExistenteException{
-//        Optional<ModalidadeEsportiva> modalidadeEsportiva = modalidadeEsportivaRepository.findById(idModalidade);
-//        Optional<Academico> academico = academicoRepository.findById(idAcademico);
-//
-//        if (academico.isPresent()){
-//            if (modalidadeEsportiva.isPresent()){
-//                List<Partida> partidas = partidaRepository
-//
-//
-//
-//
-//
-//
-//            }else {
-//                throw new AcademicoNaoExisteException("Academico nao encontrado!");
-//            }
-//        }else {
-//            throw new ModalidadeNaoExistenteException("Modalidade nao encontrada!");
-//        }
-//
-//
-//        EstatisticasPessoaisModalidadeDto estatisticas = new EstatisticasPessoaisModalidadeDto();
-//    }
+    public EstatisticasPessoaisModalidadeDto estatisticasPessoaisPorModalidade(Long idAcademico , Long idModalidade)throws AcademicoNaoExisteException, ModalidadeNaoExistenteException, RegistroNaoEncontradoException{
+        Optional<ModalidadeEsportiva> modalidadeEsportiva = modalidadeEsportivaRepository.findById(idModalidade);
+        Optional<Academico> academico = academicoRepository.findById(idAcademico);
+
+        if (academico.isPresent()){
+            if (modalidadeEsportiva.isPresent()){
+                List<Jogador> participacoesCampeonatos = jogadorRepository.findByAcademico(academico.get());
+                int vitorias = 0;
+                int derrotas = 0;
+                int totalPartidas = 0;
+
+                if (participacoesCampeonatos == null){
+                    throw new RegistroNaoEncontradoException("O jogador nao participou de nenhum campeonato!");
+                }else {
+                    List<Time> timesJogador = new ArrayList<>();
+                    for (int i = 0; i < participacoesCampeonatos.size(); i++){
+                        timesJogador.add(participacoesCampeonatos.get(i).getTime());
+                    }
+
+                    for (int x = 0; x < timesJogador.size(); x++){
+                        List<Partida> partidas = partidaRepository.findByTime1OrTime2(timesJogador.get(x), timesJogador.get(x));
+                        totalPartidas += partidas.size();
+
+                        for (int y = 0; y < partidas.size(); y++){
+                            if (partidas.get(y).getTime1() == timesJogador.get(x)){
+                                if (partidas.get(y).getResultado().getPontuacaoTime1() > partidas.get(y).getResultado().getPontuacaoTime2()){
+                                    vitorias ++;
+                                }else {
+                                    derrotas ++;
+                                }
+                            }
+                            if (partidas.get(y).getTime2() == timesJogador.get(x)){
+                                if (partidas.get(y).getResultado().getPontuacaoTime1() < partidas.get(y).getResultado().getPontuacaoTime2()){
+                                    vitorias ++;
+                                }else {
+                                    derrotas ++;
+                                }
+                            }
+                        }
+                    }
+                }
+                return new EstatisticasPessoaisModalidadeDto(modalidadeEsportiva.get().getNome(), vitorias, derrotas, totalPartidas );
+            }else {
+                throw new AcademicoNaoExisteException("Academico nao encontrado!");
+            }
+        }else {
+            throw new ModalidadeNaoExistenteException("Modalidade nao encontrada!");
+        }
+    }
+
+    public EstatisticasDeUsoDto estatisticasDeUso(Long idAcademico)throws AcademicoNaoExisteException, ModalidadeNaoExistenteException, RegistroNaoEncontradoException{
+        Optional<Academico> academico = academicoRepository.findById(idAcademico);
+
+        if (academico.isPresent()){
+            List<AcademicoModalidadeEsportiva> academicoModalidade = academicoModalidadeEsportivaReposity.findByAcademico(academico.get());
+            List<Jogador> participacoesCampeonatos = jogadorRepository.findByAcademico(academico.get());
+            //fazer para buscar posts posteriormente
+            return new EstatisticasDeUsoDto(participacoesCampeonatos.size(), academicoModalidade.size());
+        }else {
+            throw new ModalidadeNaoExistenteException("Modalidade nao encontrada!");
+        }
+    }
+
+
 }
