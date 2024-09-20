@@ -19,6 +19,7 @@ public class Privacidade implements Serializable {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id_privacidade")
     private Long idPrivacidade;
+    
     @Column(name="idAcademico", nullable = false, unique = true)
     private Long idAcademico;
 

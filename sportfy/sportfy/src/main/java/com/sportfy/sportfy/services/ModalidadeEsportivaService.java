@@ -150,7 +150,7 @@ public class ModalidadeEsportivaService {
                 throw new AcademicoNaoExisteException("Usuario não encontrado!");
             }
     }
-git 
+
     public void cancelarInscricaoModalidade(Long idAcademico, Long idModalidade) throws ModalidadeNaoExistenteException, AcademicoNaoExisteException{
         Optional<ModalidadeEsportiva> modalidade = modalidadeEsportivaRepository.findById(idModalidade);
         Optional<Academico>academico = academicoRepository.findById(idAcademico);

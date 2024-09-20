@@ -200,5 +200,17 @@ public class CampeonatoController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
+
+    @GetMapping("/historico/{idAcademico}")
+    public ResponseEntity<List<Campeonato>> buscarHistoricoCampeonatoOutrosUsuarios( @PathVariable Long idAcademico) {
+        try {
+            List<Campeonato> campeonatos = campeonatoService.buscarHistoricoCampeonatoOutrosUsuarios(idAcademico);
+            return ResponseEntity.ok(campeonatos);
+        } catch (AcademicoNaoExisteException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (ConteudoPrivadoException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
+    }
 }
 

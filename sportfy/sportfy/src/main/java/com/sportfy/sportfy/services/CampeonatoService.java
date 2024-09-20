@@ -33,6 +33,8 @@ public class CampeonatoService {
     JogadorRepository jogadorRepository;
     @Autowired
     PartidaRepository partidaRepository;
+    @Autowired
+    private PrivacidadeRepository privacidadeRepository;
 
     public Campeonato criarCampeonato(CampeonatoDto campeonatoDto) throws AcademicoNaoExisteException, ModalidadeNaoExistenteException {
         Optional<Academico> academico = academicoRepository.findById(campeonatoDto.idAcademico());
@@ -472,6 +474,26 @@ public class CampeonatoService {
                 return media;
             }else {
                 throw new ModalidadeNaoExistenteException("Modalidade esportiva nao existente!");
+            }
+        }else {
+            throw new AcademicoNaoExisteException("Academico nao encontrado!");
+        }
+    }
+
+    public List<Campeonato> buscarHistoricoCampeonatoOutrosUsuarios(Long idAcademico) throws AcademicoNaoExisteException, ConteudoPrivadoException{
+        Optional<Academico> academico = academicoRepository.findById(idAcademico);
+
+        if (academico.isPresent()){
+            Privacidade privacidade = privacidadeRepository.findByIdAcademico(idAcademico);
+            if (privacidade.isMostrarHistoricoCampeonatos()) {
+                List<Jogador> participacoesCampeonatos = jogadorRepository.findByAcademico(academico.get());
+                List<Campeonato> campeonatos = new ArrayList<Campeonato>();
+                for (int i = 0; i < participacoesCampeonatos.size(); i++){
+                    campeonatos.add(participacoesCampeonatos.get(i).getTime().getCampeonato());
+                }
+               return campeonatos;
+            }else {
+                throw new ConteudoPrivadoException("O usuario definiu seu historico como privadas!");
             }
         }else {
             throw new AcademicoNaoExisteException("Academico nao encontrado!");
