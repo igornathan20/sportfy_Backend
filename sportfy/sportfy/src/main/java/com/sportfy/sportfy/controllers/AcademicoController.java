@@ -174,9 +174,21 @@ public class AcademicoController {
         try {
             EstatisticasPessoaisModalidadeDto estatisticas = academicoService.estatisticasPessoaisPorModalidade(idAcademico, idModalidade);
             return ResponseEntity.ok(estatisticas);
-        } catch (AcademicoNaoExisteException e) {
+        } catch (AcademicoNaoExisteException | ModalidadeNaoExistenteException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        } catch (ModalidadeNaoExistenteException e) {
+        } catch (RegistroNaoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @GetMapping("/buscar/estatisticas/{idAcademico}/modalidade/{idModalidade}")
+    public ResponseEntity<EstatisticasPessoaisModalidadeDto> obterEstatisticasOutroUsuarioPorModalidade(@PathVariable Long idAcademico, @PathVariable Long idModalidade) {
+        try {
+            EstatisticasPessoaisModalidadeDto estatisticas = academicoService.estatisticasPessoaisPorModalidade(idAcademico, idModalidade);
+            return ResponseEntity.ok(estatisticas);
+        } catch (AcademicoNaoExisteException | ModalidadeNaoExistenteException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (RegistroNaoEncontradoException e) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);

@@ -296,6 +296,61 @@ public class AcademicoService {
         }
     }
 
+    public EstatisticasPessoaisModalidadeDto estatisticasOutroUsuarioPorModalidade(Long idAcademico , Long idModalidade)throws AcademicoNaoExisteException, ModalidadeNaoExistenteException, RegistroNaoEncontradoException, ConteudoPrivadoException {
+        Optional<ModalidadeEsportiva> modalidadeEsportiva = modalidadeEsportivaRepository.findById(idModalidade);
+        Optional<Academico> academico = academicoRepository.findById(idAcademico);
+
+        if (academico.isPresent()) {
+            if (modalidadeEsportiva.isPresent()) {
+                Privacidade privacidade = privacidadeRepository.findByIdAcademico(idAcademico);
+                if (privacidade.isMostrarEstatisticasModalidadesEsportivas()) {
+                    List<Jogador> participacoesCampeonatos = jogadorRepository.findByAcademico(academico.get());
+                    int vitorias = 0;
+                    int derrotas = 0;
+                    int totalPartidas = 0;
+
+                    if (participacoesCampeonatos == null) {
+                        throw new RegistroNaoEncontradoException("O jogador nao participou de nenhum campeonato!");
+                    } else {
+                        List<Time> timesJogador = new ArrayList<>();
+                        for (int i = 0; i < participacoesCampeonatos.size(); i++) {
+                            timesJogador.add(participacoesCampeonatos.get(i).getTime());
+                        }
+
+                        for (int x = 0; x < timesJogador.size(); x++) {
+                            List<Partida> partidas = partidaRepository.findByTime1OrTime2(timesJogador.get(x), timesJogador.get(x));
+                            totalPartidas += partidas.size();
+
+                            for (int y = 0; y < partidas.size(); y++) {
+                                if (partidas.get(y).getTime1() == timesJogador.get(x)) {
+                                    if (partidas.get(y).getResultado().getPontuacaoTime1() > partidas.get(y).getResultado().getPontuacaoTime2()) {
+                                        vitorias++;
+                                    } else {
+                                        derrotas++;
+                                    }
+                                }
+                                if (partidas.get(y).getTime2() == timesJogador.get(x)) {
+                                    if (partidas.get(y).getResultado().getPontuacaoTime1() < partidas.get(y).getResultado().getPontuacaoTime2()) {
+                                        vitorias++;
+                                    } else {
+                                        derrotas++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return new EstatisticasPessoaisModalidadeDto(modalidadeEsportiva.get().getNome(), vitorias, derrotas, totalPartidas);
+                }else {
+                    throw new ConteudoPrivadoException("O usuario definiu suas estatisticas como privadas!");
+                }
+            } else {
+                throw new AcademicoNaoExisteException("Academico nao encontrado!");
+            }
+        } else {
+            throw new ModalidadeNaoExistenteException("Modalidade nao encontrada!");
+        }
+    }
+
     public EstatisticasDeUsoDto estatisticasDeUso(Long idAcademico)throws AcademicoNaoExisteException, ModalidadeNaoExistenteException, RegistroNaoEncontradoException{
         Optional<Academico> academico = academicoRepository.findById(idAcademico);
 
