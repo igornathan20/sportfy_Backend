@@ -33,8 +33,8 @@ public class Academico implements Serializable {
     @ManyToMany
     @JoinTable(
             name = "academico_modalidade_esportiva",
-            joinColumns = @JoinColumn(name = "id_modalidade_esportiva"),
-            inverseJoinColumns = @JoinColumn(name = "id_academico")
+            joinColumns = @JoinColumn(name = "id_academico"),
+            inverseJoinColumns = @JoinColumn(name = "id_modalidade_esportiva")
     )
     private List<ModalidadeEsportiva> modalidadeEsportivas;
 

@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -91,7 +90,6 @@ public class ModalidadeEsportivaController {
         }
     }
 
-
     @GetMapping("/listar/{idAcademico}")
     public ResponseEntity<List<ModalidadeEsportiva>> listarModalidadesAcademico(@PathVariable Long idAcademico) {
         try {
@@ -102,6 +100,7 @@ public class ModalidadeEsportivaController {
         }
     }
 
+    
     @GetMapping("/buscar/{idAcademico}/modalidade")
     public ResponseEntity<List<ModalidadeEsportiva>> listarModalidadesOutroUsuario(@PathVariable Long idAcademico) {
         try {

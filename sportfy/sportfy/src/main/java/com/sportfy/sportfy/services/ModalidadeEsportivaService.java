@@ -2,7 +2,6 @@ package com.sportfy.sportfy.services;
 
 
 import com.sportfy.sportfy.dtos.EstatisticasGeraisModalidadeDto;
-import com.sportfy.sportfy.dtos.EstatisticasPessoaisModalidadeDto;
 import com.sportfy.sportfy.dtos.ModalidadeEsportivaDto;
 import com.sportfy.sportfy.exeptions.*;
 import com.sportfy.sportfy.models.*;
@@ -10,7 +9,6 @@ import com.sportfy.sportfy.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +30,7 @@ public class ModalidadeEsportivaService {
 
     public ModalidadeEsportiva criarModalidade(ModalidadeEsportivaDto modalidade) throws ModalidadeJaExisteException{
         Optional<ModalidadeEsportiva> modalidadeExistente = modalidadeEsportivaRepository.findByNome(modalidade.nome());
+
         if (modalidadeExistente.isEmpty()){
             ModalidadeEsportiva novaModalidade = new ModalidadeEsportiva();
             novaModalidade.updateFromDto(modalidade);
@@ -122,40 +121,33 @@ public class ModalidadeEsportivaService {
 
     public List<ModalidadeEsportiva> listarModalidadesInscritas(Long idAcademico) throws AcademicoNaoExisteException{
         Optional<Academico>academico = academicoRepository.findById(idAcademico);
-        //Optional<AcademicoModalidadeEsportiva> academicoModalidade = academicoModalidadeEsportivaReposity.findByAcademicoIdAcademicoAndModalidadeEsportivaIdModalidadeEsportiva(idAcademico,idModalidade);
-
-       // if (academicoModalidade.isEmpty()) {
-            if (academico.isPresent()) {
-                return academico.get().getModalidadeEsportivas();
-            } else {
-                throw new AcademicoNaoExisteException("Usuario não encontrado!");
-            }
-       // }else {
-       //     throw new Exception("O usuario ja esta cadastrado na modalidade!");
-       // }
+        if (academico.isPresent()) {
+            return academico.get().getModalidadeEsportivas();
+        } else {
+            throw new AcademicoNaoExisteException("Usuario não encontrado!");
+        }
     }
 
     public List<ModalidadeEsportiva> listarModalidadesOutroUsuario(Long idAcademico) throws AcademicoNaoExisteException, ConteudoPrivadoException{
         Optional<Academico>academico = academicoRepository.findById(idAcademico);
         Privacidade privacidade = privacidadeRepository.findByIdAcademico(idAcademico);
 
-
-            if (academico.isPresent()) {
-                if (privacidade.isMostrarModalidadesEsportivas()){
-                    return academico.get().getModalidadeEsportivas();
-                }else {
-                    throw new ConteudoPrivadoException("O usuario definiu como privado a visualizacao das modalidades!");
-                }
-            } else {
-                throw new AcademicoNaoExisteException("Usuario não encontrado!");
+        if (academico.isPresent()) {
+            if (privacidade.isMostrarModalidadesEsportivas()){
+                return academico.get().getModalidadeEsportivas();
+            }else {
+                throw new ConteudoPrivadoException("O usuario definiu como privado a visualizacao das modalidades!");
             }
+        } else {
+            throw new AcademicoNaoExisteException("Usuario não encontrado!");
+        }
     }
 
     public void cancelarInscricaoModalidade(Long idAcademico, Long idModalidade) throws ModalidadeNaoExistenteException, AcademicoNaoExisteException{
         Optional<ModalidadeEsportiva> modalidade = modalidadeEsportivaRepository.findById(idModalidade);
         Optional<Academico>academico = academicoRepository.findById(idAcademico);
-
         Optional<AcademicoModalidadeEsportiva> academicoModalidade = academicoModalidadeEsportivaReposity.findByAcademicoIdAcademicoAndModalidadeEsportivaIdModalidadeEsportiva(idAcademico,idModalidade);
+
         if (academico.isPresent()) {
             if (modalidade.isPresent()) {
                 academicoModalidadeEsportivaReposity.deleteById(academicoModalidade.get().getIdAcademicoModalidadeEsportiva());
