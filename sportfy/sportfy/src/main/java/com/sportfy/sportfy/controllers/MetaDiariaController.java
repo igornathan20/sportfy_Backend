@@ -40,23 +40,25 @@ public class MetaDiariaController {
         }
     }
 
-    @GetMapping("/listar")
-    public ResponseEntity<List<MetaDiaria>> listarMetas() {
+    @GetMapping("/listar/{idAcademico}")
+    public ResponseEntity<List<MetaDiaria>> listarMetas(@PathVariable Long idAcademico) {
         try {
-            List<MetaDiaria> metasDiarias = metaDiariaService.listarMetas();
+            List<MetaDiaria> metasDiarias = metaDiariaService.listarMetas(idAcademico);
             return ResponseEntity.status(HttpStatus.OK).body(metasDiarias);
+        }catch (AcademicoNaoExisteException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         } catch (MetaDiariaNaoExistenteException e) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         }
     }
 
-    @GetMapping("/buscar/{nome}")
-    public ResponseEntity<List<MetaDiaria>> buscarMeta(@PathVariable String nome) {
+    @GetMapping("/{idAcademico}/buscar/{nome}")
+    public ResponseEntity<List<MetaDiaria>> buscarMeta(@PathVariable Long idAcademico,@PathVariable String nome) {
         try {
-            List<Optional<MetaDiaria>> metasDiarias = metaDiariaService.buscarMeta(nome);
-            return ResponseEntity.ok(
-                    metasDiarias.stream().filter(Optional::isPresent).map(Optional::get).toList()
-            );
+            List<MetaDiaria> metasDiarias = metaDiariaService.buscarMeta(idAcademico, nome);
+            return ResponseEntity.status(HttpStatus.OK).body(metasDiarias);
+        } catch (AcademicoNaoExisteException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         } catch (MetaDiariaNaoExistenteException e) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         }

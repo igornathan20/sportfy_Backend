@@ -46,23 +46,33 @@ public class MetaDiariaService {
         }
     }
 
-    public List<MetaDiaria> listarMetas()throws MetaDiariaNaoExistenteException{
-        List<MetaDiaria> metasDiarias = metaDiariaRepository.findAll();
+    public List<MetaDiaria> listarMetas(Long idAcademico)throws MetaDiariaNaoExistenteException, AcademicoNaoExisteException{
+        Optional<Academico> academico = academicoRepository.findById(idAcademico);
 
-        if (!metasDiarias.isEmpty()){
-            return metasDiarias;
+        if (academico.isPresent()) {
+            List<MetaDiaria> metasDiarias = metaDiariaRepository.findByAcademico(academico.get());
+            if (!metasDiarias.isEmpty()) {
+                return metasDiarias;
+            } else {
+                throw new MetaDiariaNaoExistenteException("Nenhuma meta diaria cadastrada!");
+            }
         }else {
-            throw new MetaDiariaNaoExistenteException("Nenhuma meta diaria cadastrada!");
+            throw new AcademicoNaoExisteException("Acadêmico não encontrado!");
         }
     }
 
-    public List<Optional<MetaDiaria>> buscarMeta(String nome)throws MetaDiariaNaoExistenteException{
-        List<Optional<MetaDiaria>> metasDiarias = metaDiariaRepository.findByTituloContainingIgnoreCase(nome);
+    public List<MetaDiaria> buscarMeta(Long idAcademico, String nome)throws MetaDiariaNaoExistenteException, AcademicoNaoExisteException{
+        Optional<Academico> academico = academicoRepository.findById(idAcademico);
 
-        if (!metasDiarias.isEmpty()){
-            return metasDiarias;
+        if (academico.isPresent()) {
+            List<MetaDiaria> metasDiarias = metaDiariaRepository.findByTituloContainingIgnoreCaseAndAcademico(nome, academico.get());
+            if (!metasDiarias.isEmpty()) {
+                return metasDiarias;
+            } else {
+                throw new MetaDiariaNaoExistenteException("A modalidade nao existe!");
+            }
         }else {
-            throw new MetaDiariaNaoExistenteException("A modalidade nao existe!!");
+            throw new AcademicoNaoExisteException("Acadêmico não encontrado!");
         }
     }
 
