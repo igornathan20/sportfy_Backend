@@ -18,12 +18,15 @@ CREATE TABLE usuario_canal (
 
 CREATE TABLE publicacao (
 	id_publicacao INT AUTO_INCREMENT PRIMARY KEY,
+	titulo VARCHAR(50) NOT NULL,
 	descricao TEXT NOT NULL,
 	data_publicacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	id_canal INT NOT NULL,
 	id_usuario INT NOT NULL,
+	id_modalidade_esportiva INT,
 	CONSTRAINT fk_publicacao_canal FOREIGN KEY (id_canal) REFERENCES canal(id_canal),
-	CONSTRAINT fk_publicacao_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
+	CONSTRAINT fk_publicacao_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario),
+	CONSTRAINT fk_publicacao_modalidade_esportiva FOREIGN KEY (id_modalidade_esportiva) REFERENCES modalidade_esportiva(id_modalidade_esportiva)
 );
 
 CREATE TABLE curtida_publicacao (

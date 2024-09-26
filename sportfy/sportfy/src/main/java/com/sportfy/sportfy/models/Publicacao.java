@@ -24,6 +24,10 @@ public class Publicacao implements Serializable {
     @Setter @Getter
     private Long idPublicacao;
 
+    @Column(name="titulo", nullable = false)
+    @Setter @Getter
+    private String titulo;
+
     @Column(name="descricao", nullable = false)
     @Setter @Getter
     private String descricao;
@@ -44,6 +48,10 @@ public class Publicacao implements Serializable {
     @Setter @Getter
     private Usuario usuario;
 
+    @Column(name="id_modalidade_esportiva")
+    @Setter @Getter
+    private Long idModalidadeEsportiva;
+
     @OneToMany(mappedBy="publicacao", fetch=FetchType.EAGER, cascade=CascadeType.REMOVE)
     @Setter @Getter
     private List<CurtidaPublicacao> listaCurtidaPublicacao;
@@ -54,10 +62,12 @@ public class Publicacao implements Serializable {
 
     public void cadastrar(PublicacaoDto publicacaoDto) {
         this.idPublicacao = 0L;
+        this.titulo = publicacaoDto.titulo();
         this.descricao = publicacaoDto.descricao();
         this.canal = new Canal();
         this.canal.setIdCanal(publicacaoDto.idCanal());
         this.usuario = new Usuario();
         this.usuario.setIdUsuario(publicacaoDto.Usuario().idUsuario());
+        this.idModalidadeEsportiva = publicacaoDto.idModalidadeEsportiva();
     }
 }

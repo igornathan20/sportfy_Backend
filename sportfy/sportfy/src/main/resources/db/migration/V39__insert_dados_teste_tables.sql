@@ -52,12 +52,12 @@ INSERT INTO usuario_canal (id_usuario, id_canal) VALUES (14, 1);
 INSERT INTO usuario_canal (id_usuario, id_canal) VALUES (15, 1);
 
 -- DADOS TESTE PUBLICACAO
-INSERT INTO publicacao (descricao, id_canal, id_usuario) VALUES ('alguém afim de jogar um pingas amanhã? Se quiserem, eu vou criar um campeonato pra nós depois.', 1, 1);
-INSERT INTO publicacao (descricao, id_canal, id_usuario) VALUES ('Boa tarde, alguém pode me dar uma sugestão de meta diária criativa para fazer?', 1, 2);
-INSERT INTO publicacao (descricao, id_canal, id_usuario) VALUES ('muito feliz que consegui completar minha meta de futebol!', 1, 3);
-INSERT INTO publicacao (descricao, id_canal, id_usuario) VALUES ('Tava afim de participar de algum campeonato de futebol no próximo domingo, alguém topa?', 1, 4);
-INSERT INTO publicacao (descricao, id_canal, id_usuario) VALUES ('Galera queria saber o que vocês acham de ter uma modalidade acadêmica para cinuca? Tava pensando em criar...', 1, 12);
-INSERT INTO publicacao (descricao, id_canal, id_usuario) VALUES ('Pessoal olha o que eu descobri: prática esportiva oferece inúmeros benefícios para a saúde física e mental. Fisicamente, melhora a capacidade cardiovascular, fortalece os músculos e ossos, além de ajudar na manutenção de um peso saudável. Mentalmente, o esporte promove a liberação de endorfinas, reduzindo o estresse, a ansiedade e o risco de depressão. Também desenvolve habilidades sociais, como trabalho em equipe, e melhora a disciplina e a autoconfiança. Esses fatores contribuem para uma melhor qualidade de vida e bem-estar geral. Bora praticar mais.', 1, 8);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Pign-pong amanhã', 'alguém afim de jogar um pingas amanhã? Se quiserem, eu vou criar um campeonato pra nós depois.', 1, 1);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Meta diária criativa', 'Boa tarde, alguém pode me dar uma sugestão de meta diária criativa para fazer?', 1, 2);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('meta de futebol', 'muito feliz que consegui completar minha meta de futebol!', 1, 3);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('fut domingo', 'Tava afim de participar de algum campeonato de futebol no próximo domingo, alguém topa?', 1, 4);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Modalidade para cinuca', 'Galera queria saber o que vocês acham de ter uma modalidade acadêmica para cinuca? Tava pensando em criar...', 1, 12);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('novidade', 'Pessoal olha o que eu descobri: prática esportiva oferece inúmeros benefícios para a saúde física e mental. Fisicamente, melhora a capacidade cardiovascular, fortalece os músculos e ossos, além de ajudar na manutenção de um peso saudável. Mentalmente, o esporte promove a liberação de endorfinas, reduzindo o estresse, a ansiedade e o risco de depressão. Também desenvolve habilidades sociais, como trabalho em equipe, e melhora a disciplina e a autoconfiança. Esses fatores contribuem para uma melhor qualidade de vida e bem-estar geral. Bora praticar mais.', 1, 8);
 
 -- DADOS TESTE CURTIDA_PUBLICACAO
 INSERT INTO curtida_publicacao (id_publicacao, id_usuario) VALUES (1, 5);
