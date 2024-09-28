@@ -55,11 +55,19 @@ CREATE TABLE privacidade (
 
 CREATE TABLE modalidade_esportiva (
 	id_modalidade_esportiva INT AUTO_INCREMENT PRIMARY KEY,
-	nome VARCHAR(50) NOT NULL,
+	nome VARCHAR(50) NOT NULL UNIQUE,
 	descricao VARCHAR(255) NOT NULL,
 	foto VARCHAR(255),
 	data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	ativo BOOLEAN DEFAULT TRUE
+);
+
+CREATE TABLE regra (
+	id_regra INT AUTO_INCREMENT PRIMARY KEY,
+	titulo VARCHAR(50) NOT NULL,
+	descricao VARCHAR(255) NOT NULL,
+	id_modalidade_esportiva INT NOT NULL,
+	CONSTRAINT fk_regra_modalidade_esportiva FOREIGN KEY (id_modalidade_esportiva) REFERENCES modalidade_esportiva(id_modalidade_esportiva)
 );
 
 CREATE TABLE academico_modalidade_esportiva (
@@ -68,4 +76,23 @@ CREATE TABLE academico_modalidade_esportiva (
 	id_modalidade_esportiva INT NOT NULL,
 	CONSTRAINT fk_academico_modalidade_esportiva_academico FOREIGN KEY (id_academico) REFERENCES academico(id_academico),
 	CONSTRAINT fk_academico_modalidade_esportiva_modalidade_esportiva FOREIGN KEY (id_modalidade_esportiva) REFERENCES modalidade_esportiva(id_modalidade_esportiva)
+);
+
+CREATE TABLE meta_esportiva (
+	id_meta_esportiva INT AUTO_INCREMENT PRIMARY KEY,
+	titulo VARCHAR(50) NOT NULL,
+	descricao VARCHAR(255) NOT NULL,
+	foto VARCHAR(255),
+	ativo BOOLEAN DEFAULT TRUE,
+	id_modalidade_esportiva INT NOT NULL,
+	CONSTRAINT fk_meta_esportiva_modalidade_esportiva FOREIGN KEY (id_modalidade_esportiva) REFERENCES modalidade_esportiva(id_modalidade_esportiva)
+);
+
+CREATE TABLE conquista (
+	id_conquista INT AUTO_INCREMENT PRIMARY KEY,
+	data_conquista TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	id_academico INT NOT NULL,
+	id_meta_esportiva INT NOT NULL,
+	CONSTRAINT fk_conquista_academico FOREIGN KEY (id_academico) REFERENCES academico(id_academico),
+	CONSTRAINT fk_conquista_meta_esportiva FOREIGN KEY (id_meta_esportiva) REFERENCES meta_esportiva(id_meta_esportiva)
 );
