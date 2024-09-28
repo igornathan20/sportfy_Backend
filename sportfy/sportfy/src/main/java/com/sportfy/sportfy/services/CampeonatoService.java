@@ -217,7 +217,7 @@ public class CampeonatoService {
         Optional<Academico> academico = academicoRepository.findById(idAcademico);
 
         if (timeEncontrado.isPresent()) {
-            if (campeonato.get().getDataFim().isBefore(OffsetDateTime.now()) && campeonato.get().getSituacaoCampeonato() != TipoSituacaoCampeonato.FINALIZADO) {
+            if (campeonato.get().getDataFim().isAfter(OffsetDateTime.now()) && campeonato.get().getSituacaoCampeonato() != TipoSituacaoCampeonato.FINALIZADO) {
                 Jogador novoJogador = new Jogador();
                 novoJogador.setModalidadeEsportiva(campeonato.get().getModalidadeEsportiva());
                 novoJogador.setAcademico(academico.get());

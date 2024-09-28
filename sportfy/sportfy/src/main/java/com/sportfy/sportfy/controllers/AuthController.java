@@ -15,7 +15,6 @@ import com.sportfy.sportfy.services.AuthService;
 @RestController
 @RequestMapping(value = "/login")
 public class AuthController {
-
     @Autowired
     AuthService authService;
 
@@ -30,5 +29,4 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
 }

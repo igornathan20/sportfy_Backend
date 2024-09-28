@@ -100,7 +100,7 @@ public class ModalidadeEsportivaController {
         }
     }
 
-    
+
     @GetMapping("/buscar/{idAcademico}/modalidade")
     public ResponseEntity<List<ModalidadeEsportiva>> listarModalidadesOutroUsuario(@PathVariable Long idAcademico) {
         try {

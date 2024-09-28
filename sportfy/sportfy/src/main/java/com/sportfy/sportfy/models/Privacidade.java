@@ -19,14 +19,8 @@ public class Privacidade implements Serializable {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id_privacidade")
     private Long idPrivacidade;
-
     @Column(name="idAcademico", nullable = false, unique = true)
     private Long idAcademico;
-
-    //@Enumerated(EnumType.STRING)
-    //@Column(name="tipo_privacidade", insertable = false, updatable = false, nullable = false, unique = true)
-    //private TipoPrivacidade tipoPrivacidade;
-
     @Column(name="mostrarModalidadesEsportivas")
     private boolean mostrarModalidadesEsportivas = true;
     @Column(name="mostrarHistoricoCampeonatos")

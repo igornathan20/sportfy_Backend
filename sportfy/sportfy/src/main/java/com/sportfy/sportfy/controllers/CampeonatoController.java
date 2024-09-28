@@ -73,13 +73,13 @@ public class CampeonatoController {
             @RequestParam(required = false) Integer situacaoCampeonato) {
         try {
             CampeonatoDto campeonatoDto = new CampeonatoDto(
-                    null, codigo, titulo, descricao, aposta, dataCriacao, dataInicio, dataFim,
-                    limiteTimes != null ? limiteTimes : 0,
-                    limiteParticipantes != null ? limiteParticipantes : 0,
-                    ativo != null ? ativo : false,
-                    null, privacidadeCampeonato != null ? privacidadeCampeonato : 0,
-                    idAcademico, idModalidadeEsportiva,
-                    situacaoCampeonato != null ? situacaoCampeonato : 0
+                null, codigo, titulo, descricao, aposta, dataCriacao, dataInicio, dataFim,
+                limiteTimes != null ? limiteTimes : 0,
+                limiteParticipantes != null ? limiteParticipantes : 0,
+                ativo != null ? ativo : false,
+                null, privacidadeCampeonato != null ? privacidadeCampeonato : 0,
+                idAcademico, idModalidadeEsportiva,
+                situacaoCampeonato != null ? situacaoCampeonato : 0
             );
 
             List<Campeonato> campeonatos = campeonatoService.listarCampeonatosComFiltro(campeonatoDto);
@@ -125,6 +125,7 @@ public class CampeonatoController {
             Jogador jogador = campeonatoService.adicionarJogadorTime(timeDto, idAcademico);
             return ResponseEntity.status(HttpStatus.CREATED).body(jogador);
         } catch (CampeonatoInvalidoException | TimeInvalidoException e) {
+            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
@@ -169,7 +170,6 @@ public class CampeonatoController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
-
 
     @PostMapping("/avaliar")
     public ResponseEntity<AvaliacaoJogador> avaliarJogador(@RequestParam Long idAvaliador, @RequestParam Long idJogador, @RequestParam int nota) {

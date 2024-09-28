@@ -3,15 +3,7 @@ package com.sportfy.sportfy.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import com.sportfy.sportfy.dtos.CanalDto;
 import com.sportfy.sportfy.dtos.ComentarioDto;
 import com.sportfy.sportfy.dtos.PublicacaoDto;
@@ -23,15 +15,12 @@ import com.sportfy.sportfy.exeptions.UsuarioCurtidaComentarioNaoExisteException;
 import com.sportfy.sportfy.exeptions.UsuarioCurtidaPublicacaoJaExisteException;
 import com.sportfy.sportfy.exeptions.UsuarioCurtidaPublicacaoNaoExisteException;
 import com.sportfy.sportfy.services.CanalService;
-
 import jakarta.validation.Valid;
-
 import java.util.List;
 
 @RestController
 @RequestMapping("/canal")
 public class CanalController {
-    
     @Autowired
     private CanalService canalService;
 
