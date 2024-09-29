@@ -140,3 +140,76 @@ INSERT INTO curtida_comentario (id_usuario, id_comentario) VALUES (12, 19);
 INSERT INTO curtida_comentario (id_usuario, id_comentario) VALUES (7, 19);
 INSERT INTO curtida_comentario (id_usuario, id_comentario) VALUES (9, 21);
 INSERT INTO curtida_comentario (id_usuario, id_comentario) VALUES (10, 21);
+
+
+-- DADOS TESTE MODALIDADE_ESPORTIVA
+INSERT INTO modalidade_esportiva (nome, descricao) VALUES ('Futebol', 'Esporte jogado por dois times, onde o objetivo é marcar gols movendo a bola com os pés. Vence quem marcar mais gols em dois tempos de partida.');
+INSERT INTO modalidade_esportiva (nome, descricao) VALUES ('Vôlei', 'Dois times tentam fazer a bola tocar o chão do lado adversário, passando-a por cima de uma rede. Vence quem ganhar 3 sets.');
+INSERT INTO modalidade_esportiva (nome, descricao) VALUES ('Basquete', 'Dois times tentam marcar pontos arremessando a bola na cesta do adversário. Ganha quem fizer mais pontos em quatro períodos.');
+INSERT INTO modalidade_esportiva (nome, descricao) VALUES ('Handebol', 'Jogado por dois times, o objetivo é marcar gols arremessando a bola com as mãos no gol adversário. Vence quem fizer mais gols em dois tempos de partida.');
+INSERT INTO modalidade_esportiva (nome, descricao) VALUES ('Tênis de Mesa', 'Jogadores usam raquetes para golpear uma bola em uma mesa com rede. O objetivo é fazer o adversário errar a devolução. Vence quem ganhar mais sets.');
+
+
+-- DADOS TESTE MODALIDADE_ESPORTIVA
+INSERT INTO regra (titulo, descricao, id_modalidade_esportiva) VALUES ('Gols', 'Um gol é válido quando a bola ultrapassa completamente a linha do gol.', 1);
+INSERT INTO regra (titulo, descricao, id_modalidade_esportiva) VALUES ('Faltas', 'Em caso de falta grave, o jogador pode ser expulso com cartão vermelho.', 1);
+INSERT INTO regra (titulo, descricao, id_modalidade_esportiva) VALUES ('Toque', 'Cada equipe pode tocar a bola até 3 vezes antes de enviá-la ao lado adversário.', 2);
+INSERT INTO regra (titulo, descricao, id_modalidade_esportiva) VALUES ('Contato', 'O contato físico excessivo é considerado falta.', 3);
+INSERT INTO regra (titulo, descricao, id_modalidade_esportiva) VALUES ('Pontuações', 'Cada cesta vale 2 pontos, exceto cestas de longa distância, que valem 3, e lances livres, que valem 1.', 3);
+INSERT INTO regra (titulo, descricao, id_modalidade_esportiva) VALUES ('Área do Gol', 'O goleiro é o único que pode tocar a bola dentro da área de gol.', 4);
+INSERT INTO regra (titulo, descricao, id_modalidade_esportiva) VALUES ('Quick', 'O ponto é perdido se a bola não quicar na mesa do adversário ou se o jogador não devolver corretamente.', 5);
+
+
+-- DADOS TESTE META_ESPORTIVA
+INSERT INTO meta_esportiva (titulo, descricao, id_modalidade_esportiva) VALUES ('Gols de Bicicleta', 'Fazer 10 gols de bicicleta.', 1);
+INSERT INTO meta_esportiva (titulo, descricao, id_modalidade_esportiva) VALUES ('Gols de Pênalti', 'Fazer 30 gols de bicicleta.', 1);
+INSERT INTO meta_esportiva (titulo, descricao, id_modalidade_esportiva) VALUES ('Saque Maestria', 'Fazer 10 pontos de saque.', 2);
+INSERT INTO meta_esportiva (titulo, descricao, id_modalidade_esportiva) VALUES ('Bloqueio Eficaz', 'Fazer 50 bloqueios de sucesso.', 2);
+INSERT INTO meta_esportiva (titulo, descricao, id_modalidade_esportiva) VALUES ('Anjo da Guarda', 'Fazer 50 manchetes de defesa com êxito.', 2);
+INSERT INTO meta_esportiva (titulo, descricao, id_modalidade_esportiva) VALUES ('Mestre da Enterrada', 'Fazer 50 enterradas com êxito.', 3);
+INSERT INTO meta_esportiva (titulo, descricao, id_modalidade_esportiva) VALUES ('Melhor amigo', 'Fazer 40 assistências em gols para a equipe.', 4);
+INSERT INTO meta_esportiva (titulo, descricao, id_modalidade_esportiva) VALUES ('Perspicaz', 'Interceptar ou recuperar 50 vezes a posse de bola.', 4);
+INSERT INTO meta_esportiva (titulo, descricao, id_modalidade_esportiva) VALUES ('Muralha', 'Executar 20 defesas com êxito como goleiro em uma única partida.', 4);
+INSERT INTO meta_esportiva (titulo, descricao, id_modalidade_esportiva) VALUES ('Fatiador', 'Realizar 100 cortes com êxito.', 5);
+
+
+-- DADOS TESTE ACADEMICO_MODALIDADE_ESPORTIVA
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (1, 1);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (1, 2);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (1, 3);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (1, 4);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (1, 5);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (2, 2);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (2, 4);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (3, 1);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (3, 3);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (3, 5);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (4, 5);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (5, 4);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (6, 2);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (6, 3);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (6, 4);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (6, 5);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (7, 1);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (7, 2);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (8, 4);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (8, 5);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (10, 1);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (10, 5);
+
+
+-- DADOS TESTE CONQUISTA
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (1, 1);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (1, 3);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (2, 2);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (2, 4);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (3, 3);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (3, 5);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (4, 5);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (5, 4);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (6, 3);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (6, 5);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (7, 1);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (8, 4);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (8, 5);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (10, 5);

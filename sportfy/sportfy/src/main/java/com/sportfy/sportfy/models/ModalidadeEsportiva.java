@@ -170,5 +170,22 @@ public class ModalidadeEsportiva implements Serializable {
         this.setListaMetaEsportiva(listaMetaEsportiva);
         this.setListaRegra(listaRegra);
     }    
+
+    public void inativar(MetaEsportivaRepository metaEsportivaRepository, RegraRepository regraRepository) {
+        // Inativar a modalidade esportiva
+        this.setAtivo(false);
+        
+        // Excluir todas as regras associadas a essa modalidade
+        List<Regra> regrasAtuais = regraRepository.findByModalidadeEsportivaIdModalidadeEsportiva(this.idModalidadeEsportiva);
+        for (Regra regra : regrasAtuais) {
+            regraRepository.delete(regra); // Remove a regra do banco
+        }
     
+        // Inativar todas as metas associadas a essa modalidade
+        List<MetaEsportiva> metasAtuais = metaEsportivaRepository.findByModalidadeEsportivaIdModalidadeEsportiva(this.idModalidadeEsportiva);
+        for (MetaEsportiva meta : metasAtuais) {
+            meta.setAtivo(false); // Marca a meta como inativa
+            metaEsportivaRepository.save(meta); // Atualiza a meta no banco
+        }
+    }    
 }

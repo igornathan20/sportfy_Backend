@@ -101,7 +101,7 @@ public class ModalidadeEsportivaService {
 
         if (modalidadeExistente.isPresent()){
             ModalidadeEsportiva modalidadeDesativada = modalidadeExistente.get();
-            modalidadeDesativada.setAtivo(false);
+            modalidadeDesativada.inativar(metaEsportivaRepository, regraRepository);
             ModalidadeEsportiva modalidadeEsportiva = modalidadeEsportivaRepository.save(modalidadeDesativada);
             return ModalidadeEsportivaDto.toDTO(modalidadeEsportiva);
         }else {
