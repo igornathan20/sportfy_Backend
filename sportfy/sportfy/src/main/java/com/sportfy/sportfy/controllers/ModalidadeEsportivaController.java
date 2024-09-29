@@ -43,10 +43,25 @@ public class ModalidadeEsportivaController {
     @GetMapping("/listar")
     public ResponseEntity<?> listarModalidades() {
         try {
-            List<ModalidadeEsportivaDto> modalidades = modalidadeEsportivaService.listarModalidades();
-            return ResponseEntity.status(HttpStatus.OK).body(modalidades);
+            List<ModalidadeEsportivaDto> listaModalidade = modalidadeEsportivaService.listarModalidades();
+            return ResponseEntity.status(HttpStatus.OK).body(listaModalidade);
         } catch (ModalidadeNaoExistenteException e) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }  catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/listarModalidadesAcademico/{idAcademico}")
+    //@PreAuthorize("hasRole('ROLE_ACADEMICO')")
+    public ResponseEntity<?> listarModalidadesAcademico(@PathVariable("idAcademico") Long idAcademico) {
+        try {
+            List<ModalidadeEsportivaDto> listaModalidade = modalidadeEsportivaService.listarModalidadesAcademico(idAcademico);
+            return ResponseEntity.status(HttpStatus.OK).body(listaModalidade);
+        } catch (ModalidadeNaoExistenteException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 

@@ -1,6 +1,5 @@
 package com.sportfy.sportfy.services;
 
-
 import com.sportfy.sportfy.dtos.ModalidadeEsportivaDto;
 import com.sportfy.sportfy.exeptions.AcademicoNaoExisteException;
 import com.sportfy.sportfy.exeptions.ModalidadeJaExisteException;
@@ -8,7 +7,7 @@ import com.sportfy.sportfy.exeptions.ModalidadeNaoExistenteException;
 import com.sportfy.sportfy.models.Academico;
 import com.sportfy.sportfy.models.AcademicoModalidadeEsportiva;
 import com.sportfy.sportfy.models.ModalidadeEsportiva;
-import com.sportfy.sportfy.repositories.AcademicoModalidadeEsportivaReposity;
+import com.sportfy.sportfy.repositories.AcademicoModalidadeEsportivaRepository;
 import com.sportfy.sportfy.repositories.AcademicoRepository;
 import com.sportfy.sportfy.repositories.MetaEsportivaRepository;
 import com.sportfy.sportfy.repositories.ModalidadeEsportivaRepository;
@@ -19,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ModalidadeEsportivaService {
@@ -26,7 +26,7 @@ public class ModalidadeEsportivaService {
     ModalidadeEsportivaRepository modalidadeEsportivaRepository;
 
     @Autowired
-    AcademicoModalidadeEsportivaReposity academicoModalidadeEsportivaReposity;
+    AcademicoModalidadeEsportivaRepository academicoModalidadeEsportivaRepository;
 
     @Autowired
     AcademicoRepository academicoRepository;
@@ -67,7 +67,7 @@ public class ModalidadeEsportivaService {
         }
     }
 
-    public List<ModalidadeEsportivaDto> listarModalidades()throws ModalidadeNaoExistenteException{
+    public List<ModalidadeEsportivaDto> listarModalidades() throws ModalidadeNaoExistenteException {
         List<ModalidadeEsportiva> modalidades = modalidadeEsportivaRepository.findByAtivoTrueWithActiveMetas();
 
         if (!modalidades.isEmpty()){
@@ -77,7 +77,16 @@ public class ModalidadeEsportivaService {
         }
     }
 
-    public ModalidadeEsportivaDto buscarModalidades(String nome)throws ModalidadeNaoExistenteException{
+    public List<ModalidadeEsportivaDto> listarModalidadesAcademico(Long idAcademico) throws ModalidadeNaoExistenteException {
+        List<AcademicoModalidadeEsportiva> listaAcademicoModalidadeEsportivaBD = academicoModalidadeEsportivaRepository.findByAcademicoIdAcademicoAndModalidadeEsportivaAtivo(idAcademico, true);
+        if (listaAcademicoModalidadeEsportivaBD.isEmpty()) {
+            throw new ModalidadeNaoExistenteException("Lista de modalidades esportivas vazia!");
+        }
+        List<ModalidadeEsportivaDto> listaModalidadeEsportivaDto = listaAcademicoModalidadeEsportivaBD.stream().map(academicoModalidadeEsportivaBD -> ModalidadeEsportivaDto.toDTO(academicoModalidadeEsportivaBD.getModalidadeEsportiva())).collect(Collectors.toList());
+        return listaModalidadeEsportivaDto;
+    }
+
+    public ModalidadeEsportivaDto buscarModalidades(String nome)throws ModalidadeNaoExistenteException {
         Optional<ModalidadeEsportiva> modalidades = modalidadeEsportivaRepository.findByNomeAndAtivoTrueWithActiveMetas(nome);
 
         if (!modalidades.isEmpty()){
@@ -100,10 +109,10 @@ public class ModalidadeEsportivaService {
         }
     }
 
-    public void inscreverEmModalidade(Long idAcademico, Long idModalidade) throws ModalidadeNaoExistenteException, AcademicoNaoExisteException, Exception{
+    public void inscreverEmModalidade(Long idAcademico, Long idModalidade) throws ModalidadeNaoExistenteException, AcademicoNaoExisteException, Exception {
         Optional<ModalidadeEsportiva> modalidade = modalidadeEsportivaRepository.findById(idModalidade);
         Optional<Academico>academico = academicoRepository.findById(idAcademico);
-        Optional<AcademicoModalidadeEsportiva> academicoModalidade = academicoModalidadeEsportivaReposity.findByAcademicoIdAcademicoAndModalidadeEsportivaIdModalidadeEsportiva(idAcademico,idModalidade);
+        Optional<AcademicoModalidadeEsportiva> academicoModalidade = academicoModalidadeEsportivaRepository.findByAcademicoIdAcademicoAndModalidadeEsportivaIdModalidadeEsportiva(idAcademico,idModalidade);
 
         if (academicoModalidade.isEmpty()) {
             if (academico.isPresent()) {
@@ -111,7 +120,7 @@ public class ModalidadeEsportivaService {
                     AcademicoModalidadeEsportiva inscricaoModalidade = new AcademicoModalidadeEsportiva();
                     inscricaoModalidade.setModalidadeEsportiva(modalidade.get());
                     inscricaoModalidade.setAcademico(academico.get());
-                    academicoModalidadeEsportivaReposity.save(inscricaoModalidade);
+                    academicoModalidadeEsportivaRepository.save(inscricaoModalidade);
                 } else {
                     throw new ModalidadeNaoExistenteException("A modalidade nao existe!");
                 }
@@ -123,14 +132,14 @@ public class ModalidadeEsportivaService {
         }
     }
 
-    public void cancelarInscricaoModalidade(Long idAcademico, Long idModalidade) throws ModalidadeNaoExistenteException, AcademicoNaoExisteException{
+    public void cancelarInscricaoModalidade(Long idAcademico, Long idModalidade) throws ModalidadeNaoExistenteException, AcademicoNaoExisteException {
         Optional<ModalidadeEsportiva> modalidade = modalidadeEsportivaRepository.findById(idModalidade);
         Optional<Academico>academico = academicoRepository.findById(idAcademico);
 
-        Optional<AcademicoModalidadeEsportiva> academicoModalidade = academicoModalidadeEsportivaReposity.findByAcademicoIdAcademicoAndModalidadeEsportivaIdModalidadeEsportiva(idAcademico,idModalidade);
+        Optional<AcademicoModalidadeEsportiva> academicoModalidade = academicoModalidadeEsportivaRepository.findByAcademicoIdAcademicoAndModalidadeEsportivaIdModalidadeEsportiva(idAcademico,idModalidade);
         if (academico.isPresent()) {
             if (modalidade.isPresent()) {
-                academicoModalidadeEsportivaReposity.deleteById(academicoModalidade.get().getIdAcademicoModalidadeEsportiva());
+                academicoModalidadeEsportivaRepository.deleteById(academicoModalidade.get().getIdAcademicoModalidadeEsportiva());
             } else {
                 throw new ModalidadeNaoExistenteException("A modalidade nao existe!");
             }
