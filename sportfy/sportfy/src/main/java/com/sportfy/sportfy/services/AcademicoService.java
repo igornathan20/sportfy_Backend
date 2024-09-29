@@ -33,7 +33,7 @@ public class AcademicoService {
     @Autowired
     JogadorRepository jogadorRepository;
     @Autowired
-    AcademicoModalidadeEsportivaReposity academicoModalidadeEsportivaReposity;
+    AcademicoModalidadeEsportivaRepository academicoModalidadeEsportivaReposity;
     @Autowired
     private PermissaoRepository permissaoRepository;
     @Autowired

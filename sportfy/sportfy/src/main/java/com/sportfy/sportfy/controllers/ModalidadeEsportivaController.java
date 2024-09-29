@@ -4,13 +4,15 @@ import com.sportfy.sportfy.dtos.EstatisticasGeraisModalidadeDto;
 import com.sportfy.sportfy.dtos.ModalidadeEsportivaDto;
 import com.sportfy.sportfy.exeptions.*;
 import com.sportfy.sportfy.models.ModalidadeEsportiva;
+import com.sportfy.sportfy.exeptions.AcademicoNaoExisteException;
+import com.sportfy.sportfy.exeptions.ModalidadeJaExisteException;
+import com.sportfy.sportfy.exeptions.ModalidadeNaoExistenteException;
 import com.sportfy.sportfy.services.ModalidadeEsportivaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/modalidadeEsportiva")
@@ -19,9 +21,9 @@ public class ModalidadeEsportivaController {
     ModalidadeEsportivaService modalidadeEsportivaService;
 
     @PostMapping()
-    public ResponseEntity<ModalidadeEsportiva> criarModalidade(@RequestBody ModalidadeEsportivaDto modalidade) {
+    public ResponseEntity<Object> criarModalidade(@RequestBody ModalidadeEsportivaDto modalidade) {
         try {
-            ModalidadeEsportiva novaModalidade = modalidadeEsportivaService.criarModalidade(modalidade);
+            Object novaModalidade = modalidadeEsportivaService.criarModalidade(modalidade);
             return ResponseEntity.status(HttpStatus.CREATED).body(novaModalidade);
         } catch (ModalidadeJaExisteException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
@@ -29,49 +31,43 @@ public class ModalidadeEsportivaController {
     }
 
     @PutMapping()
-    public ResponseEntity<ModalidadeEsportiva> editarModalidade(@RequestBody ModalidadeEsportivaDto modalidade) {
+    public ResponseEntity<Object> editarModalidade(@RequestBody ModalidadeEsportivaDto modalidade) {
         try {
-            ModalidadeEsportiva modalidadeEditada = modalidadeEsportivaService.editarModalidade(modalidade);
+            Object modalidadeEditada = modalidadeEsportivaService.editarModalidade(modalidade);
             return ResponseEntity.status(HttpStatus.OK).body(modalidadeEditada);
         } catch (ModalidadeNaoExistenteException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (ModalidadeJaExisteException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<List<ModalidadeEsportiva>> listarModalidades() {
+    public ResponseEntity<?> listarModalidades() {
         try {
-            List<ModalidadeEsportiva> modalidades = modalidadeEsportivaService.listarModalidades();
-            return ResponseEntity.status(HttpStatus.OK).body(modalidades);
+            List<ModalidadeEsportivaDto> listaModalidade = modalidadeEsportivaService.listarModalidades();
+            return ResponseEntity.status(HttpStatus.OK).body(listaModalidade);
         } catch (ModalidadeNaoExistenteException e) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }  catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @GetMapping("/buscar/{nome}")
-    public ResponseEntity<Optional<ModalidadeEsportiva>> buscarModalidade(@PathVariable String nome) {
+    public ResponseEntity<Object> buscarModalidade(@PathVariable String nome) {
         try {
-            Optional<ModalidadeEsportiva> modalidade = modalidadeEsportivaService.buscarModalidades(nome);
+            Object modalidade = modalidadeEsportivaService.buscarModalidades(nome);
             return ResponseEntity.status(HttpStatus.OK).body(modalidade);
         } catch (ModalidadeNaoExistenteException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<ModalidadeEsportiva> excluirModalidade(@PathVariable Long id) {
-        try {
-            Optional<ModalidadeEsportiva> modalidadeRemovida = modalidadeEsportivaService.excluirModalidade(id);
-            return modalidadeRemovida.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-        } catch (ModalidadeNaoExistenteException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
-    }
-
     @PutMapping("/desativar/{id}")
-    public ResponseEntity<ModalidadeEsportiva> desativarModalidade(@PathVariable Long id) {
+    public ResponseEntity<Object> desativarModalidade(@PathVariable Long id) {
         try {
-            ModalidadeEsportiva modalidadeDesativada = modalidadeEsportivaService.desativarModalidade(id);
+            Object modalidadeDesativada = modalidadeEsportivaService.desativarModalidade(id);
             return ResponseEntity.status(HttpStatus.OK).body(modalidadeDesativada);
         } catch (ModalidadeNaoExistenteException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -79,7 +75,7 @@ public class ModalidadeEsportivaController {
     }
 
     @PostMapping("/inscrever/{idAcademico}/{idModalidade}")
-    public ResponseEntity<Void> inscreverEmModalidade(@PathVariable Long idAcademico, @PathVariable Long idModalidade) {
+    public ResponseEntity<Object> inscreverEmModalidade(@PathVariable Long idAcademico, @PathVariable Long idModalidade) {
         try {
             modalidadeEsportivaService.inscreverEmModalidade(idAcademico, idModalidade);
             return ResponseEntity.status(HttpStatus.OK).body(null);
@@ -114,7 +110,7 @@ public class ModalidadeEsportivaController {
     }
 
     @DeleteMapping("/remover/{idAcademico}/{idModalidade}")
-    public ResponseEntity<Void> cancelarInscricaoModalidade(@PathVariable Long idAcademico, @PathVariable Long idModalidade) {
+    public ResponseEntity<Object> cancelarInscricaoModalidade(@PathVariable Long idAcademico, @PathVariable Long idModalidade) {
         try {
             modalidadeEsportivaService.cancelarInscricaoModalidade(idAcademico, idModalidade);
             return ResponseEntity.status(HttpStatus.OK).body(null);

@@ -34,4 +34,12 @@ public class Conquista implements Serializable {
     @JoinColumn(name="id_meta_esportiva", updatable = false, nullable = false)
     @Setter @Getter
     private MetaEsportiva metaEsportiva;
+
+    public void cadastrar(Long idAcademico, Long idMetaEsportiva) {
+        this.idConquista = 0L;
+        this.academico = new Academico();
+        academico.setIdAcademico(idAcademico);
+        this.metaEsportiva = new MetaEsportiva();
+        metaEsportiva.setIdMetaEsportiva(idMetaEsportiva);
+    }
 }

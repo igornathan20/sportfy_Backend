@@ -13,6 +13,10 @@ import java.util.stream.Collectors;
 public record PublicacaoDto(
     Long idPublicacao,
 
+    @NotBlank(message = "Título é obrigatório")
+    @Size(min = 1, max = 50, message = "Título deve ter entre 1 e 50 caracteres")
+    String titulo,
+
     @NotBlank(message = "Descrição é obrigatório")
     @Size(min = 1, max = 500, message = "Descrição deve ter entre 1 e 500 caracteres")
     String descricao,
@@ -26,6 +30,8 @@ public record PublicacaoDto(
     @NotNull(message = "O campo Usuario é obrigatório")
     @Valid
     UsuarioDto Usuario,
+
+    Long idModalidadeEsportiva,
 
     List<UsuarioDto> listaUsuarioCurtida,
 
@@ -42,10 +48,12 @@ public record PublicacaoDto(
         }
         return new PublicacaoDto(
             publicacao.getIdPublicacao(),
+            publicacao.getTitulo(),
             publicacao.getDescricao(),
             publicacao.getDataPublicacao(),
             publicacao.getCanal().getIdCanal(),
             UsuarioDto.fromUsuarioBD(publicacao.getUsuario()),
+            publicacao.getIdModalidadeEsportiva(),
             listaUsuarioCurtida,
             listaComentario
         );
