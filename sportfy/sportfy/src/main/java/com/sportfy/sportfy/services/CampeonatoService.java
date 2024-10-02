@@ -49,6 +49,7 @@ public class CampeonatoService {
                     novoCampeonato.setAcademico(academico.get());
                     novoCampeonato.setModalidadeEsportiva(modalidade.get());
                     novoCampeonato.setCodigo("#" + gerarCodigoUnico());
+                    novoCampeonato.setSituacaoCampeonato(TipoSituacaoCampeonato.EM_ABERTO);
                     Endereco enderecoCampeonato = new Endereco();
                     enderecoCampeonato.toEntity(campeonatoDto.endereco());
                     novoCampeonato.setEndereco(enderecoCampeonato);
@@ -150,6 +151,27 @@ public class CampeonatoService {
         return campeonatos;
     }
 
+    public List<Campeonato> listarCampeonatosInscritos(Long idAcademico) throws RegistroNaoEncontradoException, AcademicoNaoExisteException {
+        Optional<Academico> academico = academicoRepository.findById(idAcademico);
+
+        if (academico.isPresent()) {
+            List<Jogador> participacoesCampeonatos = jogadorRepository.findByAcademico(academico.get());
+            List<Campeonato> campeonatos = new ArrayList<Campeonato>();
+
+            for (int i = 0; i < participacoesCampeonatos.size(); i++){
+                campeonatos.add(participacoesCampeonatos.get(i).getTime().getCampeonato());
+            }
+
+            if (campeonatos.isEmpty()) {
+                throw new RegistroNaoEncontradoException("Nenhum campeonato encontrado!");
+            }
+            return campeonatos;
+        } else {
+            throw new AcademicoNaoExisteException("Academico não encontrado!");
+        }
+    }
+
+
     public Optional<Campeonato> excluirCampeonato(Long id) throws RegistroNaoEncontradoException {
         Optional<Campeonato> campeonato = campeonatoRepository.findById(id);
 
@@ -198,7 +220,7 @@ public class CampeonatoService {
         Optional<Time> timeEncontrado = timeRepository.findByNomeAndCampeonato(novoTime.nome(), campeonato.get());
 
         if (timeEncontrado.isEmpty()) {
-            if (campeonato.get().getDataFim().isAfter(OffsetDateTime.now()) && campeonato.get().getSituacaoCampeonato() != TipoSituacaoCampeonato.FINALIZADO) {
+            if (campeonato.get().getDataFim().isAfter(OffsetDateTime.now()) && campeonato.get().getSituacaoCampeonato() != TipoSituacaoCampeonato.FINALIZADO && campeonato.get().getSituacaoCampeonato() != TipoSituacaoCampeonato.INICIADO) {
                 Time timeCriado = new Time();
                 timeCriado.setNome(novoTime.nome());
                 timeCriado.setCampeonato(campeonato.get());
@@ -217,7 +239,7 @@ public class CampeonatoService {
         Optional<Academico> academico = academicoRepository.findById(idAcademico);
 
         if (timeEncontrado.isPresent()) {
-            if (campeonato.get().getDataFim().isAfter(OffsetDateTime.now()) && campeonato.get().getSituacaoCampeonato() != TipoSituacaoCampeonato.FINALIZADO) {
+            if (campeonato.get().getDataFim().isAfter(OffsetDateTime.now()) && campeonato.get().getSituacaoCampeonato() != TipoSituacaoCampeonato.FINALIZADO  && campeonato.get().getSituacaoCampeonato() != TipoSituacaoCampeonato.INICIADO) {
                 Jogador novoJogador = new Jogador();
                 novoJogador.setModalidadeEsportiva(campeonato.get().getModalidadeEsportiva());
                 novoJogador.setAcademico(academico.get());
@@ -307,6 +329,8 @@ public class CampeonatoService {
 
             //campeonato.setPartidas(partidas);
             partidaRepository.saveAll(partidas);
+            campeonato.get().setSituacaoCampeonato(TipoSituacaoCampeonato.INICIADO);
+            campeonatoRepository.save(campeonato.get());
             return partidas;
         }else {
             throw new RegistroNaoEncontradoException("Campeonato nao encontrado!");

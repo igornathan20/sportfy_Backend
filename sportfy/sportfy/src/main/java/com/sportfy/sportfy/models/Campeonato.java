@@ -111,9 +111,12 @@ public class Campeonato implements Serializable {
 
         switch (dto.situacaoCampeonato()){
             case 0:
-                setSituacaoCampeonato(TipoSituacaoCampeonato.EM_ANDAMENTO);
+                setSituacaoCampeonato(TipoSituacaoCampeonato.EM_ABERTO);
                 break;
             case 1:
+                setSituacaoCampeonato(TipoSituacaoCampeonato.INICIADO);
+                break;
+            case 2:
                 setSituacaoCampeonato(TipoSituacaoCampeonato.FINALIZADO);
                 break;
             default:

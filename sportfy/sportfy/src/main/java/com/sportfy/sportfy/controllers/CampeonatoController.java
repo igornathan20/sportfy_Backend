@@ -89,6 +89,16 @@ public class CampeonatoController {
         }
     }
 
+    @GetMapping("/{idAcademico}/listar")
+    public ResponseEntity<List<Campeonato>> listarCampeonatosInscritos(@PathVariable Long idAcademico){
+        try {
+            List<Campeonato> campeonatos = campeonatoService.listarCampeonatosInscritos(idAcademico);
+            return ResponseEntity.status(HttpStatus.OK).body(campeonatos);
+        } catch (RegistroNaoEncontradoException | AcademicoNaoExisteException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Campeonato> excluirCampeonato(@PathVariable Long id) {
         try {
