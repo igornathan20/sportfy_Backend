@@ -171,6 +171,21 @@ public class CampeonatoService {
         }
     }
 
+    public List<Campeonato> listarCampeonatosCriados(Long idAcademico) throws RegistroNaoEncontradoException, AcademicoNaoExisteException {
+        Optional<Academico> academico = academicoRepository.findById(idAcademico);
+
+        if (academico.isPresent()) {
+            List<Campeonato> campeonatosCriados = campeonatoRepository.findByAcademico(academico.get());
+
+            if (campeonatosCriados.isEmpty()) {
+                throw new RegistroNaoEncontradoException("Nenhum campeonato encontrado!");
+            }
+            return campeonatosCriados;
+        } else {
+            throw new AcademicoNaoExisteException("Academico não encontrado!");
+        }
+    }
+
 
     public Optional<Campeonato> excluirCampeonato(Long id) throws RegistroNaoEncontradoException {
         Optional<Campeonato> campeonato = campeonatoRepository.findById(id);
