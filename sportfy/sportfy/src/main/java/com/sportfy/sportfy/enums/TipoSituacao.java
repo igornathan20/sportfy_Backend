@@ -1,6 +1,6 @@
 package com.sportfy.sportfy.enums;
 
-public enum TipoSituacaoCampeonato {
+public enum TipoSituacao {
     EM_ABERTO,
     INICIADO,
     FINALIZADO,

@@ -3,7 +3,7 @@ package com.sportfy.sportfy.services;
 import com.sportfy.sportfy.dtos.CampeonatoDto;
 import com.sportfy.sportfy.dtos.TimeDto;
 import com.sportfy.sportfy.enums.TipoFasePartida;
-import com.sportfy.sportfy.enums.TipoSituacaoCampeonato;
+import com.sportfy.sportfy.enums.TipoSituacao;
 import com.sportfy.sportfy.exeptions.*;
 import com.sportfy.sportfy.models.*;
 import com.sportfy.sportfy.repositories.*;
@@ -49,7 +49,7 @@ public class CampeonatoService {
                     novoCampeonato.setAcademico(academico.get());
                     novoCampeonato.setModalidadeEsportiva(modalidade.get());
                     novoCampeonato.setCodigo("#" + gerarCodigoUnico());
-                    novoCampeonato.setSituacaoCampeonato(TipoSituacaoCampeonato.EM_ABERTO);
+                    novoCampeonato.setSituacaoCampeonato(TipoSituacao.EM_ABERTO);
                     Endereco enderecoCampeonato = new Endereco();
                     enderecoCampeonato.toEntity(campeonatoDto.endereco());
                     novoCampeonato.setEndereco(enderecoCampeonato);
@@ -235,7 +235,7 @@ public class CampeonatoService {
         Optional<Time> timeEncontrado = timeRepository.findByNomeAndCampeonato(novoTime.nome(), campeonato.get());
 
         if (timeEncontrado.isEmpty()) {
-            if (campeonato.get().getDataFim().isAfter(OffsetDateTime.now()) && campeonato.get().getSituacaoCampeonato() != TipoSituacaoCampeonato.FINALIZADO && campeonato.get().getSituacaoCampeonato() != TipoSituacaoCampeonato.INICIADO) {
+            if (campeonato.get().getDataFim().isAfter(OffsetDateTime.now()) && campeonato.get().getSituacaoCampeonato() != TipoSituacao.FINALIZADO && campeonato.get().getSituacaoCampeonato() != TipoSituacao.INICIADO) {
                 Time timeCriado = new Time();
                 timeCriado.setNome(novoTime.nome());
                 timeCriado.setCampeonato(campeonato.get());
@@ -254,7 +254,7 @@ public class CampeonatoService {
         Optional<Academico> academico = academicoRepository.findById(idAcademico);
 
         if (timeEncontrado.isPresent()) {
-            if (campeonato.get().getDataFim().isAfter(OffsetDateTime.now()) && campeonato.get().getSituacaoCampeonato() != TipoSituacaoCampeonato.FINALIZADO  && campeonato.get().getSituacaoCampeonato() != TipoSituacaoCampeonato.INICIADO) {
+            if (campeonato.get().getDataFim().isAfter(OffsetDateTime.now()) && campeonato.get().getSituacaoCampeonato() != TipoSituacao.FINALIZADO  && campeonato.get().getSituacaoCampeonato() != TipoSituacao.INICIADO) {
                 Jogador novoJogador = new Jogador();
                 novoJogador.setModalidadeEsportiva(campeonato.get().getModalidadeEsportiva());
                 novoJogador.setAcademico(academico.get());
@@ -275,7 +275,7 @@ public class CampeonatoService {
         if (campeonato.isPresent() && academico.isPresent()){
             Optional<Time> timeEncontrado = timeRepository.findByNomeAndCampeonato(academico.get().getUsuario().getUsername(), campeonato.get());
             if (timeEncontrado.isEmpty()) {
-                if (campeonato.get().getDataFim().isAfter(OffsetDateTime.now()) && campeonato.get().getSituacaoCampeonato() != TipoSituacaoCampeonato.FINALIZADO && campeonato.get().getLimiteParticipantes() == 1) {
+                if (campeonato.get().getDataFim().isAfter(OffsetDateTime.now()) && campeonato.get().getSituacaoCampeonato() != TipoSituacao.FINALIZADO && campeonato.get().getLimiteParticipantes() == 1) {
                     Time timeCriado = new Time();
                     timeCriado.setNome(academico.get().getUsuario().getUsername());
                     timeCriado.setCampeonato(campeonato.get());
@@ -344,7 +344,7 @@ public class CampeonatoService {
 
             //campeonato.setPartidas(partidas);
             partidaRepository.saveAll(partidas);
-            campeonato.get().setSituacaoCampeonato(TipoSituacaoCampeonato.INICIADO);
+            campeonato.get().setSituacaoCampeonato(TipoSituacao.INICIADO);
             campeonatoRepository.save(campeonato.get());
             return partidas;
         }else {
@@ -367,6 +367,21 @@ public class CampeonatoService {
         }
     }
 
+    public List<Partida> listarPartidas(Long idCampeonato)throws RegistroNaoEncontradoException {
+        Optional<Campeonato> campeonato = campeonatoRepository.findById(idCampeonato);
+        if (campeonato.isPresent()) {
+            List<Partida> partidas = partidaRepository.findByCampeonato(campeonato.get());
+            if(partidas.isEmpty()){
+                throw new RegistroNaoEncontradoException("Nenhuma partida foi encontrada no campeonato!");
+            }else {
+                return partidas;
+            }
+        }else {
+            throw new RegistroNaoEncontradoException("Campeonato nao encontrado!");
+        }
+    }
+
+
     public void avacarDeFase(Long idCampeonato) throws RegistroNaoEncontradoException{
         Optional<Campeonato> campeonato = campeonatoRepository.findById(idCampeonato);
         if (campeonato.isPresent()) {
@@ -374,13 +389,14 @@ public class CampeonatoService {
             List<Time> times = new ArrayList<>();
 
             for (int i = 0; i < partidasFaseAnterior.size(); i++) {
-                if (partidasFaseAnterior.get(i).getTime1() == null && partidasFaseAnterior.get(i).getTime2() != null) {
+                if (partidasFaseAnterior.get(i).getTime1() == null) {
                     partidasFaseAnterior.get(i).getResultado().setVencedor(partidasFaseAnterior.get(i).getTime2());
                 }
-                if (partidasFaseAnterior.get(i).getTime2() == null && partidasFaseAnterior.get(i).getTime1() != null) {
+                if (partidasFaseAnterior.get(i).getTime2() == null) {
                     partidasFaseAnterior.get(i).getResultado().setVencedor(partidasFaseAnterior.get(i).getTime1());
                 }
                 times.add(partidasFaseAnterior.get(i).getResultado().getVencedor());
+                partidasFaseAnterior.get(i).setSituacaoPartida(TipoSituacao.FINALIZADO);
             }
             int numeroDeTimes = times.size();
 
@@ -423,6 +439,7 @@ public class CampeonatoService {
         Optional<Partida> partida = partidaRepository.findById(idPartida);
 
         if (partida.isPresent()){
+            partida.get().setSituacaoPartida(TipoSituacao.EM_ABERTO);
             partida.get().getResultado().setPontuacaoTime1(pontuacaoTime1);
             partida.get().getResultado().setPontuacaoTime2(pontuacaoTime2);
 

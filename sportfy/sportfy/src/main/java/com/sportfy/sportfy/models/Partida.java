@@ -3,6 +3,7 @@ package com.sportfy.sportfy.models;
 import java.io.Serializable;
 
 import com.sportfy.sportfy.enums.TipoFasePartida;
+import com.sportfy.sportfy.enums.TipoSituacao;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -38,11 +39,9 @@ public class Partida implements Serializable {
     @JoinColumn(name="id_time2")
     private Time time2;
 
-//    @Column(name="pontuacao_time1")
-//    private int pontuacaoTime1;
-//
-//    @Column(name="pontuacao_time2")
-//    private int pontuacaoTime2;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "situacao_partida", nullable = false)
+    private TipoSituacao situacaoPartida = TipoSituacao.EM_ABERTO;
 
     @OneToOne(fetch=FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name="id_resultado")

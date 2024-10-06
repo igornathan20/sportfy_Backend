@@ -5,7 +5,7 @@ import java.io.Serializable;
 import com.sportfy.sportfy.dtos.CampeonatoDto;
 import com.sportfy.sportfy.enums.TipoFasePartida;
 import com.sportfy.sportfy.enums.TipoPrivacidadeCampeonato;
-import com.sportfy.sportfy.enums.TipoSituacaoCampeonato;
+import com.sportfy.sportfy.enums.TipoSituacao;
 import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.*;
@@ -74,7 +74,7 @@ public class Campeonato implements Serializable {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "situacao_campeonato", nullable = false)
-    private TipoSituacaoCampeonato situacaoCampeonato;
+    private TipoSituacao situacaoCampeonato;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "fase_atual")
@@ -111,13 +111,13 @@ public class Campeonato implements Serializable {
 
         switch (dto.situacaoCampeonato()){
             case 0:
-                setSituacaoCampeonato(TipoSituacaoCampeonato.EM_ABERTO);
+                setSituacaoCampeonato(TipoSituacao.EM_ABERTO);
                 break;
             case 1:
-                setSituacaoCampeonato(TipoSituacaoCampeonato.INICIADO);
+                setSituacaoCampeonato(TipoSituacao.INICIADO);
                 break;
             case 2:
-                setSituacaoCampeonato(TipoSituacaoCampeonato.FINALIZADO);
+                setSituacaoCampeonato(TipoSituacao.FINALIZADO);
                 break;
             default:
                 throw new Exception("Tipo de privacidade invalido!");

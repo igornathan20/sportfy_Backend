@@ -183,6 +183,17 @@ public class CampeonatoController {
         }
     }
 
+    @GetMapping("/{idCampeonato}/partidas")
+    public ResponseEntity<List<Partida>> listarPartidas(@PathVariable Long idCampeonato) {
+        try {
+            List<Partida> partidas = campeonatoService.listarPartidas(idCampeonato);
+            return ResponseEntity.status(HttpStatus.OK).body(partidas);
+        }catch (RegistroNaoEncontradoException e){
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
     @PostMapping("/{idCampeonato}/avancar-fase")
     public ResponseEntity<Void> avancarDeFase(@PathVariable Long idCampeonato) {
         try {
