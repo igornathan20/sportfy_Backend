@@ -10,7 +10,7 @@ public record NotificacaoDto(
      boolean likes
 
 ) {
-    public static NotificacaoDto fromNotificacao(Notificacao notificacao){
+    public static NotificacaoDto toEntity(Notificacao notificacao){
         return new NotificacaoDto(
                 notificacao.getIdAcademico(),
                 notificacao.isNotificarCampeonatos(),

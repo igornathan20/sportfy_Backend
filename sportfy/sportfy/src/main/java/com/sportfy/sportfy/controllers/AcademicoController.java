@@ -24,19 +24,19 @@ public class AcademicoController {
 
     @PostMapping("/cadastrar")
     //@PreAuthorize("hasRole('ROLE_ACADEMICO')")
-    public ResponseEntity<Object> cadastrar(@RequestBody @Valid AcademicoDto academico) {
+    public ResponseEntity<AcademicoResponseDto> cadastrar(@RequestBody @Valid AcademicoDto academico) {
         try {
-            Object academicoCriado = academicoService.cadastrar(academico);
+            AcademicoResponseDto academicoCriado = academicoService.cadastrar(academico);
             return ResponseEntity.status(HttpStatus.CREATED).body(academicoCriado);
         } catch(EmailInvalidoException e) {
             System.out.println("Erro " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         } catch (OutroUsuarioComDadosJaExistentes e) {
             System.out.println("Erro " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         } catch (PermissaoNaoExisteException e) {
             System.out.println("Erro " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         } catch (Exception e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -45,19 +45,19 @@ public class AcademicoController {
 
     @PutMapping("/atualizar/{idAcademico}")
     //@PreAuthorize("hasRole('ROLE_ACADEMICO')")
-    public ResponseEntity<Object> atualizar(@PathVariable("idAcademico") Long idAcademico, @RequestBody @Valid AcademicoDto academico) {
+    public ResponseEntity<AcademicoResponseDto> atualizar(@PathVariable("idAcademico") Long idAcademico, @RequestBody @Valid AcademicoDto academico) {
         try {
-            Object academicoAtualizado = academicoService.atualizar(idAcademico, academico);
+            AcademicoResponseDto academicoAtualizado = academicoService.atualizar(idAcademico, academico);
             return ResponseEntity.status(HttpStatus.OK).body(academicoAtualizado);
         } catch (EmailInvalidoException e) {
             System.out.println("Erro " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         } catch (AcademicoNaoExisteException e) {
             System.out.println("Erro " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (OutroUsuarioComDadosJaExistentes e) {
             System.out.println("Erro " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         } catch (Exception e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -66,13 +66,13 @@ public class AcademicoController {
 
     @PutMapping("/inativar/{idAcademico}")
     //@PreAuthorize("hasRole('ROLE_ACADEMICO')")
-    public ResponseEntity<Object> inativar(@PathVariable("idAcademico") Long idAcademico) {
+    public ResponseEntity<AcademicoResponseDto> inativar(@PathVariable("idAcademico") Long idAcademico) {
         try {
-            Object academicoInativado = academicoService.inativar(idAcademico);
+            AcademicoResponseDto academicoInativado = academicoService.inativar(idAcademico);
             return ResponseEntity.status(HttpStatus.OK).body(academicoInativado);
         } catch (AcademicoNaoExisteException e) {
             System.out.println("Erro " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -81,13 +81,13 @@ public class AcademicoController {
 
     @GetMapping("/consultar/{idUsuario}")
     //@PreAuthorize("hasRole('ROLE_ACADEMICO')")
-    public ResponseEntity<Object> consultar(@PathVariable("idUsuario") Long idUsuario) {
+    public ResponseEntity<AcademicoResponseDto> consultar(@PathVariable("idUsuario") Long idUsuario) {
         try {
-            Object academicoConsultado = academicoService.consultar(idUsuario);
+            AcademicoResponseDto academicoConsultado = academicoService.consultar(idUsuario);
             return ResponseEntity.status(HttpStatus.OK).body(academicoConsultado);
         } catch (AcademicoNaoExisteException e) {
             System.out.println("Erro " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -96,13 +96,13 @@ public class AcademicoController {
 
     @GetMapping("/listar")
     //@PreAuthorize("hasRole('ROLE_ACADEMICO')")
-    public ResponseEntity<?> listar() {
+    public ResponseEntity<List<AcademicoResponseDto>> listar() {
         try {
-            List<AcademicoDto> listaAcademico = academicoService.listar();
+            List<AcademicoResponseDto> listaAcademico = academicoService.listar();
             return ResponseEntity.status(HttpStatus.OK).body(listaAcademico);
         } catch (ListaAcademicosVaziaException e) {
             System.out.println("Erro " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -121,10 +121,10 @@ public class AcademicoController {
     }
 
     @GetMapping("/notificacoes/{idAcademico}")
-    public ResponseEntity<Notificacao> retornaTodasPreferenciaNotificacao(@PathVariable Long idAcademico){
+    public ResponseEntity<NotificacaoDto> retornaTodasPreferenciaNotificacao(@PathVariable Long idAcademico){
         try {
-            Notificacao notificar = academicoService.retornaTodasNotificacoes(idAcademico);
-            return ResponseEntity.status(HttpStatus.OK).body(notificar);
+            NotificacaoDto notificacoes = academicoService.retornaTodasNotificacoes(idAcademico);
+            return ResponseEntity.status(HttpStatus.OK).body(notificacoes);
         }catch (Exception e){
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -135,7 +135,7 @@ public class AcademicoController {
     public ResponseEntity<NotificacaoDto> alteraNotificacao(@RequestBody NotificacaoDto userNotificacao){
         try {
             Notificacao notificacao = academicoService.alteraNotificacao(userNotificacao);
-            return ResponseEntity.status(HttpStatus.OK).body(NotificacaoDto.fromNotificacao(notificacao));
+            return ResponseEntity.status(HttpStatus.OK).body(NotificacaoDto.toEntity(notificacao));
         }catch (Exception e){
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -154,9 +154,9 @@ public class AcademicoController {
     }
 
     @GetMapping("/privacidade/{idAcademico}")
-    public ResponseEntity<Privacidade> retornaTodasPrivacidade(@PathVariable Long idAcademico){
+    public ResponseEntity<PrivacidadeDto> retornaTodasPrivacidade(@PathVariable Long idAcademico){
         try {
-            Privacidade privacidade = academicoService.retornaTodasPrivacidade(idAcademico);
+            PrivacidadeDto privacidade = academicoService.retornaTodasPrivacidade(idAcademico);
             return ResponseEntity.status(HttpStatus.OK).body(privacidade);
         }catch (Exception e){
             System.out.println("Erro " + e.getMessage());

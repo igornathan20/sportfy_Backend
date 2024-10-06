@@ -42,7 +42,7 @@ public class AcademicoService {
     private NotificacaoRepository notificacaoRepository;
 
 
-    public AcademicoDto cadastrar(AcademicoDto academicoDto) throws EmailInvalidoException, OutroUsuarioComDadosJaExistentes, PermissaoNaoExisteException {
+    public AcademicoResponseDto cadastrar(AcademicoDto academicoDto) throws EmailInvalidoException, OutroUsuarioComDadosJaExistentes, PermissaoNaoExisteException {
         if (!isEmailFromUfpr(academicoDto.email())) {
             throw new EmailInvalidoException("Email invalido!");
         }
@@ -98,7 +98,7 @@ public class AcademicoService {
             } catch (Exception e) {
                 System.err.println("Erro ao enviar email: " + e.getMessage());
             }
-            return AcademicoDto.fromAcademicoBD(academicoCriado);  
+            return AcademicoResponseDto.fromAcademicoBD(academicoCriado);
         } else if (existAcademicoBD.get().size() == 1) {
             Academico academicoAtualizado = new Academico();
             String senha = GeraSenha.generatePassword();
@@ -106,13 +106,13 @@ public class AcademicoService {
             academicoAtualizado.getUsuario().setPassword(passwordEncoder.encode(senha));
             academicoAtualizado.getUsuario().setPermissao(existAcademicoBD.get().get(0).getUsuario().getPermissao());
             Academico academicoSalvo = academicoRepository.save(academicoAtualizado);
-            return AcademicoDto.fromAcademicoBD(academicoSalvo);
+            return AcademicoResponseDto.fromAcademicoBD(academicoSalvo);
         } else {
             throw new OutroUsuarioComDadosJaExistentes("Outro usuário com username eou email já existente!");
         }
     }
     
-    public AcademicoDto atualizar(Long idAcademico, AcademicoDto academicoDto) throws EmailInvalidoException, AcademicoNaoExisteException, OutroUsuarioComDadosJaExistentes {
+    public AcademicoResponseDto atualizar(Long idAcademico, AcademicoDto academicoDto) throws EmailInvalidoException, AcademicoNaoExisteException, OutroUsuarioComDadosJaExistentes {
         if (!isEmailFromUfpr(academicoDto.email())) {
             throw new EmailInvalidoException("Email invalido!");
         }
@@ -151,27 +151,27 @@ public class AcademicoService {
         }
 
         Academico academicoSalvo = academicoRepository.save(academicoAtualizado);
-        return AcademicoDto.fromAcademicoBD(academicoSalvo);
+        return AcademicoResponseDto.fromAcademicoBD(academicoSalvo);
     }
     
-    public AcademicoDto inativar(Long idAcademico) throws AcademicoNaoExisteException {
+    public AcademicoResponseDto inativar(Long idAcademico) throws AcademicoNaoExisteException {
         return academicoRepository.findByIdAcademicoAndUsuarioAtivo(idAcademico, true).map(academicoBD -> {
             academicoBD.getUsuario().inativar();
             Academico academicoInativado = academicoRepository.save(academicoBD);
-            return AcademicoDto.fromAcademicoBD(academicoInativado);
+            return AcademicoResponseDto.fromAcademicoBD(academicoInativado);
         }).orElseThrow(() -> new AcademicoNaoExisteException("Academico não existe!"));
     }
 
-    public AcademicoDto consultar(Long idUsuario) throws AcademicoNaoExisteException {
+    public AcademicoResponseDto consultar(Long idUsuario) throws AcademicoNaoExisteException {
         return academicoRepository.findByUsuarioIdUsuarioAndUsuarioAtivo(idUsuario, true).map(academicoBD -> {
-            return AcademicoDto.fromAcademicoBD(academicoBD);
+            return AcademicoResponseDto.fromAcademicoBD(academicoBD);
         }).orElseThrow(() -> new AcademicoNaoExisteException("Academico não existe!"));
     }
 
-    public List<AcademicoDto> listar() throws ListaAcademicosVaziaException {
+    public List<AcademicoResponseDto> listar() throws ListaAcademicosVaziaException {
         Optional<List<Academico>> listaAcademicoBD = academicoRepository.findByUsuarioAtivo(true);
         if (listaAcademicoBD.isPresent()) {
-            List<AcademicoDto> listaAcademicoDto = listaAcademicoBD.get().stream().map(academicoBD -> AcademicoDto.fromAcademicoBD(academicoBD)).collect(Collectors.toList());
+            List<AcademicoResponseDto> listaAcademicoDto = listaAcademicoBD.get().stream().map(academicoBD -> AcademicoResponseDto.fromAcademicoBD(academicoBD)).collect(Collectors.toList());
             return listaAcademicoDto;
         } else {
             throw new ListaAcademicosVaziaException("Lista de acadêmicos vazia!");
@@ -199,8 +199,9 @@ public class AcademicoService {
         }
     }
 
-    public Notificacao retornaTodasNotificacoes(Long idAcademico){
-       return notificacaoRepository.findByIdAcademico(idAcademico);
+    public NotificacaoDto retornaTodasNotificacoes(Long idAcademico){
+        Notificacao notificacoes = notificacaoRepository.findByIdAcademico(idAcademico);
+        return notificacoes.toDto(notificacoes);
     }
 
     public Notificacao alteraNotificacao(NotificacaoDto userNotificacao){
@@ -231,8 +232,9 @@ public class AcademicoService {
         }
     }
 
-    public Privacidade retornaTodasPrivacidade(Long idAcademico){
-        return privacidadeRepository.findByIdAcademico(idAcademico);
+    public PrivacidadeDto retornaTodasPrivacidade(Long idAcademico){
+        Privacidade privacidade = privacidadeRepository.findByIdAcademico(idAcademico);
+        return privacidade.toDto(privacidade);
     }
 
     public Privacidade alteraPrivacidade(PrivacidadeDto userPrivacidade){

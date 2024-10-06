@@ -1,5 +1,6 @@
 package com.sportfy.sportfy.models;
 
+import com.sportfy.sportfy.dtos.PrivacidadeDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,4 +30,14 @@ public class Privacidade implements Serializable {
     private boolean mostrarEstatisticasModalidadesEsportivas = true;
     @Column(name="mostrarConquistas")
     private boolean mostrarConquistas = true;
+
+    public PrivacidadeDto toDto(Privacidade privacidade){
+        return new PrivacidadeDto(
+                privacidade.getIdAcademico(),
+                privacidade.isMostrarModalidadesEsportivas(),
+                privacidade.isMostrarHistoricoCampeonatos(),
+                privacidade.isMostrarEstatisticasModalidadesEsportivas(),
+                privacidade.isMostrarConquistas()
+        );
+    }
 }

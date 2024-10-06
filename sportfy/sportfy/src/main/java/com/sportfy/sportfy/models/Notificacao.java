@@ -1,5 +1,6 @@
 package com.sportfy.sportfy.models;
 
+import com.sportfy.sportfy.dtos.NotificacaoDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,4 +32,13 @@ public class Notificacao implements Serializable {
     @Column(name="likes")
     private boolean notificarLikes = true;
 
+    public NotificacaoDto toDto(Notificacao notificacao){
+        return new NotificacaoDto(
+                notificacao.getIdAcademico(),
+                notificacao.isNotificarCampeonatos(),
+                notificacao.isNotificarPosts(),
+                notificacao.isNotificarComentarios(),
+                notificacao.isNotificarLikes()
+        );
+    }
 }
