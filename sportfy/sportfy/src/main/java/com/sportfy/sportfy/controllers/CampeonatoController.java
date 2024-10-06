@@ -27,8 +27,10 @@ public class CampeonatoController {
             Campeonato campeonato = campeonatoService.criarCampeonato(campeonatoDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(campeonato);
         } catch (AcademicoNaoExisteException | ModalidadeNaoExistenteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -39,8 +41,10 @@ public class CampeonatoController {
             Campeonato campeonato = campeonatoService.editarCampeonato(campeonatoDto);
             return ResponseEntity.status(HttpStatus.OK).body(campeonato);
         } catch (RegistroNaoEncontradoException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -51,6 +55,7 @@ public class CampeonatoController {
             List<Campeonato> campeonatos = campeonatoService.listarTodosCampeonatos();
             return new ResponseEntity<>(campeonatos, HttpStatus.OK);
         } catch (RegistroNaoEncontradoException e) {
+            System.out.println("Erro " + e.getMessage());
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
@@ -85,6 +90,7 @@ public class CampeonatoController {
             List<Campeonato> campeonatos = campeonatoService.listarCampeonatosComFiltro(campeonatoDto);
             return ResponseEntity.status(HttpStatus.OK).body(campeonatos);
         } catch (RegistroNaoEncontradoException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
@@ -95,6 +101,7 @@ public class CampeonatoController {
             List<Campeonato> campeonatos = campeonatoService.listarCampeonatosInscritos(idAcademico);
             return ResponseEntity.status(HttpStatus.OK).body(campeonatos);
         } catch (RegistroNaoEncontradoException | AcademicoNaoExisteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
@@ -105,6 +112,7 @@ public class CampeonatoController {
             List<Campeonato> campeonatos = campeonatoService.listarCampeonatosCriados(idAcademico);
             return ResponseEntity.status(HttpStatus.OK).body(campeonatos);
         } catch (RegistroNaoEncontradoException | AcademicoNaoExisteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
@@ -115,6 +123,7 @@ public class CampeonatoController {
             Optional<Campeonato> campeonato = campeonatoService.excluirCampeonato(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } catch (RegistroNaoEncontradoException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
@@ -125,6 +134,7 @@ public class CampeonatoController {
             Campeonato campeonato = campeonatoService.desativarCampeonato(id);
             return ResponseEntity.status(HttpStatus.OK).body(campeonato);
         } catch (RegistroNaoEncontradoException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
@@ -135,6 +145,7 @@ public class CampeonatoController {
             Time timeCriado = campeonatoService.criarTime(novoTime);
             return ResponseEntity.status(HttpStatus.CREATED).body(timeCriado);
         } catch (CampeonatoInvalidoException | TimeInvalidoException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
@@ -145,7 +156,7 @@ public class CampeonatoController {
             Jogador jogador = campeonatoService.adicionarJogadorTime(timeDto, idAcademico);
             return ResponseEntity.status(HttpStatus.CREATED).body(jogador);
         } catch (CampeonatoInvalidoException | TimeInvalidoException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
@@ -156,7 +167,7 @@ public class CampeonatoController {
             Time timeCriado = campeonatoService.criarTimeComUmJogador(idCampeonato, idAcademico);
             return ResponseEntity.status(HttpStatus.CREATED).body(timeCriado);
         } catch (CampeonatoInvalidoException | TimeInvalidoException | RegistroNaoEncontradoException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
@@ -167,6 +178,7 @@ public class CampeonatoController {
             campeonatoService.definirPrimeiraFase(idCampeonato);
             return ResponseEntity.status(HttpStatus.OK).build();
         }catch (RegistroNaoEncontradoException e){
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
@@ -177,6 +189,7 @@ public class CampeonatoController {
             campeonatoService.avacarDeFase(idCampeonato);
             return ResponseEntity.status(HttpStatus.OK).build();
         }catch (RegistroNaoEncontradoException e){
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
@@ -187,6 +200,7 @@ public class CampeonatoController {
             Partida partida = campeonatoService.alterarPontuacaoPartida(idPartida, pontuacaoTime1, pontuacaoTime2);
             return ResponseEntity.status(HttpStatus.OK).body(partida);
         } catch (RegistroNaoEncontradoException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
@@ -197,7 +211,11 @@ public class CampeonatoController {
             AvaliacaoJogador avaliacao = campeonatoService.avaliarJogador(idAvaliador, idJogador, nota);
             return ResponseEntity.ok(avaliacao);
         } catch (AcademicoNaoExisteException | RegistroNaoEncontradoException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }catch (Exception e){
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
@@ -207,6 +225,7 @@ public class CampeonatoController {
             float media = campeonatoService.recuperaAvaliacaoNoCampeonato(idCampeonato, idAcademico);
             return ResponseEntity.ok(media);
         } catch (AcademicoNaoExisteException | CampeonatoInvalidoException | RegistroNaoEncontradoException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
@@ -217,6 +236,7 @@ public class CampeonatoController {
             float media = campeonatoService.recuperaAvaliacaoPorModalidade(idModalidade, idAcademico);
             return ResponseEntity.ok(media);
         } catch (AcademicoNaoExisteException | ModalidadeNaoExistenteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
@@ -227,8 +247,10 @@ public class CampeonatoController {
             List<Campeonato> campeonatos = campeonatoService.buscarHistoricoCampeonatoOutrosUsuarios(idAcademico);
             return ResponseEntity.ok(campeonatos);
         } catch (AcademicoNaoExisteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (ConteudoPrivadoException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
     }

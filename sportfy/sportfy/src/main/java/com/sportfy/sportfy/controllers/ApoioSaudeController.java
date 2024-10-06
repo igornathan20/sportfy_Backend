@@ -24,6 +24,7 @@ public class ApoioSaudeController {
             ApoioSaude novoApoioSaude = apoioSaudeService.criarMeta(apoioSaudeDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(novoApoioSaude);
         } catch (AdministradorNaoExisteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
@@ -34,6 +35,7 @@ public class ApoioSaudeController {
             ApoioSaude apoioSaudeEditado = apoioSaudeService.editarApoioSaude(apoioSaudeDto);
             return ResponseEntity.status(HttpStatus.OK).body(apoioSaudeEditado);
         } catch (RegistroNaoEncontradoException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
@@ -44,6 +46,7 @@ public class ApoioSaudeController {
             List<ApoioSaude> listaApoioSaude = apoioSaudeService.listar();
             return ResponseEntity.status(HttpStatus.OK).body(listaApoioSaude);
         } catch (RegistroNaoEncontradoException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
@@ -54,6 +57,7 @@ public class ApoioSaudeController {
             List<Optional<ApoioSaude>> registrosEncontrados = apoioSaudeService.buscarApoioSaude(nome);
             return ResponseEntity.status(HttpStatus.OK).body(registrosEncontrados);
         } catch (RegistroNaoEncontradoException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
@@ -64,6 +68,7 @@ public class ApoioSaudeController {
             Optional<ApoioSaude> apoioSaudeExcluido = apoioSaudeService.excluirApoioSaude(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(apoioSaudeExcluido);
         } catch (RegistroNaoEncontradoException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);        }
         }
 }

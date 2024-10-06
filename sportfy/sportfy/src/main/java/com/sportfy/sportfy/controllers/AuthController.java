@@ -24,8 +24,10 @@ public class AuthController {
             Object token = authService.efetuarLogin(dados);
             return ResponseEntity.status(HttpStatus.OK).body(token);
         }catch (BadCredentialsException e){
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         } catch (Exception e){
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

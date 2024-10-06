@@ -26,6 +26,7 @@ public class ModalidadeEsportivaController {
             Object novaModalidade = modalidadeEsportivaService.criarModalidade(modalidade);
             return ResponseEntity.status(HttpStatus.CREATED).body(novaModalidade);
         } catch (ModalidadeJaExisteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
     }
@@ -36,8 +37,10 @@ public class ModalidadeEsportivaController {
             Object modalidadeEditada = modalidadeEsportivaService.editarModalidade(modalidade);
             return ResponseEntity.status(HttpStatus.OK).body(modalidadeEditada);
         } catch (ModalidadeNaoExistenteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (ModalidadeJaExisteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
     }
@@ -48,8 +51,10 @@ public class ModalidadeEsportivaController {
             List<ModalidadeEsportivaDto> listaModalidade = modalidadeEsportivaService.listarModalidades();
             return ResponseEntity.status(HttpStatus.OK).body(listaModalidade);
         } catch (ModalidadeNaoExistenteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }  catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -60,6 +65,7 @@ public class ModalidadeEsportivaController {
             Object modalidade = modalidadeEsportivaService.buscarModalidades(nome);
             return ResponseEntity.status(HttpStatus.OK).body(modalidade);
         } catch (ModalidadeNaoExistenteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
@@ -70,6 +76,7 @@ public class ModalidadeEsportivaController {
             Object modalidadeDesativada = modalidadeEsportivaService.desativarModalidade(id);
             return ResponseEntity.status(HttpStatus.OK).body(modalidadeDesativada);
         } catch (ModalidadeNaoExistenteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
@@ -80,8 +87,10 @@ public class ModalidadeEsportivaController {
             modalidadeEsportivaService.inscreverEmModalidade(idAcademico, idModalidade);
             return ResponseEntity.status(HttpStatus.OK).body(null);
         } catch (ModalidadeNaoExistenteException | AcademicoNaoExisteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }catch (Exception e){
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
     }
@@ -92,6 +101,7 @@ public class ModalidadeEsportivaController {
             List<ModalidadeEsportiva> modalidadeAcademico = modalidadeEsportivaService.listarModalidadesInscritas(idAcademico);
             return ResponseEntity.status(HttpStatus.OK).body(modalidadeAcademico);
         } catch (AcademicoNaoExisteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
@@ -103,8 +113,10 @@ public class ModalidadeEsportivaController {
             List<ModalidadeEsportiva> modalidadeAcademico = modalidadeEsportivaService.listarModalidadesOutroUsuario(idAcademico);
             return ResponseEntity.status(HttpStatus.OK).body(modalidadeAcademico);
         } catch (AcademicoNaoExisteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }catch (ConteudoPrivadoException e){
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         }
     }
@@ -115,6 +127,7 @@ public class ModalidadeEsportivaController {
             modalidadeEsportivaService.cancelarInscricaoModalidade(idAcademico, idModalidade);
             return ResponseEntity.status(HttpStatus.OK).body(null);
         } catch (ModalidadeNaoExistenteException | AcademicoNaoExisteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
@@ -125,10 +138,13 @@ public class ModalidadeEsportivaController {
             EstatisticasGeraisModalidadeDto estatisticas = modalidadeEsportivaService.estatisticasGeraisPorModalidade(idModalidade);
             return ResponseEntity.ok(estatisticas);
         } catch (ModalidadeNaoExistenteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (RegistroNaoEncontradoException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }

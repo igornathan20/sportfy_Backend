@@ -22,10 +22,13 @@ public class EnderecoController {
             Object enderecoConsultado  = enderecoService.consultar(cep);
             return ResponseEntity.status(HttpStatus.CREATED).body(enderecoConsultado);
         } catch(CepNaoExisteException e){
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch(CepInvalidoException e){
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch(Exception e){
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }

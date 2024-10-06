@@ -24,7 +24,7 @@ public class Jogador implements Serializable {
     @Column(name="pontuacao")
     private int pontuacao;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "avaliacao",
             joinColumns = @JoinColumn(name = "id_avaliacao"),

@@ -31,4 +31,5 @@ public class AvaliacaoJogador {
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="id_academico_avaliador", updatable = false, nullable = false)
     private Academico avaliador;
+
 }

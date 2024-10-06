@@ -31,6 +31,7 @@ public class CanalController {
             Object publicacaoCriada = canalService.cadastrarPublicacao(publicacao);
             return ResponseEntity.status(HttpStatus.CREATED).body(publicacaoCriada);
         } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -42,8 +43,10 @@ public class CanalController {
             Object publicacaoAtualizada = canalService.atualizarPublicacao(idPublicacao, publicacao);
             return ResponseEntity.status(HttpStatus.OK).body(publicacaoAtualizada);
         } catch (PublicacaoNaoExisteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -55,8 +58,10 @@ public class CanalController {
             Object publicacaoRemovida = canalService.removerPublicacao(idPublicacao);
             return ResponseEntity.status(HttpStatus.OK).body(publicacaoRemovida);
         } catch (PublicacaoNaoExisteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -68,10 +73,13 @@ public class CanalController {
             Object publicacaoCurtida = canalService.curtirPublicacao(idUsuario, idPublicacao);
             return ResponseEntity.status(HttpStatus.CREATED).body(publicacaoCurtida);
         } catch (UsuarioCurtidaPublicacaoJaExisteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }  catch (PublicacaoNaoExisteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -83,10 +91,13 @@ public class CanalController {
             Object isCurtidaPublicacaoRemovida = canalService.removerCurtidaPublicacao(idUsuario, idPublicacao);
             return ResponseEntity.status(HttpStatus.CREATED).body(isCurtidaPublicacaoRemovida);
         } catch (UsuarioCurtidaPublicacaoNaoExisteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }  catch (PublicacaoNaoExisteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -98,6 +109,7 @@ public class CanalController {
             Object comentarioCriada = canalService.cadastrarComentario(comentario);
             return ResponseEntity.status(HttpStatus.CREATED).body(comentarioCriada);
         } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -109,8 +121,10 @@ public class CanalController {
             Object comentarioAtualizado = canalService.atualizarComentario(idComentario, comentario);
             return ResponseEntity.status(HttpStatus.OK).body(comentarioAtualizado);
         } catch (ComentarioNaoExisteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -122,8 +136,10 @@ public class CanalController {
             Object comentarioRemovido = canalService.removerComentario(idComentario);
             return ResponseEntity.status(HttpStatus.OK).body(comentarioRemovido);
         } catch (ComentarioNaoExisteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -135,10 +151,13 @@ public class CanalController {
             Object comentarioCurtida = canalService.curtirComentario(idUsuario, idComentario);
             return ResponseEntity.status(HttpStatus.CREATED).body(comentarioCurtida);
         } catch (UsuarioCurtidaComentarioJaExisteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }  catch (ComentarioNaoExisteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -150,10 +169,13 @@ public class CanalController {
             Object isCurtidaComentarioRemovida = canalService.removerCurtidaComentario(idUsuario, idComentario);
             return ResponseEntity.status(HttpStatus.CREATED).body(isCurtidaComentarioRemovida);
         } catch (UsuarioCurtidaComentarioNaoExisteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }  catch (ComentarioNaoExisteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -165,8 +187,10 @@ public class CanalController {
             List<CanalDto> listaCanal = canalService.listar();
             return ResponseEntity.status(HttpStatus.OK).body(listaCanal);
         } catch (ListaCanalVazioException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

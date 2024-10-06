@@ -29,8 +29,10 @@ public class ConquistaController {
             Object novaConquista = conquistaService.conquistar(idAcademico, idMetaEsportiva);
             return ResponseEntity.status(HttpStatus.CREATED).body(novaConquista);
         } catch (ConquistaJaExistenteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -42,8 +44,10 @@ public class ConquistaController {
             List<ConquistaDto> listaConquista = conquistaService.listarConquistas(idAcademico);
             return ResponseEntity.status(HttpStatus.OK).body(listaConquista);
         } catch (ConquistaNaoExistenteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

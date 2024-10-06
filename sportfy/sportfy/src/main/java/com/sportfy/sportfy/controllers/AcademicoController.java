@@ -29,12 +29,16 @@ public class AcademicoController {
             Object academicoCriado = academicoService.cadastrar(academico);
             return ResponseEntity.status(HttpStatus.CREATED).body(academicoCriado);
         } catch(EmailInvalidoException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (OutroUsuarioComDadosJaExistentes e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         } catch (PermissaoNaoExisteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -46,12 +50,16 @@ public class AcademicoController {
             Object academicoAtualizado = academicoService.atualizar(idAcademico, academico);
             return ResponseEntity.status(HttpStatus.OK).body(academicoAtualizado);
         } catch (EmailInvalidoException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (AcademicoNaoExisteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (OutroUsuarioComDadosJaExistentes e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -63,8 +71,10 @@ public class AcademicoController {
             Object academicoInativado = academicoService.inativar(idAcademico);
             return ResponseEntity.status(HttpStatus.OK).body(academicoInativado);
         } catch (AcademicoNaoExisteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -76,8 +86,10 @@ public class AcademicoController {
             Object academicoConsultado = academicoService.consultar(idUsuario);
             return ResponseEntity.status(HttpStatus.OK).body(academicoConsultado);
         } catch (AcademicoNaoExisteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -89,8 +101,10 @@ public class AcademicoController {
             List<AcademicoDto> listaAcademico = academicoService.listar();
             return ResponseEntity.status(HttpStatus.OK).body(listaAcademico);
         } catch (ListaAcademicosVaziaException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -101,6 +115,7 @@ public class AcademicoController {
             boolean notificar = academicoService.retornaNotificacao(idAcademico, tipoNotificacao);
             return ResponseEntity.status(HttpStatus.OK).body(notificar);
         }catch (Exception e){
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -111,6 +126,7 @@ public class AcademicoController {
             Notificacao notificar = academicoService.retornaTodasNotificacoes(idAcademico);
             return ResponseEntity.status(HttpStatus.OK).body(notificar);
         }catch (Exception e){
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -121,6 +137,7 @@ public class AcademicoController {
             Notificacao notificacao = academicoService.alteraNotificacao(userNotificacao);
             return ResponseEntity.status(HttpStatus.OK).body(NotificacaoDto.fromNotificacao(notificacao));
         }catch (Exception e){
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -131,6 +148,7 @@ public class AcademicoController {
             boolean privacidade = academicoService.retornaPrivacidade(idAcademico, tipoPrivacidade);
             return ResponseEntity.status(HttpStatus.OK).body(privacidade);
         }catch (Exception e){
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -141,6 +159,7 @@ public class AcademicoController {
             Privacidade privacidade = academicoService.retornaTodasPrivacidade(idAcademico);
             return ResponseEntity.status(HttpStatus.OK).body(privacidade);
         }catch (Exception e){
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -151,6 +170,7 @@ public class AcademicoController {
             Privacidade privacidade = academicoService.alteraPrivacidade(userPrivacidade);
             return ResponseEntity.status(HttpStatus.OK).body(PrivacidadeDto.fromPrivacidade(privacidade));
         }catch (Exception e){
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -161,10 +181,13 @@ public class AcademicoController {
             EstatisticasPessoaisModalidadeDto estatisticas = academicoService.estatisticasPessoaisPorModalidade(idAcademico, idModalidade);
             return ResponseEntity.ok(estatisticas);
         } catch (AcademicoNaoExisteException | ModalidadeNaoExistenteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (RegistroNaoEncontradoException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -175,10 +198,13 @@ public class AcademicoController {
             EstatisticasPessoaisModalidadeDto estatisticas = academicoService.estatisticasPessoaisPorModalidade(idAcademico, idModalidade);
             return ResponseEntity.ok(estatisticas);
         } catch (AcademicoNaoExisteException | ModalidadeNaoExistenteException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (RegistroNaoEncontradoException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -189,6 +215,7 @@ public class AcademicoController {
             EstatisticasDeUsoDto estatisticasDeUso = academicoService.estatisticasDeUso(idAcademico);
             return ResponseEntity.ok(estatisticasDeUso);
         } catch (AcademicoNaoExisteException | ModalidadeNaoExistenteException | RegistroNaoEncontradoException e) {
+            System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
