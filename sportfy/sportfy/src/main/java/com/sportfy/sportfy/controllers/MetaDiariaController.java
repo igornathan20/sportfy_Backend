@@ -20,9 +20,9 @@ public class MetaDiariaController {
     private MetaDiariaService metaDiariaService;
 
     @PostMapping()
-    public ResponseEntity<MetaDiaria> criarMeta(@RequestBody MetaDiariaDto metaDiariaDto) {
+    public ResponseEntity<MetaDiariaDto> criarMeta(@RequestBody MetaDiariaDto metaDiariaDto) {
         try {
-            MetaDiaria novaMeta = metaDiariaService.criarMeta(metaDiariaDto);
+            MetaDiariaDto novaMeta = metaDiariaService.criarMeta(metaDiariaDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(novaMeta);
         } catch (AcademicoNaoExisteException e) {
             System.out.println("Erro " + e.getMessage());
@@ -31,9 +31,9 @@ public class MetaDiariaController {
     }
 
     @PutMapping()
-    public ResponseEntity<MetaDiaria> editarMeta(@RequestBody MetaDiariaDto metaDiariaDto) {
+    public ResponseEntity<MetaDiariaDto> editarMeta(@RequestBody MetaDiariaDto metaDiariaDto) {
         try {
-            MetaDiaria metaEditada = metaDiariaService.editarMeta(metaDiariaDto);
+            MetaDiariaDto metaEditada = metaDiariaService.editarMeta(metaDiariaDto);
             return ResponseEntity.status(HttpStatus.OK).body(metaEditada);
         } catch (MetaDiariaNaoExistenteException e) {
             System.out.println("Erro " + e.getMessage());
@@ -42,9 +42,9 @@ public class MetaDiariaController {
     }
 
     @GetMapping("/listar/{idAcademico}")
-    public ResponseEntity<List<MetaDiaria>> listarMetas(@PathVariable Long idAcademico) {
+    public ResponseEntity<List<MetaDiariaDto>> listarMetas(@PathVariable Long idAcademico) {
         try {
-            List<MetaDiaria> metasDiarias = metaDiariaService.listarMetas(idAcademico);
+            List<MetaDiariaDto> metasDiarias = metaDiariaService.listarMetas(idAcademico);
             return ResponseEntity.status(HttpStatus.OK).body(metasDiarias);
         }catch (AcademicoNaoExisteException e){
             System.out.println("Erro " + e.getMessage());
@@ -56,9 +56,9 @@ public class MetaDiariaController {
     }
 
     @GetMapping("/{idAcademico}/buscar/{nome}")
-    public ResponseEntity<List<MetaDiaria>> buscarMeta(@PathVariable Long idAcademico,@PathVariable String nome) {
+    public ResponseEntity<List<MetaDiariaDto>> buscarMeta(@PathVariable Long idAcademico,@PathVariable String nome) {
         try {
-            List<MetaDiaria> metasDiarias = metaDiariaService.buscarMeta(idAcademico, nome);
+            List<MetaDiariaDto> metasDiarias = metaDiariaService.buscarMeta(idAcademico, nome);
             return ResponseEntity.status(HttpStatus.OK).body(metasDiarias);
         } catch (AcademicoNaoExisteException e) {
             System.out.println("Erro " + e.getMessage());
@@ -70,9 +70,9 @@ public class MetaDiariaController {
     }
 
     @DeleteMapping("/excluir/{id}")
-    public ResponseEntity<Optional<MetaDiaria>> excluirMeta(@PathVariable Long id) {
+    public ResponseEntity<MetaDiariaDto> excluirMeta(@PathVariable Long id) {
         try {
-            Optional<MetaDiaria> metaDiariaExcluida = metaDiariaService.excluirModalidade(id);
+            MetaDiariaDto metaDiariaExcluida = metaDiariaService.excluirModalidade(id);
             return ResponseEntity.ok(metaDiariaExcluida);
         } catch (MetaDiariaNaoExistenteException e) {
             System.out.println("Erro " + e.getMessage());

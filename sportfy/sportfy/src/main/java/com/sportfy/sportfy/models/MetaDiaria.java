@@ -63,4 +63,17 @@ public class MetaDiaria implements Serializable {
 
     }
 
+    public static MetaDiariaDto toDto(MetaDiaria metaDiaria) {
+        return new MetaDiariaDto(
+                metaDiaria.getIdMetaDiaria(),
+                metaDiaria.getTitulo(),
+                metaDiaria.getObjetivo(),
+                metaDiaria.getQuantidadeConcluido(),
+                metaDiaria.getProgressoAtual(),
+                metaDiaria.getProgressoMaximo(),
+                metaDiaria.getProgressoItem(),
+                metaDiaria.getAcademico() != null ? metaDiaria.getAcademico().getIdAcademico() : null,
+                metaDiaria.getTipoSituacaoMetaDiaria().ordinal()
+        );
+    }
 }
