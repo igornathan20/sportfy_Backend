@@ -1,6 +1,7 @@
 package com.sportfy.sportfy.controllers;
 
 import com.sportfy.sportfy.dtos.ApoioSaudeDto;
+import com.sportfy.sportfy.dtos.ApoioSaudeResponseDto;
 import com.sportfy.sportfy.exeptions.AdministradorNaoExisteException;
 import com.sportfy.sportfy.exeptions.RegistroNaoEncontradoException;
 import com.sportfy.sportfy.models.ApoioSaude;
@@ -19,9 +20,9 @@ public class ApoioSaudeController {
     private ApoioSaudeService apoioSaudeService;
 
     @PostMapping
-    public ResponseEntity<ApoioSaude> criarApoioSaude(@RequestBody ApoioSaudeDto apoioSaudeDto) {
+    public ResponseEntity<ApoioSaudeResponseDto> criarApoioSaude(@RequestBody ApoioSaudeDto apoioSaudeDto) {
         try {
-            ApoioSaude novoApoioSaude = apoioSaudeService.criarMeta(apoioSaudeDto);
+            ApoioSaudeResponseDto novoApoioSaude = apoioSaudeService.criarMeta(apoioSaudeDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(novoApoioSaude);
         } catch (AdministradorNaoExisteException e) {
             System.out.println("Erro " + e.getMessage());
@@ -30,9 +31,9 @@ public class ApoioSaudeController {
     }
 
     @PutMapping("/editar")
-    public ResponseEntity<ApoioSaude> editarApoioSaude(@RequestBody ApoioSaudeDto apoioSaudeDto) {
+    public ResponseEntity<ApoioSaudeResponseDto> editarApoioSaude(@RequestBody ApoioSaudeDto apoioSaudeDto) {
         try {
-            ApoioSaude apoioSaudeEditado = apoioSaudeService.editarApoioSaude(apoioSaudeDto);
+            ApoioSaudeResponseDto apoioSaudeEditado = apoioSaudeService.editarApoioSaude(apoioSaudeDto);
             return ResponseEntity.status(HttpStatus.OK).body(apoioSaudeEditado);
         } catch (RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
@@ -41,9 +42,9 @@ public class ApoioSaudeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ApoioSaude>> listarApoioSaude() {
+    public ResponseEntity<List<ApoioSaudeResponseDto>> listarApoioSaude() {
         try {
-            List<ApoioSaude> listaApoioSaude = apoioSaudeService.listar();
+            List<ApoioSaudeResponseDto> listaApoioSaude = apoioSaudeService.listar();
             return ResponseEntity.status(HttpStatus.OK).body(listaApoioSaude);
         } catch (RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
@@ -52,9 +53,9 @@ public class ApoioSaudeController {
     }
 
     @GetMapping("/buscar/{nome}")
-    public ResponseEntity<List<Optional<ApoioSaude>>> buscarApoioSaude(@PathVariable String nome) {
+    public ResponseEntity<List<ApoioSaudeResponseDto>> buscarApoioSaude(@PathVariable String nome) {
         try {
-            List<Optional<ApoioSaude>> registrosEncontrados = apoioSaudeService.buscarApoioSaude(nome);
+            List<ApoioSaudeResponseDto> registrosEncontrados = apoioSaudeService.buscarApoioSaude(nome);
             return ResponseEntity.status(HttpStatus.OK).body(registrosEncontrados);
         } catch (RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
@@ -63,9 +64,9 @@ public class ApoioSaudeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Optional<ApoioSaude>> excluirApoioSaude(@PathVariable Long id) {
+    public ResponseEntity<ApoioSaudeResponseDto> excluirApoioSaude(@PathVariable Long id) {
         try {
-            Optional<ApoioSaude> apoioSaudeExcluido = apoioSaudeService.excluirApoioSaude(id);
+            ApoioSaudeResponseDto apoioSaudeExcluido = apoioSaudeService.excluirApoioSaude(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(apoioSaudeExcluido);
         } catch (RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());

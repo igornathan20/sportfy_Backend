@@ -1,6 +1,7 @@
 package com.sportfy.sportfy.controllers;
 
 import com.sportfy.sportfy.dtos.AdministradorDto;
+import com.sportfy.sportfy.dtos.AdministradorResponseDto;
 import com.sportfy.sportfy.exeptions.AdministradorNaoExisteException;
 import com.sportfy.sportfy.exeptions.ListaAdministradoresVaziaException;
 import com.sportfy.sportfy.exeptions.OutroUsuarioComDadosJaExistentes;
@@ -26,22 +27,22 @@ public class AdministradorController {
 
     @PostMapping("/cadastrar")
     //@PreAuthorize("hasRole('ROLE_ADMINISTRADOR_MASTER')")
-    public ResponseEntity<Object> cadastrar(@RequestBody @Valid AdministradorDto administrador) {
+    public ResponseEntity<AdministradorResponseDto> cadastrar(@RequestBody @Valid AdministradorDto administrador) {
         try {
-            Object administradorCriado = administradorService.cadastrar(administrador);
+            AdministradorResponseDto administradorCriado = administradorService.cadastrar(administrador);
             return ResponseEntity.status(HttpStatus.CREATED).body(administradorCriado);
         } catch (PasswordInvalidoException e) {
             System.out.println("Erro " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         } catch (OutroUsuarioComDadosJaExistentes e) {
             System.out.println("Erro " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         } catch (RoleNaoPermitidaException e) {
             System.out.println("Erro " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         } catch (PermissaoNaoExisteException e){
             System.out.println("Erro " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         } catch (Exception e){
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -50,22 +51,22 @@ public class AdministradorController {
 
     @PutMapping("/atualizar/{idAdministrador}")
     //@PreAuthorize("hasRole('ROLE_ADMINISTRADOR_MASTER')")
-    public ResponseEntity<Object> atualizar(@PathVariable("idAdministrador") Long idAdministrador, @RequestBody @Valid AdministradorDto administrador) {
+    public ResponseEntity<AdministradorResponseDto> atualizar(@PathVariable("idAdministrador") Long idAdministrador, @RequestBody @Valid AdministradorDto administrador) {
         try {
-            Object administradorAtualizado = administradorService.atualizar(idAdministrador, administrador);
+            AdministradorResponseDto administradorAtualizado = administradorService.atualizar(idAdministrador, administrador);
             return ResponseEntity.status(HttpStatus.OK).body(administradorAtualizado);
         } catch (AdministradorNaoExisteException e) {
             System.out.println("Erro " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (OutroUsuarioComDadosJaExistentes e) {
             System.out.println("Erro " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         } catch (RoleNaoPermitidaException e) {
             System.out.println("Erro " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         } catch (PermissaoNaoExisteException e){
             System.out.println("Erro " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         } catch (Exception e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -74,13 +75,13 @@ public class AdministradorController {
 
     @DeleteMapping("/inativar/{idAdministrador}")
     //@PreAuthorize("hasRole('ROLE_ADMINISTRADOR_MASTER')")
-    public ResponseEntity<Object> inativar(@PathVariable("idAdministrador") Long idAdministrador) {
+    public ResponseEntity<AdministradorResponseDto> inativar(@PathVariable("idAdministrador") Long idAdministrador) {
         try {
-            Object administradorInativado = administradorService.inativar(idAdministrador);
+            AdministradorResponseDto administradorInativado = administradorService.inativar(idAdministrador);
             return ResponseEntity.status(HttpStatus.OK).body(administradorInativado);
         } catch (AdministradorNaoExisteException e) {
             System.out.println("Erro " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -89,13 +90,13 @@ public class AdministradorController {
 
     @GetMapping("/consultar/{idUsuario}")
     //@PreAuthorize("hasRole('ROLE_ADMINISTRADOR') or hasRole('ROLE_ADMINISTRADOR_MASTER')")
-    public ResponseEntity<Object> consultar(@PathVariable("idUsuario") Long idUsuario) {
+    public ResponseEntity<AdministradorResponseDto> consultar(@PathVariable("idUsuario") Long idUsuario) {
         try {
-            Object administradorConsultado = administradorService.consultar(idUsuario);
+            AdministradorResponseDto administradorConsultado = administradorService.consultar(idUsuario);
             return ResponseEntity.status(HttpStatus.OK).body(administradorConsultado);
         } catch (AdministradorNaoExisteException e) {
             System.out.println("Erro " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -104,17 +105,16 @@ public class AdministradorController {
 
     @GetMapping("/listar")
     //@PreAuthorize("hasRole('ROLE_ADMINISTRADOR_MASTER')")
-    public ResponseEntity<?> listar() {
+    public ResponseEntity<List<AdministradorResponseDto>> listar() {
         try {
-            List<AdministradorDto> listaAdministrador = administradorService.listar();
+            List<AdministradorResponseDto> listaAdministrador = administradorService.listar();
             return ResponseEntity.status(HttpStatus.OK).body(listaAdministrador);
         } catch (ListaAdministradoresVaziaException e) {
             System.out.println("Erro " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
 }

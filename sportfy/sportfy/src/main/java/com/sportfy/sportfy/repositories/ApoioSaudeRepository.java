@@ -10,6 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface ApoioSaudeRepository extends JpaRepository<ApoioSaude, Long> {
-    List<Optional<ApoioSaude>> findByNomeContainingIgnoreCase(String nome);
+    List<ApoioSaude> findByNomeContainingIgnoreCase(String nome);
 
 }

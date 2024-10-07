@@ -3,6 +3,7 @@ package com.sportfy.sportfy.models;
 import java.io.Serializable;
 
 import com.sportfy.sportfy.dtos.ApoioSaudeDto;
+import com.sportfy.sportfy.dtos.ApoioSaudeResponseDto;
 import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.*;
@@ -47,5 +48,17 @@ public class ApoioSaude implements Serializable {
         this.email = (dto.email());
         this.telefone = (dto.telefone());
         this.descricao = (dto.descricao());
+    }
+
+    public static ApoioSaudeResponseDto toDto(ApoioSaude apoioSaude) {
+        return new ApoioSaudeResponseDto(
+                apoioSaude.getIdApoioSaude(),
+                apoioSaude.getNome(),
+                apoioSaude.getEmail(),
+                apoioSaude.getTelefone(),
+                apoioSaude.getDescricao(),
+                apoioSaude.getDataPublicacao(),
+                apoioSaude.getAdministrador() != null ? apoioSaude.getAdministrador().getIdAdministrador() : null
+        );
     }
 }
