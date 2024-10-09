@@ -3,6 +3,7 @@ package com.sportfy.sportfy.models;
 import java.io.Serializable;
 import java.util.List;
 
+import com.sportfy.sportfy.dtos.JogadorDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -39,4 +40,14 @@ public class Jogador implements Serializable {
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="id_academico", updatable = false, nullable = false)
     private Academico academico;
+
+    public JogadorDto toDto(Jogador jogador) {
+        return new JogadorDto(
+                jogador.getIdJogador(),
+                jogador.getModalidadeEsportiva().getIdModalidadeEsportiva(),
+                jogador.getPontuacao(),
+                jogador.getTime().getIdTime(),
+                jogador.getAcademico().getIdAcademico()
+        );
+    }
 }

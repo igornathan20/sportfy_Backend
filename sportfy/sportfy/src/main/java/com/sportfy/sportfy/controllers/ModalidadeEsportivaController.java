@@ -122,7 +122,7 @@ public class ModalidadeEsportivaController {
     }
 
     @DeleteMapping("/remover/{idAcademico}/{idModalidade}")
-    public ResponseEntity<Object> cancelarInscricaoModalidade(@PathVariable Long idAcademico, @PathVariable Long idModalidade) {
+    public ResponseEntity<Void> cancelarInscricaoModalidade(@PathVariable Long idAcademico, @PathVariable Long idModalidade) {
         try {
             modalidadeEsportivaService.cancelarInscricaoModalidade(idAcademico, idModalidade);
             return ResponseEntity.status(HttpStatus.OK).body(null);

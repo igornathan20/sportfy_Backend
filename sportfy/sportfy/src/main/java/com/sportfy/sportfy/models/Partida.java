@@ -2,6 +2,7 @@ package com.sportfy.sportfy.models;
 
 import java.io.Serializable;
 
+import com.sportfy.sportfy.dtos.PartidaDto;
 import com.sportfy.sportfy.enums.TipoFasePartida;
 import com.sportfy.sportfy.enums.TipoSituacao;
 import jakarta.persistence.*;
@@ -45,6 +46,18 @@ public class Partida implements Serializable {
 
     @OneToOne(fetch=FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name="id_resultado")
-    private Resultado resultado;
+    private Resultado resultado = new Resultado();
 
+    public PartidaDto toDto(Partida partida) {
+        return new PartidaDto(
+                partida != null ? partida.getIdPartida() : null,
+                partida != null ? partida.getDataPartida() : null,
+                partida != null && partida.getCampeonato() != null ? partida.getCampeonato().getIdCampeonato() : null,
+                partida != null && partida.getFasePartida() != null ? partida.getFasePartida().name() : null,
+                partida != null && partida.getTime1() != null ? partida.getTime1().getIdTime() : null,
+                partida != null && partida.getTime2() != null ? partida.getTime2().getIdTime() : null,
+                partida != null && partida.getSituacaoPartida() != null ? partida.getSituacaoPartida().name() : null,
+                partida != null && partida.getResultado() != null ? partida.getResultado().toDto(partida.getResultado()) : null
+        );
+    }
 }

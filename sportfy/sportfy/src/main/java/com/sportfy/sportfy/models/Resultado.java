@@ -1,5 +1,6 @@
 package com.sportfy.sportfy.models;
 
+import com.sportfy.sportfy.dtos.ResultadoDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,4 +33,15 @@ public class Resultado implements Serializable {
 
     @Column(name="descricao")
     private String descricao;
+
+    public ResultadoDto toDto(Resultado resultado) {
+        return new ResultadoDto(
+                resultado != null ? resultado.getId() : null,
+                resultado != null && resultado.getVencedor() != null ? resultado.getVencedor().getIdTime() : null,
+                resultado != null ? resultado.getPontuacaoTime1() : 0,
+                resultado != null ? resultado.getPontuacaoTime2() : 0,
+                resultado != null ? resultado.getDescricao() : null
+        );
+    }
+
 }

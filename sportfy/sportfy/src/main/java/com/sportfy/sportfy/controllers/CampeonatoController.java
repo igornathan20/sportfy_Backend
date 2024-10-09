@@ -1,7 +1,6 @@
 package com.sportfy.sportfy.controllers;
 
-import com.sportfy.sportfy.dtos.CampeonatoDto;
-import com.sportfy.sportfy.dtos.TimeDto;
+import com.sportfy.sportfy.dtos.*;
 import com.sportfy.sportfy.exeptions.*;
 import com.sportfy.sportfy.models.*;
 import com.sportfy.sportfy.services.CampeonatoService;
@@ -22,9 +21,9 @@ public class CampeonatoController {
     private CampeonatoService campeonatoService;
 
     @PostMapping
-    public ResponseEntity<Campeonato> criarCampeonato(@RequestBody CampeonatoDto campeonatoDto) {
+    public ResponseEntity<CampeonatoDto> criarCampeonato(@RequestBody CampeonatoDto campeonatoDto) {
         try {
-            Campeonato campeonato = campeonatoService.criarCampeonato(campeonatoDto);
+            CampeonatoDto campeonato = campeonatoService.criarCampeonato(campeonatoDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(campeonato);
         } catch (AcademicoNaoExisteException | ModalidadeNaoExistenteException e) {
             System.out.println("Erro " + e.getMessage());
@@ -36,9 +35,9 @@ public class CampeonatoController {
     }
 
     @PutMapping()
-    public ResponseEntity<Campeonato> editarCampeonato(@RequestBody CampeonatoDto campeonatoDto) {
+    public ResponseEntity<CampeonatoDto> editarCampeonato(@RequestBody CampeonatoDto campeonatoDto) {
         try {
-            Campeonato campeonato = campeonatoService.editarCampeonato(campeonatoDto);
+            CampeonatoDto campeonato = campeonatoService.editarCampeonato(campeonatoDto);
             return ResponseEntity.status(HttpStatus.OK).body(campeonato);
         } catch (RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
@@ -50,9 +49,9 @@ public class CampeonatoController {
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<List<Campeonato>> listarTodosCampeonatos() {
+    public ResponseEntity<List<CampeonatoDto>> listarTodosCampeonatos() {
         try {
-            List<Campeonato> campeonatos = campeonatoService.listarTodosCampeonatos();
+            List<CampeonatoDto> campeonatos = campeonatoService.listarTodosCampeonatos();
             return new ResponseEntity<>(campeonatos, HttpStatus.OK);
         } catch (RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
@@ -61,7 +60,7 @@ public class CampeonatoController {
     }
 
     @GetMapping("/filtrar")
-    public ResponseEntity<List<Campeonato>> listarCampeonatosComFiltro(
+    public ResponseEntity<List<CampeonatoDto>> listarCampeonatosComFiltro(
             @RequestParam(required = false) String codigo,
             @RequestParam(required = false) String titulo,
             @RequestParam(required = false) String descricao,
@@ -87,7 +86,7 @@ public class CampeonatoController {
                 situacaoCampeonato != null ? situacaoCampeonato : 0
             );
 
-            List<Campeonato> campeonatos = campeonatoService.listarCampeonatosComFiltro(campeonatoDto);
+            List<CampeonatoDto> campeonatos = campeonatoService.listarCampeonatosComFiltro(campeonatoDto);
             return ResponseEntity.status(HttpStatus.OK).body(campeonatos);
         } catch (RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
@@ -96,9 +95,9 @@ public class CampeonatoController {
     }
 
     @GetMapping("/{idAcademico}/listar")
-    public ResponseEntity<List<Campeonato>> listarCampeonatosInscritos(@PathVariable Long idAcademico){
+    public ResponseEntity<List<CampeonatoDto>> listarCampeonatosInscritos(@PathVariable Long idAcademico){
         try {
-            List<Campeonato> campeonatos = campeonatoService.listarCampeonatosInscritos(idAcademico);
+            List<CampeonatoDto> campeonatos = campeonatoService.listarCampeonatosInscritos(idAcademico);
             return ResponseEntity.status(HttpStatus.OK).body(campeonatos);
         } catch (RegistroNaoEncontradoException | AcademicoNaoExisteException e) {
             System.out.println("Erro " + e.getMessage());
@@ -107,9 +106,9 @@ public class CampeonatoController {
     }
 
     @GetMapping("/{idAcademico}/meusCampeonatos")
-    public ResponseEntity<List<Campeonato>> listarCampeonatosCriados(@PathVariable Long idAcademico){
+    public ResponseEntity<List<CampeonatoDto>> listarCampeonatosCriados(@PathVariable Long idAcademico){
         try {
-            List<Campeonato> campeonatos = campeonatoService.listarCampeonatosCriados(idAcademico);
+            List<CampeonatoDto> campeonatos = campeonatoService.listarCampeonatosCriados(idAcademico);
             return ResponseEntity.status(HttpStatus.OK).body(campeonatos);
         } catch (RegistroNaoEncontradoException | AcademicoNaoExisteException e) {
             System.out.println("Erro " + e.getMessage());
@@ -118,7 +117,7 @@ public class CampeonatoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Campeonato> excluirCampeonato(@PathVariable Long id) {
+    public ResponseEntity<Void> excluirCampeonato(@PathVariable Long id) {
         try {
             Optional<Campeonato> campeonato = campeonatoService.excluirCampeonato(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
@@ -129,9 +128,9 @@ public class CampeonatoController {
     }
 
     @PatchMapping("/desativar/{id}")
-    public ResponseEntity<Campeonato> desativarCampeonato(@PathVariable Long id) {
+    public ResponseEntity<CampeonatoDto> desativarCampeonato(@PathVariable Long id) {
         try {
-            Campeonato campeonato = campeonatoService.desativarCampeonato(id);
+            CampeonatoDto campeonato = campeonatoService.desativarCampeonato(id);
             return ResponseEntity.status(HttpStatus.OK).body(campeonato);
         } catch (RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
@@ -140,9 +139,9 @@ public class CampeonatoController {
     }
 
     @PostMapping("/times")
-    public ResponseEntity<Time> criarTime(@RequestBody TimeDto novoTime) {
+    public ResponseEntity<TimeDto> criarTime(@RequestBody TimeDto novoTime) {
         try {
-            Time timeCriado = campeonatoService.criarTime(novoTime);
+            TimeDto timeCriado = campeonatoService.criarTime(novoTime);
             return ResponseEntity.status(HttpStatus.CREATED).body(timeCriado);
         } catch (CampeonatoInvalidoException | TimeInvalidoException e) {
             System.out.println("Erro " + e.getMessage());
@@ -151,9 +150,9 @@ public class CampeonatoController {
     }
 
     @PostMapping("/times/{idAcademico}")
-    public ResponseEntity<Jogador> adicionarJogadorTime(@RequestBody TimeDto timeDto, @PathVariable Long idAcademico) {
+    public ResponseEntity<JogadorDto> adicionarJogadorTime(@RequestBody TimeDto timeDto, @PathVariable Long idAcademico) {
         try {
-            Jogador jogador = campeonatoService.adicionarJogadorTime(timeDto, idAcademico);
+            JogadorDto jogador = campeonatoService.adicionarJogadorTime(timeDto, idAcademico);
             return ResponseEntity.status(HttpStatus.CREATED).body(jogador);
         } catch (CampeonatoInvalidoException | TimeInvalidoException e) {
             System.out.println("Erro " + e.getMessage());
@@ -162,9 +161,9 @@ public class CampeonatoController {
     }
 
     @PostMapping("/{idCampeonato}/times/{idAcademico}")
-    public ResponseEntity<Time> criarTimeComUmJogador(@PathVariable Long idCampeonato, @PathVariable Long idAcademico) {
+    public ResponseEntity<TimeDto> criarTimeComUmJogador(@PathVariable Long idCampeonato, @PathVariable Long idAcademico) {
         try {
-            Time timeCriado = campeonatoService.criarTimeComUmJogador(idCampeonato, idAcademico);
+            TimeDto timeCriado = campeonatoService.criarTimeComUmJogador(idCampeonato, idAcademico);
             return ResponseEntity.status(HttpStatus.CREATED).body(timeCriado);
         } catch (CampeonatoInvalidoException | TimeInvalidoException | RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
@@ -173,10 +172,10 @@ public class CampeonatoController {
     }
 
     @PostMapping("/{idCampeonato}/primeira-fase")
-    public ResponseEntity<List<Partida>> definirPrimeiraFase(@PathVariable Long idCampeonato) {
+    public ResponseEntity<List<PartidaDto>> definirPrimeiraFase(@PathVariable Long idCampeonato) {
         try {
-            campeonatoService.definirPrimeiraFase(idCampeonato);
-            return ResponseEntity.status(HttpStatus.OK).build();
+            List<PartidaDto> partidas = campeonatoService.definirPrimeiraFase(idCampeonato);
+            return ResponseEntity.status(HttpStatus.OK).body(partidas);
         }catch (RegistroNaoEncontradoException e){
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -184,9 +183,9 @@ public class CampeonatoController {
     }
 
     @GetMapping("/{idCampeonato}/partidas")
-    public ResponseEntity<List<Partida>> listarPartidas(@PathVariable Long idCampeonato) {
+    public ResponseEntity<List<PartidaDto>> listarPartidas(@PathVariable Long idCampeonato) {
         try {
-            List<Partida> partidas = campeonatoService.listarPartidas(idCampeonato);
+            List<PartidaDto> partidas = campeonatoService.listarPartidas(idCampeonato);
             return ResponseEntity.status(HttpStatus.OK).body(partidas);
         }catch (RegistroNaoEncontradoException e){
             System.out.println("Erro " + e.getMessage());
@@ -195,10 +194,10 @@ public class CampeonatoController {
     }
 
     @PostMapping("/{idCampeonato}/avancar-fase")
-    public ResponseEntity<Void> avancarDeFase(@PathVariable Long idCampeonato) {
+    public ResponseEntity<List<PartidaDto>> avancarDeFase(@PathVariable Long idCampeonato) {
         try {
-            campeonatoService.avacarDeFase(idCampeonato);
-            return ResponseEntity.status(HttpStatus.OK).build();
+            List<PartidaDto> partidas = campeonatoService.avacarDeFase(idCampeonato);
+            return ResponseEntity.status(HttpStatus.OK).body(partidas);
         }catch (RegistroNaoEncontradoException e){
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -206,9 +205,9 @@ public class CampeonatoController {
     }
 
     @PutMapping("/partidas/{idPartida}/pontuacao")
-    public ResponseEntity<Partida> alterarPontuacaoPartida(@PathVariable Long idPartida, @RequestParam int pontuacaoTime1, @RequestParam int pontuacaoTime2) {
+    public ResponseEntity<PartidaDto> alterarPontuacaoPartida(@PathVariable Long idPartida, @RequestParam int pontuacaoTime1, @RequestParam int pontuacaoTime2) {
         try {
-            Partida partida = campeonatoService.alterarPontuacaoPartida(idPartida, pontuacaoTime1, pontuacaoTime2);
+            PartidaDto partida = campeonatoService.alterarPontuacaoPartida(idPartida, pontuacaoTime1, pontuacaoTime2);
             return ResponseEntity.status(HttpStatus.OK).body(partida);
         } catch (RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
@@ -217,9 +216,9 @@ public class CampeonatoController {
     }
 
     @PostMapping("/avaliar")
-    public ResponseEntity<AvaliacaoJogador> avaliarJogador(@RequestParam Long idAvaliador, @RequestParam Long idJogador, @RequestParam int nota) {
+    public ResponseEntity<AvaliacaoJogadorDto> avaliarJogador(@RequestParam Long idAvaliador, @RequestParam Long idJogador, @RequestParam int nota) {
         try {
-            AvaliacaoJogador avaliacao = campeonatoService.avaliarJogador(idAvaliador, idJogador, nota);
+            AvaliacaoJogadorDto avaliacao = campeonatoService.avaliarJogador(idAvaliador, idJogador, nota);
             return ResponseEntity.ok(avaliacao);
         } catch (AcademicoNaoExisteException | RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
@@ -230,8 +229,8 @@ public class CampeonatoController {
         }
     }
 
-    @GetMapping("/avaliacao/campeonato")
-    public ResponseEntity<Float> recuperaAvaliacaoNoCampeonato(@RequestParam Long idCampeonato, @RequestParam Long idAcademico) {
+    @GetMapping("/{idCampeonato}/avaliacao/{idAcademico}")
+    public ResponseEntity<Float> recuperaAvaliacaoNoCampeonato(@PathVariable Long idCampeonato, @PathVariable Long idAcademico) {
         try {
             float media = campeonatoService.recuperaAvaliacaoNoCampeonato(idCampeonato, idAcademico);
             return ResponseEntity.ok(media);
@@ -241,8 +240,8 @@ public class CampeonatoController {
         }
     }
 
-    @GetMapping("/avaliacao/modalidade")
-    public ResponseEntity<Float> recuperaAvaliacaoPorModalidade(@RequestParam Long idModalidade, @RequestParam Long idAcademico) {
+    @GetMapping("/avaliacao/{idAcademico}/modalidade/{idModalidade}")
+    public ResponseEntity<Float> recuperaAvaliacaoPorModalidade(@PathVariable Long idModalidade, @PathVariable Long idAcademico) {
         try {
             float media = campeonatoService.recuperaAvaliacaoPorModalidade(idModalidade, idAcademico);
             return ResponseEntity.ok(media);
@@ -253,9 +252,9 @@ public class CampeonatoController {
     }
 
     @GetMapping("/historico/{idAcademico}")
-    public ResponseEntity<List<Campeonato>> buscarHistoricoCampeonatoOutrosUsuarios( @PathVariable Long idAcademico) {
+    public ResponseEntity<List<CampeonatoDto>> buscarHistoricoCampeonatoOutrosUsuarios( @PathVariable Long idAcademico) {
         try {
-            List<Campeonato> campeonatos = campeonatoService.buscarHistoricoCampeonatoOutrosUsuarios(idAcademico);
+            List<CampeonatoDto> campeonatos = campeonatoService.buscarHistoricoCampeonatoOutrosUsuarios(idAcademico);
             return ResponseEntity.ok(campeonatos);
         } catch (AcademicoNaoExisteException e) {
             System.out.println("Erro " + e.getMessage());

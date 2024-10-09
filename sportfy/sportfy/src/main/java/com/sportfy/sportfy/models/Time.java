@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import jakarta.persistence.*;
+import com.sportfy.sportfy.dtos.TimeDto;
 import lombok.*;
 
 @Entity
@@ -23,4 +24,12 @@ public class Time implements Serializable {
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="id_campeonato", updatable = false, nullable = false)
     private Campeonato campeonato;
+
+    public TimeDto toDto(Time time) {
+        return new TimeDto(
+                time.idTime,
+                time.nome,
+                time.campeonato.getIdCampeonato()
+        );
+    }
 }

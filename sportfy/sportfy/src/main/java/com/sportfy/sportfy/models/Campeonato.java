@@ -3,6 +3,7 @@ package com.sportfy.sportfy.models;
 import java.io.Serializable;
 
 import com.sportfy.sportfy.dtos.CampeonatoDto;
+import com.sportfy.sportfy.dtos.EnderecoDto;
 import com.sportfy.sportfy.enums.TipoFasePartida;
 import com.sportfy.sportfy.enums.TipoPrivacidadeCampeonato;
 import com.sportfy.sportfy.enums.TipoSituacao;
@@ -123,4 +124,28 @@ public class Campeonato implements Serializable {
                 throw new Exception("Tipo de privacidade invalido!");
         }
     }
+
+    public CampeonatoDto toDto(Campeonato campeonato) {
+        return new CampeonatoDto(
+                campeonato.getIdCampeonato(),
+                campeonato.getCodigo(),
+                campeonato.getTitulo(),
+                campeonato.getDescricao(),
+                campeonato.getAposta(),
+                campeonato.getDataCriacao(),
+                campeonato.getDataInicio(),
+                campeonato.getDataFim(),
+                campeonato.getLimiteTimes(),
+                campeonato.getLimiteParticipantes(),
+                campeonato.isAtivo(),
+                EnderecoDto.fromEntity(campeonato.getEndereco()),
+                campeonato.getPrivacidadeCampeonato().ordinal(),
+                campeonato.academico.getIdAcademico(),
+                campeonato.getModalidadeEsportiva().getIdModalidadeEsportiva(),
+                campeonato.getSituacaoCampeonato().ordinal()
+        );
+    }
+
 }
+
+
