@@ -1,5 +1,6 @@
 package com.sportfy.sportfy.models;
 
+import com.sportfy.sportfy.dtos.AvaliacaoJogadorDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,4 +33,12 @@ public class AvaliacaoJogador {
     @JoinColumn(name="id_academico_avaliador", updatable = false, nullable = false)
     private Academico avaliador;
 
+    public AvaliacaoJogadorDto toDto(AvaliacaoJogador avaliacao) {
+        return new AvaliacaoJogadorDto(
+                avaliacao.getIdAvaliacao(),
+                avaliacao.getJogador().getIdJogador(),
+                avaliacao.getNota(),
+                avaliacao.getAvaliador() != null ? avaliacao.getAvaliador().getIdAcademico() : null
+        );
+    }
 }
