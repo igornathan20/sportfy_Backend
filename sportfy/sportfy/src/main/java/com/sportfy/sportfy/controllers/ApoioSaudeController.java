@@ -27,6 +27,9 @@ public class ApoioSaudeController {
         } catch (AdministradorNaoExisteException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -38,6 +41,9 @@ public class ApoioSaudeController {
         } catch (RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -49,6 +55,9 @@ public class ApoioSaudeController {
         } catch (RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -60,6 +69,9 @@ public class ApoioSaudeController {
         } catch (RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -70,6 +82,10 @@ public class ApoioSaudeController {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(apoioSaudeExcluido);
         } catch (RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);        }
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
 }

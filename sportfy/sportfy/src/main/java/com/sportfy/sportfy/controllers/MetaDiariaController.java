@@ -27,6 +27,9 @@ public class MetaDiariaController {
         } catch (AcademicoNaoExisteException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -38,6 +41,9 @@ public class MetaDiariaController {
         } catch (MetaDiariaNaoExistenteException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -52,6 +58,9 @@ public class MetaDiariaController {
         } catch (MetaDiariaNaoExistenteException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -66,6 +75,9 @@ public class MetaDiariaController {
         } catch (MetaDiariaNaoExistenteException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -77,6 +89,9 @@ public class MetaDiariaController {
         } catch (MetaDiariaNaoExistenteException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }

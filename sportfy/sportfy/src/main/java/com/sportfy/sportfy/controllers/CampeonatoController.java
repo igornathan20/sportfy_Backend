@@ -56,6 +56,9 @@ public class CampeonatoController {
         } catch (RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -91,6 +94,9 @@ public class CampeonatoController {
         } catch (RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -102,6 +108,9 @@ public class CampeonatoController {
         } catch (RegistroNaoEncontradoException | AcademicoNaoExisteException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -113,6 +122,9 @@ public class CampeonatoController {
         } catch (RegistroNaoEncontradoException | AcademicoNaoExisteException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -124,6 +136,9 @@ public class CampeonatoController {
         } catch (RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -135,6 +150,9 @@ public class CampeonatoController {
         } catch (RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -149,6 +167,9 @@ public class CampeonatoController {
         } catch (PasswordInvalidoException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -163,6 +184,9 @@ public class CampeonatoController {
         } catch (PasswordInvalidoException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -191,6 +215,9 @@ public class CampeonatoController {
         } catch (RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -211,15 +238,17 @@ public class CampeonatoController {
         }
     }
 
-
     @PostMapping("/{idCampeonato}/primeira-fase")
     public ResponseEntity<List<PartidaDto>> definirPrimeiraFase(@PathVariable Long idCampeonato) {
         try {
             List<PartidaDto> partidas = campeonatoService.definirPrimeiraFase(idCampeonato);
             return ResponseEntity.status(HttpStatus.OK).body(partidas);
-        }catch (RegistroNaoEncontradoException e){
+        } catch (RegistroNaoEncontradoException e){
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -228,9 +257,12 @@ public class CampeonatoController {
         try {
             List<PartidaDto> partidas = campeonatoService.listarPartidas(idCampeonato);
             return ResponseEntity.status(HttpStatus.OK).body(partidas);
-        }catch (RegistroNaoEncontradoException e){
+        } catch (RegistroNaoEncontradoException e){
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -242,6 +274,9 @@ public class CampeonatoController {
         }catch (RegistroNaoEncontradoException e){
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -253,6 +288,9 @@ public class CampeonatoController {
         } catch (RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -278,6 +316,9 @@ public class CampeonatoController {
         } catch (AcademicoNaoExisteException | CampeonatoInvalidoException | RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -289,6 +330,9 @@ public class CampeonatoController {
         } catch (AcademicoNaoExisteException | ModalidadeNaoExistenteException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -303,6 +347,9 @@ public class CampeonatoController {
         } catch (ConteudoPrivadoException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }
