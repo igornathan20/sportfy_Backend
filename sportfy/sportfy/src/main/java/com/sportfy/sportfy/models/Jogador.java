@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.sportfy.sportfy.dtos.JogadorDto;
+import com.sportfy.sportfy.enums.TipoSituacaoJogador;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,6 +22,9 @@ public class Jogador implements Serializable {
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="id_modalidade_esportiva", updatable = false, nullable = false)
     private ModalidadeEsportiva modalidadeEsportiva;
+
+    @Column(name="situacao_jogador")
+    private TipoSituacaoJogador situacaoJogador = TipoSituacaoJogador.EM_ABERTO;
 
     @Column(name="pontuacao")
     private int pontuacao;
@@ -45,6 +49,7 @@ public class Jogador implements Serializable {
         return new JogadorDto(
                 jogador.getIdJogador(),
                 jogador.getModalidadeEsportiva().getIdModalidadeEsportiva(),
+                jogador.getSituacaoJogador(),
                 jogador.getPontuacao(),
                 jogador.getTime().getIdTime(),
                 jogador.getAcademico().getIdAcademico()
