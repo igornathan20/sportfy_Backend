@@ -44,7 +44,7 @@ CREATE TABLE time (
 CREATE TABLE jogador (
     id_jogador int AUTO_INCREMENT PRIMARY KEY,
     id_modalidade_esportiva int NOT NULL,
-    situacao_jogador VARCHAR(100) NOT NULL,
+    situacao_jogador int NOT NULL,
     pontuacao INT,
     id_time int NOT NULL,
     id_academico int NOT NULL,

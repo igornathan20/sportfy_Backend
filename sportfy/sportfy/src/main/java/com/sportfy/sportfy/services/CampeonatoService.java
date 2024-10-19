@@ -297,8 +297,6 @@ public class CampeonatoService {
     public TimeDto criarTimeComUmJogador(Long idCampeonato, Long idAcademico, String senhaCampeonato) throws CampeonatoInvalidoException, TimeInvalidoException, RegistroNaoEncontradoException, PasswordInvalidoException {
         Optional<Campeonato> campeonato = campeonatoRepository.findById(idCampeonato);
         Optional<Academico> academico = academicoRepository.findById(idAcademico);
-        System.out.println("Senha recebida: " + senhaCampeonato);
-        System.out.println("senha: " + passwordEncoder.encode(senhaCampeonato));
         if (campeonato.isPresent() && academico.isPresent()){
             Optional<Time> timeEncontrado = timeRepository.findByNomeAndCampeonato(academico.get().getUsuario().getUsername(), campeonato.get());
             if (timeEncontrado.isEmpty()) {
@@ -325,6 +323,51 @@ public class CampeonatoService {
             }
         }else {
             throw new RegistroNaoEncontradoException("Campeonato ou academico invalido!");
+        }
+    }
+
+    public List<JogadorDto> listarJogadoresCampeonato(Long idCampeonato) throws RegistroNaoEncontradoException {
+        Optional<Campeonato> campeonato = campeonatoRepository.findById(idCampeonato);
+
+        if (campeonato.isPresent()) {
+            List<JogadorDto> jogadores = jogadorRepository.findByTimeCampeonato(campeonato.get()).stream().map(
+                    jogador -> jogador.toDto(jogador)
+            ).collect(Collectors.toList());
+
+            if (jogadores.isEmpty()) {
+                System.out.println("Nenhum jogador encontrado para o campeonato.");
+            }
+
+            return jogadores;
+        } else {
+            throw new RegistroNaoEncontradoException("O campeonato com id " + idCampeonato + " não foi encontrado");
+        }
+    }
+
+
+    public JogadorDto mudarSituacaoJogador(Long idJogador, int situacao ) throws TipoInvalidoException, RegistroNaoEncontradoException{
+        Optional<Jogador> jogador = jogadorRepository.findById(idJogador);
+
+        if (jogador.isPresent()){
+            switch (situacao){
+                case 0:
+                    jogador.get().setSituacaoJogador(TipoSituacaoJogador.EM_ABERTO);
+                    break;
+                case 1:
+                    jogador.get().setSituacaoJogador(TipoSituacaoJogador.ATIVO);
+                    break;
+                case 2:
+                    jogador.get().setSituacaoJogador(TipoSituacaoJogador.BLOQUEADO);
+                    break;
+                case 3:
+                    jogador.get().setSituacaoJogador(TipoSituacaoJogador.FINALIZADO);
+                    break;
+                default:
+                    throw new TipoInvalidoException("O tipo situação do jogador é invalido!");
+            }
+            return jogador.get().toDto(jogadorRepository.save(jogador.get()));
+        }else {
+            throw new RegistroNaoEncontradoException("Nenhum registro do jogador foi encontrado!");
         }
     }
 
@@ -371,6 +414,12 @@ public class CampeonatoService {
                 partida.setFasePartida(campeonato.get().getFaseAtual());
                 partida.setResultado(resultado);
                 partidas.add(partida);
+            }
+
+            List<Jogador> jogadores = jogadorRepository.findByTimeCampeonato(campeonato.get());
+            for (int i = 0; i < jogadores.size(); i++){
+                jogadores.get(i).setSituacaoJogador(TipoSituacaoJogador.ATIVO);
+                jogadorRepository.save(jogadores.get(i));
             }
 
             //campeonato.setPartidas(partidas);

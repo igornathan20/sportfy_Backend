@@ -77,13 +77,13 @@ public class CampeonatoController {
             @RequestParam(required = false) Integer situacaoCampeonato) {
         try {
             CampeonatoDto campeonatoDto = new CampeonatoDto(
-                null, codigo,null, titulo, descricao, aposta, dataCriacao, dataInicio, dataFim,
-                limiteTimes != null ? limiteTimes : 0,
-                limiteParticipantes != null ? limiteParticipantes : 0,
-                ativo != null ? ativo : false,
-                null, privacidadeCampeonato != null ? privacidadeCampeonato : 0,
-                idAcademico, idModalidadeEsportiva,
-                situacaoCampeonato != null ? situacaoCampeonato : 0
+                    null, codigo, null, titulo, descricao, aposta, dataCriacao, dataInicio, dataFim,
+                    limiteTimes != null ? limiteTimes : 0,
+                    limiteParticipantes != null ? limiteParticipantes : 0,
+                    ativo != null ? ativo : false,
+                    null, privacidadeCampeonato != null ? privacidadeCampeonato : 0,
+                    idAcademico, idModalidadeEsportiva,
+                    situacaoCampeonato != null ? situacaoCampeonato : 0
             );
 
             List<CampeonatoDto> campeonatos = campeonatoService.listarCampeonatosComFiltro(campeonatoDto);
@@ -95,7 +95,7 @@ public class CampeonatoController {
     }
 
     @GetMapping("/{idAcademico}/listar")
-    public ResponseEntity<List<CampeonatoDto>> listarCampeonatosInscritos(@PathVariable Long idAcademico){
+    public ResponseEntity<List<CampeonatoDto>> listarCampeonatosInscritos(@PathVariable Long idAcademico) {
         try {
             List<CampeonatoDto> campeonatos = campeonatoService.listarCampeonatosInscritos(idAcademico);
             return ResponseEntity.status(HttpStatus.OK).body(campeonatos);
@@ -106,7 +106,7 @@ public class CampeonatoController {
     }
 
     @GetMapping("/{idAcademico}/meusCampeonatos")
-    public ResponseEntity<List<CampeonatoDto>> listarCampeonatosCriados(@PathVariable Long idAcademico){
+    public ResponseEntity<List<CampeonatoDto>> listarCampeonatosCriados(@PathVariable Long idAcademico) {
         try {
             List<CampeonatoDto> campeonatos = campeonatoService.listarCampeonatosCriados(idAcademico);
             return ResponseEntity.status(HttpStatus.OK).body(campeonatos);
@@ -146,7 +146,7 @@ public class CampeonatoController {
         } catch (CampeonatoInvalidoException | TimeInvalidoException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }catch (PasswordInvalidoException e){
+        } catch (PasswordInvalidoException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
@@ -160,7 +160,7 @@ public class CampeonatoController {
         } catch (CampeonatoInvalidoException | TimeInvalidoException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }catch (PasswordInvalidoException e){
+        } catch (PasswordInvalidoException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
@@ -174,14 +174,43 @@ public class CampeonatoController {
         } catch (CampeonatoInvalidoException | TimeInvalidoException | RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }catch (PasswordInvalidoException e){
+        } catch (PasswordInvalidoException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-        }catch (Exception e ){
+        } catch (Exception e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
+    @GetMapping("/{idCampeonato}/jogadores")
+    public ResponseEntity<List<JogadorDto>> listarJogadoresPorCampeonato(@PathVariable Long idCampeonato) {
+        try {
+            List<JogadorDto> jogadores = campeonatoService.listarJogadoresCampeonato(idCampeonato);
+            return ResponseEntity.status(HttpStatus.OK).body(jogadores);
+        } catch (RegistroNaoEncontradoException e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @PutMapping("/{id}/situacao")
+    public ResponseEntity<JogadorDto> mudarSituacaoJogador(@PathVariable Long id, @RequestParam int situacao) {
+        try {
+            JogadorDto jogadorAtualizado = campeonatoService.mudarSituacaoJogador(id, situacao);
+            return ResponseEntity.ok(jogadorAtualizado);
+        } catch (TipoInvalidoException e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        } catch (RegistroNaoEncontradoException e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
 
     @PostMapping("/{idCampeonato}/primeira-fase")
     public ResponseEntity<List<PartidaDto>> definirPrimeiraFase(@PathVariable Long idCampeonato) {

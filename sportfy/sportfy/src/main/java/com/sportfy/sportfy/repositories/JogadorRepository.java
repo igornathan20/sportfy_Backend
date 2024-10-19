@@ -15,5 +15,6 @@ public interface JogadorRepository extends JpaRepository<Jogador, Long> {
     List<Jogador> findByAcademico(Academico academico);
     Optional<Jogador> findByAcademicoAndTimeCampeonato( Academico academico, Campeonato Campeonato);
     List<Jogador> findByAcademicoAndTimeCampeonatoModalidadeEsportiva( Academico academico, ModalidadeEsportiva modalidadeEsportiva);
+    List<Jogador> findByTimeCampeonato( Campeonato campeonato);
 
 }
