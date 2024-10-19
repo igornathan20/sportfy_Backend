@@ -5,6 +5,7 @@ import java.time.OffsetDateTime;
 public record CampeonatoDto(
         Long idCampeonato,
         String codigo,
+        String senha,
         String titulo,
         String descricao,
         String aposta,

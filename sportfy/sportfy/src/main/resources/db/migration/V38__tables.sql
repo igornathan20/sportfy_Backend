@@ -12,6 +12,7 @@ CREATE TABLE endereco (
 CREATE TABLE campeonato (
     id_campeonato int AUTO_INCREMENT PRIMARY KEY,
     codigo VARCHAR(255) UNIQUE,
+    senha VARCHAR(255),
     titulo VARCHAR(255) NOT NULL,
     descricao TEXT NOT NULL,
     aposta VARCHAR(255),
@@ -43,6 +44,7 @@ CREATE TABLE time (
 CREATE TABLE jogador (
     id_jogador int AUTO_INCREMENT PRIMARY KEY,
     id_modalidade_esportiva int NOT NULL,
+    situacao_jogador VARCHAR(100) NOT NULL,
     pontuacao INT,
     id_time int NOT NULL,
     id_academico int NOT NULL,

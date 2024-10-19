@@ -77,7 +77,7 @@ public class CampeonatoController {
             @RequestParam(required = false) Integer situacaoCampeonato) {
         try {
             CampeonatoDto campeonatoDto = new CampeonatoDto(
-                null, codigo, titulo, descricao, aposta, dataCriacao, dataInicio, dataFim,
+                null, codigo,null, titulo, descricao, aposta, dataCriacao, dataInicio, dataFim,
                 limiteTimes != null ? limiteTimes : 0,
                 limiteParticipantes != null ? limiteParticipantes : 0,
                 ativo != null ? ativo : false,
@@ -146,6 +146,9 @@ public class CampeonatoController {
         } catch (CampeonatoInvalidoException | TimeInvalidoException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }catch (PasswordInvalidoException e){
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
 
@@ -157,17 +160,26 @@ public class CampeonatoController {
         } catch (CampeonatoInvalidoException | TimeInvalidoException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }catch (PasswordInvalidoException e){
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
 
     @PostMapping("/{idCampeonato}/times/{idAcademico}")
-    public ResponseEntity<TimeDto> criarTimeComUmJogador(@PathVariable Long idCampeonato, @PathVariable Long idAcademico) {
+    public ResponseEntity<TimeDto> criarTimeComUmJogador(@PathVariable Long idCampeonato, @PathVariable Long idAcademico, @RequestBody String senhaCampeonato) {
         try {
-            TimeDto timeCriado = campeonatoService.criarTimeComUmJogador(idCampeonato, idAcademico);
+            TimeDto timeCriado = campeonatoService.criarTimeComUmJogador(idCampeonato, idAcademico, senhaCampeonato);
             return ResponseEntity.status(HttpStatus.CREATED).body(timeCriado);
         } catch (CampeonatoInvalidoException | TimeInvalidoException | RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }catch (PasswordInvalidoException e){
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }catch (Exception e ){
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 

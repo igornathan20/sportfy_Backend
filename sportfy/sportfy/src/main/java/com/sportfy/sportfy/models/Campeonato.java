@@ -29,6 +29,9 @@ public class Campeonato implements Serializable {
     @Column(name = "codigo", unique = true)
     private String codigo;
 
+    @Column(name = "senha", unique = true)
+    private String senha;
+
     @Column(name = "titulo", nullable = false)
     private String titulo;
 
@@ -129,6 +132,7 @@ public class Campeonato implements Serializable {
         return new CampeonatoDto(
                 campeonato.getIdCampeonato(),
                 campeonato.getCodigo(),
+                "",
                 campeonato.getTitulo(),
                 campeonato.getDescricao(),
                 campeonato.getAposta(),

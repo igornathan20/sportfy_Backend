@@ -2,12 +2,15 @@ package com.sportfy.sportfy.services;
 
 import com.sportfy.sportfy.dtos.*;
 import com.sportfy.sportfy.enums.TipoFasePartida;
+import com.sportfy.sportfy.enums.TipoPrivacidadeCampeonato;
 import com.sportfy.sportfy.enums.TipoSituacao;
+import com.sportfy.sportfy.enums.TipoSituacaoJogador;
 import com.sportfy.sportfy.exeptions.*;
 import com.sportfy.sportfy.models.*;
 import com.sportfy.sportfy.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
@@ -37,6 +40,8 @@ public class CampeonatoService {
     private PrivacidadeRepository privacidadeRepository;
     @Autowired
     private AvaliacaoJogadorRepository avaliacaoJogadorRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public CampeonatoDto criarCampeonato(CampeonatoDto campeonatoDto) throws AcademicoNaoExisteException, ModalidadeNaoExistenteException {
         Optional<Academico> academico = academicoRepository.findById(campeonatoDto.idAcademico());
@@ -55,6 +60,9 @@ public class CampeonatoService {
                     Endereco enderecoCampeonato = new Endereco();
                     enderecoCampeonato.toEntity(campeonatoDto.endereco());
                     novoCampeonato.setEndereco(enderecoCampeonato);
+                    if (campeonatoDto.senha() != null){
+                        novoCampeonato.setSenha(passwordEncoder.encode(campeonatoDto.senha()));
+                    }
                     return novoCampeonato.toDto(campeonatoRepository.save(novoCampeonato));
                 } catch (Exception e) {
                     return null;
@@ -77,7 +85,9 @@ public class CampeonatoService {
                 Endereco enderecoCampeonato = editCampeonato.getEndereco();
                 enderecoCampeonato.toEntity(campeonatoDto.endereco());
                 editCampeonato.setEndereco(enderecoCampeonato);
-
+                if (campeonatoDto.senha() != null){
+                    editCampeonato.setSenha(passwordEncoder.encode(campeonatoDto.senha()));
+                }
                 return editCampeonato.toDto(campeonatoRepository.save(editCampeonato));
             } catch (Exception e) {
                 return null;
@@ -238,16 +248,20 @@ public class CampeonatoService {
         return codigo.toString();
     }
 
-    public TimeDto criarTime(TimeDto novoTime) throws CampeonatoInvalidoException, TimeInvalidoException {
+    public TimeDto criarTime(TimeDto novoTime) throws CampeonatoInvalidoException, TimeInvalidoException, PasswordInvalidoException {
         Optional<Campeonato> campeonato = campeonatoRepository.findById(novoTime.campeonato());
         Optional<Time> timeEncontrado = timeRepository.findByNomeAndCampeonato(novoTime.nome(), campeonato.get());
 
         if (timeEncontrado.isEmpty()) {
             if (campeonato.get().getDataFim().isAfter(OffsetDateTime.now()) && campeonato.get().getSituacaoCampeonato() != TipoSituacao.FINALIZADO && campeonato.get().getSituacaoCampeonato() != TipoSituacao.INICIADO) {
-                Time timeCriado = new Time();
-                timeCriado.setNome(novoTime.nome());
-                timeCriado.setCampeonato(campeonato.get());
-                return timeCriado.toDto(timeRepository.save(timeCriado));
+                if (campeonato.get().getPrivacidadeCampeonato() == TipoPrivacidadeCampeonato.PUBLICO || passwordEncoder.matches(novoTime.senhaCampeonato(), campeonato.get().getSenha())){
+                    Time timeCriado = new Time();
+                    timeCriado.setNome(novoTime.nome());
+                    timeCriado.setCampeonato(campeonato.get());
+                    return timeCriado.toDto(timeRepository.save(timeCriado));
+                }else {
+                    throw new PasswordInvalidoException("Senha do campeonato invalida!");
+                }
             } else {
                 throw new CampeonatoInvalidoException("O campeonato ja esta finalizado!");
             }
@@ -256,18 +270,22 @@ public class CampeonatoService {
         }
     }
 
-    public JogadorDto adicionarJogadorTime(TimeDto timeDto, Long idAcademico) throws CampeonatoInvalidoException, TimeInvalidoException{
+    public JogadorDto adicionarJogadorTime(TimeDto timeDto, Long idAcademico) throws CampeonatoInvalidoException, TimeInvalidoException, PasswordInvalidoException{
         Optional<Campeonato> campeonato = campeonatoRepository.findById(timeDto.campeonato());
         Optional<Time> timeEncontrado = timeRepository.findByNomeAndCampeonato(timeDto.nome(), campeonato.get());
         Optional<Academico> academico = academicoRepository.findById(idAcademico);
 
         if (timeEncontrado.isPresent()) {
             if (campeonato.get().getDataFim().isAfter(OffsetDateTime.now()) && campeonato.get().getSituacaoCampeonato() != TipoSituacao.FINALIZADO  && campeonato.get().getSituacaoCampeonato() != TipoSituacao.INICIADO) {
-                Jogador novoJogador = new Jogador();
-                novoJogador.setModalidadeEsportiva(campeonato.get().getModalidadeEsportiva());
-                novoJogador.setAcademico(academico.get());
-                novoJogador.setTime(timeEncontrado.get());
-                return novoJogador.toDto(jogadorRepository.save(novoJogador));
+                if (campeonato.get().getPrivacidadeCampeonato() == TipoPrivacidadeCampeonato.PUBLICO || passwordEncoder.matches(timeDto.senhaCampeonato(), campeonato.get().getSenha())){
+                    Jogador novoJogador = new Jogador();
+                    novoJogador.setModalidadeEsportiva(campeonato.get().getModalidadeEsportiva());
+                    novoJogador.setAcademico(academico.get());
+                    novoJogador.setTime(timeEncontrado.get());
+                    return novoJogador.toDto(jogadorRepository.save(novoJogador));
+                }else {
+                    throw new PasswordInvalidoException("Senha do campeonato invalida!");
+                }
             } else {
                 throw new CampeonatoInvalidoException("O campeonato ja esta finalizado!");
             }
@@ -276,24 +294,29 @@ public class CampeonatoService {
         }
     }
 
-    public TimeDto criarTimeComUmJogador(Long idCampeonato, Long idAcademico) throws CampeonatoInvalidoException, TimeInvalidoException, RegistroNaoEncontradoException {
+    public TimeDto criarTimeComUmJogador(Long idCampeonato, Long idAcademico, String senhaCampeonato) throws CampeonatoInvalidoException, TimeInvalidoException, RegistroNaoEncontradoException, PasswordInvalidoException {
         Optional<Campeonato> campeonato = campeonatoRepository.findById(idCampeonato);
         Optional<Academico> academico = academicoRepository.findById(idAcademico);
-
+        System.out.println("Senha recebida: " + senhaCampeonato);
+        System.out.println("senha: " + passwordEncoder.encode(senhaCampeonato));
         if (campeonato.isPresent() && academico.isPresent()){
             Optional<Time> timeEncontrado = timeRepository.findByNomeAndCampeonato(academico.get().getUsuario().getUsername(), campeonato.get());
             if (timeEncontrado.isEmpty()) {
                 if (campeonato.get().getDataFim().isAfter(OffsetDateTime.now()) && campeonato.get().getSituacaoCampeonato() != TipoSituacao.FINALIZADO && campeonato.get().getLimiteParticipantes() == 1) {
-                    Time timeCriado = new Time();
-                    timeCriado.setNome(academico.get().getUsuario().getUsername());
-                    timeCriado.setCampeonato(campeonato.get());
+                    if (campeonato.get().getPrivacidadeCampeonato() == TipoPrivacidadeCampeonato.PUBLICO || passwordEncoder.matches(senhaCampeonato, campeonato.get().getSenha())){
+                        Time timeCriado = new Time();
+                        timeCriado.setNome(academico.get().getUsuario().getUsername());
+                        timeCriado.setCampeonato(campeonato.get());
 
-                    Jogador novoJogador = new Jogador();
-                    novoJogador.setModalidadeEsportiva(campeonato.get().getModalidadeEsportiva());
-                    novoJogador.setAcademico(academico.get());
-                    novoJogador.setTime(timeCriado);
-                    jogadorRepository.save(novoJogador);
-                    return timeCriado.toDto(timeCriado);
+                        Jogador novoJogador = new Jogador();
+                        novoJogador.setModalidadeEsportiva(campeonato.get().getModalidadeEsportiva());
+                        novoJogador.setAcademico(academico.get());
+                        novoJogador.setTime(timeCriado);
+                        jogadorRepository.save(novoJogador);
+                        return timeCriado.toDto(timeCriado);
+                    }else {
+                        throw new PasswordInvalidoException("Senha do campeonato invalida!");
+                    }
                 } else {
                     throw new CampeonatoInvalidoException("O campeonato ja esta finalizado!");
                 }

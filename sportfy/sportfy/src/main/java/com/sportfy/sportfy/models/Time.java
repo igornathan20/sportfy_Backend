@@ -29,7 +29,8 @@ public class Time implements Serializable {
         return new TimeDto(
                 time.idTime,
                 time.nome,
-                time.campeonato.getIdCampeonato()
+                time.campeonato.getIdCampeonato(),
+                ""
         );
     }
 }
