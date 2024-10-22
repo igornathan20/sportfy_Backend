@@ -43,11 +43,19 @@ public class ApoioSaude implements Serializable {
     @JoinColumn(name="id_administrador", updatable = false, nullable = false)
     private Administrador administrador;
 
-    public void updateFromDto(ApoioSaudeDto dto) {
-        this.nome =(dto.nome());
-        this.email = (dto.email());
-        this.telefone = (dto.telefone());
-        this.descricao = (dto.descricao());
+    public void fromDto(ApoioSaudeDto dto) {
+        if (dto.nome() != null) {
+            this.nome = dto.nome();
+        }
+        if (dto.email() != null) {
+            this.email = dto.email();
+        }
+        if (dto.telefone() != null) {
+            this.telefone = dto.telefone();
+        }
+        if (dto.descricao() != null) {
+            this.descricao = dto.descricao();
+        }
     }
 
     public static ApoioSaudeResponseDto toDto(ApoioSaude apoioSaude) {

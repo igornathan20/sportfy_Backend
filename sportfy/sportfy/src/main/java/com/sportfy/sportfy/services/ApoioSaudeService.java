@@ -22,12 +22,12 @@ public class ApoioSaudeService {
     @Autowired
     AdministradorRepository administradorRepository;
 
-    public ApoioSaudeResponseDto criarMeta(ApoioSaudeDto apoioSaudeDto) throws AdministradorNaoExisteException {
+    public ApoioSaudeResponseDto criarApoioSaude(ApoioSaudeDto apoioSaudeDto) throws AdministradorNaoExisteException {
         Optional<Administrador> administrador = administradorRepository.findById(apoioSaudeDto.idAdministrador());
 
         if (administrador.isPresent()){
             ApoioSaude novoRegistro = new ApoioSaude();
-            novoRegistro.updateFromDto(apoioSaudeDto);
+            novoRegistro.fromDto(apoioSaudeDto);
             novoRegistro.setAdministrador(administrador.get());
             return ApoioSaude.toDto(apoioSaudeRepository.save(novoRegistro));
         }else {
@@ -35,12 +35,12 @@ public class ApoioSaudeService {
         }
     }
 
-    public ApoioSaudeResponseDto editarApoioSaude(ApoioSaudeDto apoioSaudeDto) throws RegistroNaoEncontradoException {
-        Optional<ApoioSaude> apoioSaudeExistente = apoioSaudeRepository.findById(apoioSaudeDto.idApoioSaude());
+    public ApoioSaudeResponseDto editarApoioSaude(Long idApoioSaude, ApoioSaudeDto apoioSaudeDto) throws RegistroNaoEncontradoException {
+        Optional<ApoioSaude> apoioSaudeExistente = apoioSaudeRepository.findById(idApoioSaude);
 
         if (apoioSaudeExistente.isPresent()){
             ApoioSaude apoioSaudeEdit = apoioSaudeExistente.get();
-            apoioSaudeEdit.updateFromDto(apoioSaudeDto);
+            apoioSaudeEdit.fromDto(apoioSaudeDto);
             return ApoioSaude.toDto(apoioSaudeRepository.save(apoioSaudeEdit));
         }else {
             throw new RegistroNaoEncontradoException("O registro de apoio a saude nao existe!");

@@ -37,13 +37,24 @@ public class Administrador implements Serializable {
 
     public void atualizar(Long idAdministrador, Long idUsuario, AdministradorDto administradorDto) {
         this.idAdministrador = idAdministrador;
-        this.usuario = new Usuario();
+        if (this.usuario == null) {
+            this.usuario = new Usuario();
+        }
         this.usuario.setIdUsuario(idUsuario);
-        this.usuario.setUsername(administradorDto.username().toLowerCase());
-        this.usuario.setNome(administradorDto.nome());
-        this.usuario.setTelefone(administradorDto.telefone());
-        this.usuario.setDataNascimento(administradorDto.dataNascimento());
-        this.usuario.setFoto(administradorDto.foto());
+        if (administradorDto.username() != null) {
+            this.usuario.setUsername(administradorDto.username().toLowerCase());
+        }
+        if (administradorDto.nome() != null) {
+            this.usuario.setNome(administradorDto.nome());
+        }
+        if (administradorDto.telefone() != null) {
+            this.usuario.setTelefone(administradorDto.telefone());
+        }
+        if (administradorDto.dataNascimento() != null) {
+            this.usuario.setDataNascimento(administradorDto.dataNascimento());
+        }
+        if (administradorDto.foto() != null) {
+            this.usuario.setFoto(administradorDto.foto());
+        }
     }
-
 }

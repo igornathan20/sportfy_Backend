@@ -22,7 +22,7 @@ public class ApoioSaudeController {
     @PostMapping
     public ResponseEntity<ApoioSaudeResponseDto> criarApoioSaude(@RequestBody ApoioSaudeDto apoioSaudeDto) {
         try {
-            ApoioSaudeResponseDto novoApoioSaude = apoioSaudeService.criarMeta(apoioSaudeDto);
+            ApoioSaudeResponseDto novoApoioSaude = apoioSaudeService.criarApoioSaude(apoioSaudeDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(novoApoioSaude);
         } catch (AdministradorNaoExisteException e) {
             System.out.println("Erro " + e.getMessage());
@@ -33,10 +33,10 @@ public class ApoioSaudeController {
         }
     }
 
-    @PutMapping("/editar")
-    public ResponseEntity<ApoioSaudeResponseDto> editarApoioSaude(@RequestBody ApoioSaudeDto apoioSaudeDto) {
+    @PutMapping("/{idApoioSaude}")
+    public ResponseEntity<ApoioSaudeResponseDto> editarApoioSaude(@PathVariable Long idApoioSaude , @RequestBody ApoioSaudeDto apoioSaudeDto) {
         try {
-            ApoioSaudeResponseDto apoioSaudeEditado = apoioSaudeService.editarApoioSaude(apoioSaudeDto);
+            ApoioSaudeResponseDto apoioSaudeEditado = apoioSaudeService.editarApoioSaude(idApoioSaude, apoioSaudeDto);
             return ResponseEntity.status(HttpStatus.OK).body(apoioSaudeEditado);
         } catch (RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());

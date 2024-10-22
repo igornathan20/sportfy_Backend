@@ -93,16 +93,38 @@ public class Campeonato implements Serializable {
     private List<Partida> partidas;
 
     public void toEntity(CampeonatoDto dto) throws Exception {
-        setTitulo(dto.titulo());
-        setDescricao(dto.descricao());
-        setAposta(dto.aposta());
-        setDataInicio(dto.dataInicio());
-        setDataFim(dto.dataFim());
-        setLimiteTimes(dto.limiteTimes());
-        setLimiteParticipantes(dto.limiteParticipantes());
+        if (dto.titulo() != null) {
+            setTitulo(dto.titulo());
+        }
+
+        if (dto.descricao() != null) {
+            setDescricao(dto.descricao());
+        }
+
+        if (dto.aposta() != null) {
+            setAposta(dto.aposta());
+        }
+
+        if (dto.dataInicio() != null) {
+            setDataInicio(dto.dataInicio());
+        }
+
+        if (dto.dataFim() != null) {
+            setDataFim(dto.dataFim());
+        }
+
+        if (dto.limiteTimes() != 0) {
+            setLimiteTimes(dto.limiteTimes());
+        }
+
+        if (dto.limiteParticipantes() != 0) {
+            setLimiteParticipantes(dto.limiteParticipantes());
+        }
+
         setAtivo(dto.ativo());
 
-        switch (dto.privacidadeCampeonato()){
+
+        switch (dto.privacidadeCampeonato()) {
             case 0:
                 setPrivacidadeCampeonato(TipoPrivacidadeCampeonato.PUBLICO);
                 break;
@@ -113,20 +135,21 @@ public class Campeonato implements Serializable {
                 throw new Exception("Tipo de privacidade invalido!");
         }
 
-        switch (dto.situacaoCampeonato()){
-            case 0:
-                setSituacaoCampeonato(TipoSituacao.EM_ABERTO);
-                break;
-            case 1:
-                setSituacaoCampeonato(TipoSituacao.INICIADO);
-                break;
-            case 2:
-                setSituacaoCampeonato(TipoSituacao.FINALIZADO);
-                break;
-            default:
-                throw new Exception("Tipo de privacidade invalido!");
-        }
+         switch (dto.situacaoCampeonato()) {
+                case 0:
+                    setSituacaoCampeonato(TipoSituacao.EM_ABERTO);
+                    break;
+                case 1:
+                    setSituacaoCampeonato(TipoSituacao.INICIADO);
+                    break;
+                case 2:
+                    setSituacaoCampeonato(TipoSituacao.FINALIZADO);
+                    break;
+                default:
+                    throw new Exception("Situação do campeonato inválida!");
+         }
     }
+
 
     public CampeonatoDto toDto(Campeonato campeonato) {
         return new CampeonatoDto(

@@ -53,17 +53,38 @@ public class Academico implements Serializable {
     }
 
     public void atualizar(Long idAcademico, Long idUsuario, AcademicoDto academicoDto) {
-        this.idAcademico = idAcademico;
-        this.email = academicoDto.email().toLowerCase();
-        this.curso = academicoDto.curso();
-        this.usuario = new Usuario();
-        this.usuario.setIdUsuario(idUsuario);
-        this.usuario.setUsername(academicoDto.username().toLowerCase());
-        this.usuario.setNome(academicoDto.nome());
-        this.usuario.setGenero(academicoDto.genero());
-        this.usuario.setTelefone(academicoDto.telefone());
-        this.usuario.setDataNascimento(academicoDto.dataNascimento());
-        this.usuario.setFoto(academicoDto.foto());
+        if (idAcademico != null) {
+            this.idAcademico = idAcademico;
+        }
+        if (academicoDto.email() != null) {
+            this.email = academicoDto.email().toLowerCase();
+        }
+        if (academicoDto.curso() != null) {
+            this.curso = academicoDto.curso();
+        }
+        if (idUsuario != null) {
+            if (this.usuario == null) {
+                this.usuario = new Usuario();
+            }
+            this.usuario.setIdUsuario(idUsuario);
+        }
+        if (academicoDto.username() != null) {
+            this.usuario.setUsername(academicoDto.username().toLowerCase());
+        }
+        if (academicoDto.nome() != null) {
+            this.usuario.setNome(academicoDto.nome());
+        }
+        if (academicoDto.genero() != null) {
+            this.usuario.setGenero(academicoDto.genero());
+        }
+        if (academicoDto.telefone() != null) {
+            this.usuario.setTelefone(academicoDto.telefone());
+        }
+        if (academicoDto.dataNascimento() != null) {
+            this.usuario.setDataNascimento(academicoDto.dataNascimento());
+        }
+        if (academicoDto.foto() != null) {
+            this.usuario.setFoto(academicoDto.foto());
+        }
     }
-
 }

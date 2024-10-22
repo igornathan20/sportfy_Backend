@@ -45,7 +45,7 @@ public class AcademicoController {
 
     @PutMapping("/atualizar/{idAcademico}")
     //@PreAuthorize("hasRole('ROLE_ACADEMICO')")
-    public ResponseEntity<AcademicoResponseDto> atualizar(@PathVariable("idAcademico") Long idAcademico, @RequestBody @Valid AcademicoDto academico) {
+    public ResponseEntity<AcademicoResponseDto> atualizar(@PathVariable("idAcademico") Long idAcademico, @RequestBody AcademicoDto academico) {
         try {
             AcademicoResponseDto academicoAtualizado = academicoService.atualizar(idAcademico, academico);
             return ResponseEntity.status(HttpStatus.OK).body(academicoAtualizado);

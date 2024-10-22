@@ -34,10 +34,10 @@ public class CampeonatoController {
         }
     }
 
-    @PutMapping()
-    public ResponseEntity<CampeonatoDto> editarCampeonato(@RequestBody CampeonatoDto campeonatoDto) {
+    @PutMapping("/{idCampeonato}")
+    public ResponseEntity<CampeonatoDto> editarCampeonato(@PathVariable Long idCampeonato, @RequestBody CampeonatoDto campeonatoDto) {
         try {
-            CampeonatoDto campeonato = campeonatoService.editarCampeonato(campeonatoDto);
+            CampeonatoDto campeonato = campeonatoService.editarCampeonato(idCampeonato, campeonatoDto);
             return ResponseEntity.status(HttpStatus.OK).body(campeonato);
         } catch (RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());

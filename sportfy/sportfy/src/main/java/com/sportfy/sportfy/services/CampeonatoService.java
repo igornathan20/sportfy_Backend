@@ -75,8 +75,8 @@ public class CampeonatoService {
         }
     }
 
-    public CampeonatoDto editarCampeonato(CampeonatoDto campeonatoDto) throws RegistroNaoEncontradoException {
-        Optional<Campeonato> campeonato = campeonatoRepository.findById(campeonatoDto.idCampeonato());
+    public CampeonatoDto editarCampeonato(Long idCampeonato, CampeonatoDto campeonatoDto) throws RegistroNaoEncontradoException {
+        Optional<Campeonato> campeonato = campeonatoRepository.findById(idCampeonato);
 
         if (campeonato.isPresent()) {
             Campeonato editCampeonato = campeonato.get();
