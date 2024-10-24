@@ -98,8 +98,9 @@ public class CampeonatoService {
     }
 
     public List<CampeonatoDto> listarTodosCampeonatos() throws RegistroNaoEncontradoException {
-        List<CampeonatoDto> campeonatos = campeonatoRepository.findAll().stream().map(
-                campeonato -> campeonato.toDto(campeonato)
+        List<CampeonatoDto> campeonatos = campeonatoRepository.findAll().stream()
+                .filter(Campeonato::isAtivo)
+                .map(campeonato ->  campeonato.toDto(campeonato)
         ).collect(Collectors.toList());
 
         if (campeonatos.isEmpty()) {

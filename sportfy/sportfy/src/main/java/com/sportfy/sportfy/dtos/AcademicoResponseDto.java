@@ -8,19 +8,21 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 import java.time.OffsetDateTime;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 public record AcademicoResponseDto(
-    Long idAcademico,
-    String curso,
-    String username,
-    String email,
-    String nome,
-    String genero,
-    String telefone,
-    OffsetDateTime dataNascimento,
-    OffsetDateTime dataCriacao,
-    boolean ativo,
-    TipoPermissao permissao
+        Long idAcademico,
+        String curso,
+        String username,
+        String email,
+        String nome,
+        String genero,
+        String telefone,
+        OffsetDateTime dataNascimento,
+        OffsetDateTime dataCriacao,
+        boolean ativo,
+        TipoPermissao permissao
 ) {
     public static AcademicoResponseDto fromAcademicoBD(Academico academico) {
         return new AcademicoResponseDto(
@@ -34,7 +36,7 @@ public record AcademicoResponseDto(
                 academico.getUsuario().getDataNascimento(),
                 academico.getUsuario().getDataCriacao(),
                 academico.getUsuario().isAtivo(),
-                academico.getUsuario().getPermissao().getTipoPermissao()
+                academico.getUsuario().getPermissao()
         );
     }
 }

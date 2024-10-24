@@ -5,18 +5,21 @@ import com.sportfy.sportfy.models.Usuario;
 
 import jakarta.validation.constraints.*;
 
+import java.util.Collection;
+import java.util.stream.Collectors;
+
 public record UsuarioDto(
-    @NotNull(message = "O campo idUsuario é obrigatório")
+        @NotNull(message = "O campo idUsuario é obrigatório")
     @Min(value = 1, message = "O idUsuario deve ser maior que 0")
     Long idUsuario,
 
-    String username,
+        String username,
 
-    String nome,
+        String nome,
 
-    String foto,
+        String foto,
 
-    TipoPermissao permissao
+        TipoPermissao permissao
 ) {
     public static UsuarioDto fromUsuarioBD(Usuario usuario) {
         return new UsuarioDto(
@@ -24,7 +27,7 @@ public record UsuarioDto(
             usuario.getUsername(),
             usuario.getNome(),
             usuario.getFoto(),
-            usuario.getPermissao().getTipoPermissao()
+            usuario.getPermissao()
         );
     }
 }

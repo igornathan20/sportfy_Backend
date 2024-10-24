@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping(value = "/administrador")
@@ -26,7 +27,7 @@ public class AdministradorController {
     AdministradorService administradorService;
 
     @PostMapping("/cadastrar")
-    //@PreAuthorize("hasRole('ROLE_ADMINISTRADOR_MASTER')")
+    //@PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     public ResponseEntity<AdministradorResponseDto> cadastrar(@RequestBody @Valid AdministradorDto administrador) {
         try {
             AdministradorResponseDto administradorCriado = administradorService.cadastrar(administrador);
@@ -104,7 +105,7 @@ public class AdministradorController {
     }
 
     @GetMapping("/listar")
-    //@PreAuthorize("hasRole('ROLE_ADMINISTRADOR_MASTER')")
+    //@PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     public ResponseEntity<List<AdministradorResponseDto>> listar() {
         try {
             List<AdministradorResponseDto> listaAdministrador = administradorService.listar();

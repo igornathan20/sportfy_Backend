@@ -8,17 +8,19 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 import java.time.OffsetDateTime;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 public record AdministradorResponseDto (
-    Long idAdministrador,
-    String username,
-    String nome,
-    String telefone,
-    OffsetDateTime dataNascimento,
-    String foto,
-    OffsetDateTime dataCriacao,
-    boolean ativo,
-    TipoPermissao permissao
+        Long idAdministrador,
+        String username,
+        String nome,
+        String telefone,
+        OffsetDateTime dataNascimento,
+        String foto,
+        OffsetDateTime dataCriacao,
+        boolean ativo,
+        TipoPermissao permissao
 ) {
 public static AdministradorResponseDto fromEntity(Administrador administrador) {
     return new AdministradorResponseDto(
@@ -30,7 +32,7 @@ public static AdministradorResponseDto fromEntity(Administrador administrador) {
             administrador.getUsuario().getFoto(),
             administrador.getUsuario().getDataCriacao(),
             administrador.getUsuario().isAtivo(),
-            administrador.getUsuario().getPermissao().getTipoPermissao()
+            administrador.getUsuario().getPermissao()
     );
 }
 }

@@ -46,7 +46,7 @@ public class AcademicoService {
         if (!isEmailFromUfpr(academicoDto.email())) {
             throw new EmailInvalidoException("Email invalido!");
         }
-    
+
         Optional<List<Academico>> existAcademicoBD = academicoRepository.findByUsuarioUsernameOrEmail(academicoDto.username(), academicoDto.email());
         if (existAcademicoBD.isPresent() && !existAcademicoBD.get().isEmpty()) {
             boolean usernameExists = false;
@@ -69,18 +69,15 @@ public class AcademicoService {
                 throw new OutroUsuarioComDadosJaExistentes("Outro usuário com email já existente!");
             }
         }
-    
-        Optional<Permissao> permissao = permissaoRepository.findByTipoPermissao(TipoPermissao.ACADEMICO);
-        if (!permissao.isPresent()) {
-            throw new PermissaoNaoExisteException(String.format("Permissao %s nao existe no banco de dados!", TipoPermissao.ACADEMICO));
-        }
-    
+
         if (existAcademicoBD.get().size() == 0) {
             Academico novoAcademico = new Academico();
             String senha = "1234"; //GeraSenha.generatePassword();
             novoAcademico.toEntity(academicoDto);
             novoAcademico.getUsuario().setPassword(passwordEncoder.encode(senha));
-            novoAcademico.getUsuario().setPermissao(permissao.get());
+
+
+            novoAcademico.getUsuario().setPermissao(TipoPermissao.ACADEMICO);
             Academico academicoCriado = academicoRepository.save(novoAcademico);
 
             Privacidade privacidadeUser = new Privacidade();
@@ -90,6 +87,7 @@ public class AcademicoService {
             Notificacao notificacaoUser = new Notificacao();
             notificacaoUser.setIdAcademico(academicoCriado.getIdAcademico());
             notificacaoRepository.save(notificacaoUser);
+
 
             try {
                 String mensagem = "Bem vindo ao Sportfy! Acesse a sua conta com o username cadastrado e a sua senha: \n\n" + senha +

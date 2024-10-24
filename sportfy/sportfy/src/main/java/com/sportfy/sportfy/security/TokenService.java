@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TokenService {
@@ -21,18 +23,22 @@ public class TokenService {
     public String gerarToken(Usuario usuario) {
         try {
             Algorithm algoritmo = Algorithm.HMAC256(secret);
+
+
             String token = JWT.create()
                     .withIssuer("sportfy")
                     .withSubject(usuario.getUsername())
-                    .withClaim("role", usuario.getPermissao().getTipoPermissao().name())
+                    .withClaim("roles", usuario.getPermissao().getTipoPermissao())
                     .withClaim("idUsuario", usuario.getIdUsuario())
                     .withExpiresAt(dataExpiracao())
                     .sign(algoritmo);
+
             return token;
-        } catch (JWTCreationException exception){
-            throw new RuntimeException("erro ao gerar token jwt", exception);
+        } catch (JWTCreationException exception) {
+            throw new RuntimeException("Erro ao gerar token JWT", exception);
         }
     }
+
 
     public String getSubject(String tokenJWT) {
         try {

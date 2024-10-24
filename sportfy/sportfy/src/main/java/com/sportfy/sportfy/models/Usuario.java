@@ -1,5 +1,6 @@
 package com.sportfy.sportfy.models;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import jakarta.persistence.*;
 
@@ -7,10 +8,14 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import com.sportfy.sportfy.enums.TipoPermissao;
 
 @Entity
 @Table(name="usuario")
@@ -54,13 +59,12 @@ public class Usuario implements UserDetails {
     @Column(name="ativo", insertable = false)
     private boolean ativo = true;
 
-    @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="id_permissao")
-    private Permissao permissao;
+    @Column(name="permissao")
+    private TipoPermissao permissao;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return List.of(new SimpleGrantedAuthority("ROLE_" + permissao.getTipoPermissao()));
     }
 
     @Override
