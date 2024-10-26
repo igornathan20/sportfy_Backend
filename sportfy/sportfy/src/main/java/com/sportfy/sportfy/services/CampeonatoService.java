@@ -491,6 +491,9 @@ public class CampeonatoService {
                 case TipoFasePartida.SEMI:
                     campeonato.get().setFaseAtual(TipoFasePartida.FINAL);
                     break;
+                case TipoFasePartida.FINAL:
+                    finalizarCampeonato(campeonato.get());
+                    return new ArrayList<>();
                 default:
                     //fase invalida
             }
@@ -515,6 +518,43 @@ public class CampeonatoService {
             throw new RegistroNaoEncontradoException("Campeonato nao encontrado!");
         }
     }
+
+    public void finalizarCampeonato(Campeonato campeonato)  {
+        List<Partida> partidas = partidaRepository.findByCampeonato(campeonato);
+        List<Jogador> jogadores = jogadorRepository.findByTimeCampeonato(campeonato);
+
+        campeonato.setSituacaoCampeonato(TipoSituacao.FINALIZADO);
+        campeonato.setAtivo(false);
+        campeonato.setDataFim(OffsetDateTime.now());
+
+        for (int i = 0; i < partidas.size(); i ++){
+            partidas.get(i).setSituacaoPartida(TipoSituacao.FINALIZADO);
+
+            if (partidas.get(i).getFasePartida() == TipoFasePartida.FINAL){
+                if (partidas.get(i).getTime1() == null) {
+                    partidas.get(i).getResultado().setVencedor(partidas.get(i).getTime2());
+                }else if (partidas.get(i).getTime2() == null) {
+                    partidas.get(i).getResultado().setVencedor(partidas.get(i).getTime1());
+                }
+
+                if (partidas.get(i).getResultado().getPontuacaoTime1() > partidas.get(i).getResultado().getPontuacaoTime2()){
+                    partidas.get(i).getResultado().setVencedor(partidas.get(i).getTime1());
+                }else {
+                    partidas.get(i).getResultado().setVencedor(partidas.get(i).getTime2());
+                }
+            }
+        }
+
+        for (int i = 0; i < jogadores.size(); i ++) {
+            if (jogadores.get(i).getSituacaoJogador() != TipoSituacaoJogador.BLOQUEADO){
+                jogadores.get(i).setSituacaoJogador(TipoSituacaoJogador.FINALIZADO);
+            }
+        }
+        partidaRepository.saveAll(partidas);
+        jogadorRepository.saveAll(jogadores);
+        campeonatoRepository.save(campeonato);
+    }
+
 
     public PartidaDto alterarPontuacaoPartida(Long idPartida, int pontuacaoTime1, int pontuacaoTime2) throws RegistroNaoEncontradoException{
         Optional<Partida> partida = partidaRepository.findById(idPartida);
