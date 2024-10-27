@@ -491,7 +491,7 @@ public class CampeonatoService {
     }
 
 
-    public List<PartidaDto> avacarDeFase(Long idCampeonato) throws RegistroNaoEncontradoException{
+    public List<PartidaDto> avancarDeFase(Long idCampeonato) throws RegistroNaoEncontradoException, AvancarFaseException{
         Optional<Campeonato> campeonato = campeonatoRepository.findById(idCampeonato);
         if (campeonato.isPresent()) {
             List<Partida> partidasFaseAnterior = partidaRepository.findByCampeonatoAndFasePartida(campeonato.get(), campeonato.get().getFaseAtual());
@@ -503,6 +503,9 @@ public class CampeonatoService {
                 }
                 if (partidasFaseAnterior.get(i).getTime2() == null) {
                     partidasFaseAnterior.get(i).getResultado().setVencedor(partidasFaseAnterior.get(i).getTime1());
+                }
+                if (partidasFaseAnterior.get(i).getResultado().getPontuacaoTime1() == partidasFaseAnterior.get(i).getResultado().getPontuacaoTime2()) {
+                    throw new AvancarFaseException("Não é possivel avancar de fase pois existem partidas sem vencedor definido!");
                 }
                 times.add(partidasFaseAnterior.get(i).getResultado().getVencedor());
                 partidasFaseAnterior.get(i).setSituacaoPartida(TipoSituacao.FINALIZADO);
@@ -594,7 +597,7 @@ public class CampeonatoService {
 
             if (partida.get().getResultado().getPontuacaoTime1() > partida.get().getResultado().getPontuacaoTime2()){
                 partida.get().getResultado().setVencedor(partida.get().getTime1());
-            }else {
+            }else if (partida.get().getResultado().getPontuacaoTime1() < partida.get().getResultado().getPontuacaoTime2()){
                 partida.get().getResultado().setVencedor(partida.get().getTime2());
             }
             return  partida.get().toDto(partidaRepository.save(partida.get()));

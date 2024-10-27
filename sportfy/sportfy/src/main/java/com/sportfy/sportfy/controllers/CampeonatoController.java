@@ -303,12 +303,15 @@ public class CampeonatoController {
     @PermitAll
     public ResponseEntity<List<PartidaDto>> avancarDeFase(@PathVariable Long idCampeonato) {
         try {
-            List<PartidaDto> partidas = campeonatoService.avacarDeFase(idCampeonato);
+            List<PartidaDto> partidas = campeonatoService.avancarDeFase(idCampeonato);
             return ResponseEntity.status(HttpStatus.OK).body(partidas);
         }catch (RegistroNaoEncontradoException e){
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        } catch (Exception e) {
+        }catch (AvancarFaseException e){
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        } catch(Exception e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
