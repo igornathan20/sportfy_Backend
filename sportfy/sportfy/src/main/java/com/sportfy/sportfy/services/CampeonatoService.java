@@ -41,29 +41,33 @@ public class CampeonatoService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public CampeonatoDto criarCampeonato(CampeonatoDto campeonatoDto) throws AcademicoNaoExisteException, ModalidadeNaoExistenteException {
+    public CampeonatoDto criarCampeonato(CampeonatoDto campeonatoDto) throws AcademicoNaoExisteException, ModalidadeNaoExistenteException, CampeonatoInvalidoException {
         Optional<Academico> academico = academicoRepository.findById(campeonatoDto.idAcademico());
         Optional<ModalidadeEsportiva> modalidade = modalidadeEsportivaRepository.findById(campeonatoDto.idModalidadeEsportiva());
+        Optional<List<Campeonato>> campeonatos = campeonatoRepository.findByTituloAndAtivo(campeonatoDto.titulo(), true);
 
         if (academico.isPresent()) {
             if (modalidade.isPresent()) {
-
-                Campeonato novoCampeonato = new Campeonato();
-                try {
-                    novoCampeonato.toEntity(campeonatoDto);
-                    novoCampeonato.setAcademico(academico.get());
-                    novoCampeonato.setModalidadeEsportiva(modalidade.get());
-                    novoCampeonato.setCodigo("#" + gerarCodigoUnico());
-                    novoCampeonato.setSituacaoCampeonato(TipoSituacao.EM_ABERTO);
-                    Endereco enderecoCampeonato = new Endereco();
-                    enderecoCampeonato.toEntity(campeonatoDto.endereco());
-                    novoCampeonato.setEndereco(enderecoCampeonato);
-                    if (campeonatoDto.senha() != null){
-                        novoCampeonato.setSenha(passwordEncoder.encode(campeonatoDto.senha()));
+                if (campeonatos.isPresent() && campeonatos.get().isEmpty()) {
+                    Campeonato novoCampeonato = new Campeonato();
+                    try {
+                        novoCampeonato.toEntity(campeonatoDto);
+                        novoCampeonato.setAcademico(academico.get());
+                        novoCampeonato.setModalidadeEsportiva(modalidade.get());
+                        novoCampeonato.setCodigo("#" + gerarCodigoUnico());
+                        novoCampeonato.setSituacaoCampeonato(TipoSituacao.EM_ABERTO);
+                        Endereco enderecoCampeonato = new Endereco();
+                        enderecoCampeonato.toEntity(campeonatoDto.endereco());
+                        novoCampeonato.setEndereco(enderecoCampeonato);
+                        if (campeonatoDto.senha() != null){
+                            novoCampeonato.setSenha(passwordEncoder.encode(campeonatoDto.senha()));
+                        }
+                        return novoCampeonato.toDto(campeonatoRepository.save(novoCampeonato));
+                    } catch (Exception e) {
+                        return null;
                     }
-                    return novoCampeonato.toDto(campeonatoRepository.save(novoCampeonato));
-                } catch (Exception e) {
-                    return null;
+                }else {
+                    throw  new CampeonatoInvalidoException("Um campeonato com o titulo " + campeonatoDto.titulo() + " ja exite!");
                 }
             } else {
                 throw new ModalidadeNaoExistenteException("Modalidade esportiva nao cadastrada!");

@@ -52,7 +52,6 @@ public class Usuario implements UserDetails {
     private String foto;
 
     @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="data_criacao", insertable = false, updatable = false, nullable = false)
     private OffsetDateTime dataCriacao;
 

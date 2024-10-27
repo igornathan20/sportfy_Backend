@@ -35,7 +35,6 @@ public class ApoioSaude implements Serializable {
     private String descricao;
 
     @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="data_publicacao", insertable = false, updatable = false, nullable = false)
     private OffsetDateTime dataPublicacao;
 

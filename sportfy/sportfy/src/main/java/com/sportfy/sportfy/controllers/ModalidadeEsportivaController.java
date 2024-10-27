@@ -79,7 +79,7 @@ public class ModalidadeEsportivaController {
         }
     }
 
-    @PutMapping("/desativar/{id}")
+    @PatchMapping("/desativar/{id}")
     public ResponseEntity<Object> desativarModalidade(@PathVariable Long id) {
         try {
             Object modalidadeDesativada = modalidadeEsportivaService.desativarModalidade(id);

@@ -30,7 +30,10 @@ public class CampeonatoController {
         } catch (AcademicoNaoExisteException | ModalidadeNaoExistenteException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        } catch (Exception e) {
+        } catch (CampeonatoInvalidoException e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        }catch (Exception e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
