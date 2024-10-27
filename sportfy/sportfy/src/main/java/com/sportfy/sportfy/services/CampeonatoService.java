@@ -14,11 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class CampeonatoService {
@@ -345,6 +343,32 @@ public class CampeonatoService {
         }
     }
 
+    public List<AcademicoDto> listarJogadoresEnfrentados(Long idAcademico) throws RegistroNaoEncontradoException {
+        Academico academico = academicoRepository.findById(idAcademico)
+                .orElseThrow(() -> new RegistroNaoEncontradoException("O academico com id " + idAcademico + " não foi encontrado"));
+
+        // Encontrar todos os times em que o acadêmico jogou
+        List<Jogador> participacoesCampeonatos = jogadorRepository.findByAcademico(academico);
+        List<Time> meusTimes = participacoesCampeonatos.stream()
+                .map(Jogador::getTime)
+                .collect(Collectors.toList());
+
+        // Encontrar todas as partidas dos meus times, aqui usei o Set<Time> que usa uma tabela de Hash, pode ser melhor para buscas
+        Set<Time> timesPartidas = meusTimes.stream()
+                .flatMap(time -> partidaRepository.findByTime1OrTime2(time, time).stream())
+                .flatMap(partida -> Stream.of(partida.getTime1(), partida.getTime2()))
+                .collect(Collectors.toSet());
+
+        // Buscar jogadores enfrentados nos times encontrados e transformar em AcademicoDto
+        Set<AcademicoDto> academicosEnfrentados = timesPartidas.stream()
+                .flatMap(time -> jogadorRepository.findByTime(time).stream())
+                .map(Jogador::getAcademico)
+                .filter(jogador -> !jogador.equals(academico)) // Excluir o próprio acadêmico
+                .map(Academico::toDto)
+                .collect(Collectors.toSet());
+
+        return new ArrayList<>(academicosEnfrentados);
+    }
 
     public JogadorDto mudarSituacaoJogador(Long idJogador, int situacao ) throws TipoInvalidoException, RegistroNaoEncontradoException{
         Optional<Jogador> jogador = jogadorRepository.findById(idJogador);

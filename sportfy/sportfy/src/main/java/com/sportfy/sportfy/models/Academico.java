@@ -52,6 +52,24 @@ public class Academico implements Serializable {
         this.usuario.setFoto(academicoDto.foto());
     }
 
+    public static AcademicoDto toDto(Academico academico) {
+        return new AcademicoDto(
+                academico.getIdAcademico(),
+                academico.getCurso(),
+                academico.getUsuario().getUsername(),
+                academico.getEmail(),
+                null,
+                academico.getUsuario().getNome(),
+                academico.getUsuario().getGenero(),
+                academico.getUsuario().getTelefone(),
+                academico.getUsuario().getDataNascimento(),
+                academico.getUsuario().getFoto(),
+                academico.getUsuario().getDataCriacao(),
+                academico.getUsuario().isAtivo(),
+                academico.getUsuario().getPermissao()
+        );
+    }
+
     public void atualizar(Long idAcademico, Long idUsuario, AcademicoDto academicoDto) {
         if (idAcademico != null) {
             this.idAcademico = idAcademico;

@@ -234,6 +234,20 @@ public class CampeonatoController {
         }
     }
 
+    @GetMapping("/{idAcademico}/jogadores-enfrentados")
+    public ResponseEntity<List<AcademicoDto>> listarJogadoresEnfrentados(@PathVariable Long idAcademico) {
+        try {
+            List<AcademicoDto> jogadoresEnfrentados = campeonatoService.listarJogadoresEnfrentados(idAcademico);
+            return ResponseEntity.ok(jogadoresEnfrentados);
+        } catch (RegistroNaoEncontradoException e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
     @PutMapping("/{id}/situacao")
     @PermitAll
     public ResponseEntity<JogadorDto> mudarSituacaoJogador(@PathVariable Long id, @RequestParam int situacao) {
