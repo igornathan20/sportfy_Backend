@@ -256,7 +256,7 @@ public class CampeonatoService {
         Optional<Time> timeEncontrado = timeRepository.findByNomeAndCampeonato(novoTime.nome(), campeonato.get());
 
         if (timeEncontrado.isEmpty()) {
-            if (campeonato.get().getDataFim().isAfter(OffsetDateTime.now()) && campeonato.get().getSituacaoCampeonato() != TipoSituacao.FINALIZADO && campeonato.get().getSituacaoCampeonato() != TipoSituacao.INICIADO) {
+            if (campeonato.get().getDataFim().isAfter(OffsetDateTime.now()) && campeonato.get().getSituacaoCampeonato() == TipoSituacao.EM_ABERTO && campeonato.get().getLimiteParticipantes() > 1) {
                 if (campeonato.get().getPrivacidadeCampeonato() == TipoPrivacidadeCampeonato.PUBLICO || passwordEncoder.matches(novoTime.senhaCampeonato(), campeonato.get().getSenha())){
                     Time timeCriado = new Time();
                     timeCriado.setNome(novoTime.nome());
@@ -279,7 +279,7 @@ public class CampeonatoService {
         Optional<Academico> academico = academicoRepository.findById(idAcademico);
 
         if (timeEncontrado.isPresent()) {
-            if (campeonato.get().getDataFim().isAfter(OffsetDateTime.now()) && campeonato.get().getSituacaoCampeonato() != TipoSituacao.FINALIZADO  && campeonato.get().getSituacaoCampeonato() != TipoSituacao.INICIADO) {
+            if (campeonato.get().getDataFim().isAfter(OffsetDateTime.now()) && campeonato.get().getSituacaoCampeonato() != TipoSituacao.FINALIZADO ) {
                 if (campeonato.get().getPrivacidadeCampeonato() == TipoPrivacidadeCampeonato.PUBLICO || passwordEncoder.matches(timeDto.senhaCampeonato(), campeonato.get().getSenha())){
                     Jogador novoJogador = new Jogador();
                     novoJogador.setModalidadeEsportiva(campeonato.get().getModalidadeEsportiva());
