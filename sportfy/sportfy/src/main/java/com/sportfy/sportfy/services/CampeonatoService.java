@@ -405,6 +405,29 @@ public class CampeonatoService {
         if (campeonato.isPresent()){
             List<Time> times = timeRepository.findByCampeonato(campeonato.get());
 
+            for (int i = 0; i < times.size();i ++){
+                List<Jogador> jogador = jogadorRepository.findByTime(times.get(i));
+                if (campeonato.get().getLimiteParticipantes() == 1) {
+                    if (jogador.getFirst().getSituacaoJogador() == TipoSituacaoJogador.BLOQUEADO) {
+                        jogadorRepository.delete(jogador.getFirst());
+                        timeRepository.delete(times.get(i));
+                        times.remove(times.get(i));
+                    }
+                }
+                if (campeonato.get().getLimiteParticipantes() > 1){
+                    for (Jogador j : jogador) {
+                        if (j.getSituacaoJogador() == TipoSituacaoJogador.BLOQUEADO) {
+                            jogadorRepository.delete(j);
+                        }
+                    }
+                    if (jogador.isEmpty()){
+                        timeRepository.delete(times.get(i));
+                        times.remove(times.get(i));
+                    }
+                }
+            }
+
+
             int numeroDeTimes = times.size();
             int numeroMaximoTimes = calcularProximaPotenciaDeDois(numeroDeTimes);
             switch (numeroMaximoTimes){
@@ -510,6 +533,29 @@ public class CampeonatoService {
                 times.add(partidasFaseAnterior.get(i).getResultado().getVencedor());
                 partidasFaseAnterior.get(i).setSituacaoPartida(TipoSituacao.FINALIZADO);
             }
+
+            for (int i = 0; i < times.size();i ++){
+                List<Jogador> jogador = jogadorRepository.findByTime(times.get(i));
+                if (campeonato.get().getLimiteParticipantes() == 1) {
+                    if (jogador.getFirst().getSituacaoJogador() == TipoSituacaoJogador.BLOQUEADO) {
+                        jogadorRepository.delete(jogador.getFirst());
+                        timeRepository.delete(times.get(i));
+                        times.remove(times.get(i));
+                    }
+                }
+                if (campeonato.get().getLimiteParticipantes() > 1){
+                    for (Jogador j : jogador) {
+                        if (j.getSituacaoJogador() == TipoSituacaoJogador.BLOQUEADO) {
+                            jogadorRepository.delete(j);
+                        }
+                    }
+                    if (jogador.isEmpty()){
+                        timeRepository.delete(times.get(i));
+                        times.remove(times.get(i));
+                    }
+                }
+            }
+
             int numeroDeTimes = times.size();
 
             switch (campeonato.get().getFaseAtual()) {
