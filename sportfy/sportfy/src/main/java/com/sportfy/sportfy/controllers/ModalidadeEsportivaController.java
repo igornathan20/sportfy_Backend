@@ -112,7 +112,7 @@ public class ModalidadeEsportivaController {
         try {
             List<ModalidadeEsportiva> modalidadeAcademico = modalidadeEsportivaService.listarModalidadesInscritas(idAcademico);
             return ResponseEntity.status(HttpStatus.OK).body(modalidadeAcademico);
-        } catch (AcademicoNaoExisteException e) {
+        } catch (AcademicoNaoExisteException | RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {

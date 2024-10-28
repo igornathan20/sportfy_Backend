@@ -2,10 +2,12 @@ package com.sportfy.sportfy.services;
 
 import com.sportfy.sportfy.dtos.ApoioSaudeDto;
 import com.sportfy.sportfy.dtos.ApoioSaudeResponseDto;
+import com.sportfy.sportfy.dtos.CampeonatoDto;
 import com.sportfy.sportfy.exeptions.AdministradorNaoExisteException;
 import com.sportfy.sportfy.exeptions.RegistroNaoEncontradoException;
 import com.sportfy.sportfy.models.Administrador;
 import com.sportfy.sportfy.models.ApoioSaude;
+import com.sportfy.sportfy.models.Campeonato;
 import com.sportfy.sportfy.repositories.AdministradorRepository;
 import com.sportfy.sportfy.repositories.ApoioSaudeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +78,18 @@ public class ApoioSaudeService {
             apoioSaudeRepository.deleteById(id);
             return ApoioSaude.toDto(apoioSaude.get());
         }else {
+            throw new RegistroNaoEncontradoException("Registro de apoio a saude nao encontrado!");
+        }
+    }
+
+    public ApoioSaudeResponseDto desativarApoioSaude(Long id) throws RegistroNaoEncontradoException {
+        Optional<ApoioSaude> apoioSaude = apoioSaudeRepository.findById(id);
+
+        if (apoioSaude.isPresent()) {
+            ApoioSaude apoioSaudeDesativado = apoioSaude.get();
+            apoioSaudeDesativado.setAtivo(false);
+            return apoioSaude.get().toDto(apoioSaudeRepository.save(apoioSaudeDesativado));
+        } else {
             throw new RegistroNaoEncontradoException("Registro de apoio a saude nao encontrado!");
         }
     }

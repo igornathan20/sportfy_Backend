@@ -273,27 +273,47 @@ public class CampeonatoService {
         }
     }
 
+    public List<TimeDto> listarTimesCampeonato(Long idCampeonato) throws RegistroNaoEncontradoException {
+        Optional<Campeonato> campeonato = campeonatoRepository.findById(idCampeonato);
+
+        if (campeonato.isPresent()) {
+            List<TimeDto> times = timeRepository.findByCampeonato(campeonato.get()).stream()
+                    .map( time -> time.toDto(time)).collect(Collectors.toList());
+            if (times.isEmpty()) {
+                throw new RegistroNaoEncontradoException("Nenhum time cadastrado no campeonato!");
+            }
+            return times;
+        } else {
+            throw new RegistroNaoEncontradoException("O campeonato com id " + idCampeonato + " não foi encontrado");
+        }
+    }
+
     public JogadorDto adicionarJogadorTime(TimeDto timeDto, Long idAcademico) throws CampeonatoInvalidoException, TimeInvalidoException, PasswordInvalidoException{
         Optional<Campeonato> campeonato = campeonatoRepository.findById(timeDto.campeonato());
         Optional<Time> timeEncontrado = timeRepository.findByNomeAndCampeonato(timeDto.nome(), campeonato.get());
         Optional<Academico> academico = academicoRepository.findById(idAcademico);
 
         if (timeEncontrado.isPresent()) {
-            if (campeonato.get().getDataFim().isAfter(OffsetDateTime.now()) && campeonato.get().getSituacaoCampeonato() != TipoSituacao.FINALIZADO ) {
-                if (campeonato.get().getPrivacidadeCampeonato() == TipoPrivacidadeCampeonato.PUBLICO || passwordEncoder.matches(timeDto.senhaCampeonato(), campeonato.get().getSenha())){
-                    Jogador novoJogador = new Jogador();
-                    novoJogador.setModalidadeEsportiva(campeonato.get().getModalidadeEsportiva());
-                    novoJogador.setAcademico(academico.get());
-                    novoJogador.setTime(timeEncontrado.get());
-                    return novoJogador.toDto(jogadorRepository.save(novoJogador));
-                }else {
-                    throw new PasswordInvalidoException("Senha do campeonato invalida!");
+            List<Jogador> jogadores = jogadorRepository.findByTime(timeEncontrado.get());
+            if (jogadores.size() <= campeonato.get().getLimiteParticipantes()){
+                if (campeonato.get().getDataFim().isAfter(OffsetDateTime.now()) && campeonato.get().getSituacaoCampeonato() != TipoSituacao.FINALIZADO ) {
+                    if (campeonato.get().getPrivacidadeCampeonato() == TipoPrivacidadeCampeonato.PUBLICO || passwordEncoder.matches(timeDto.senhaCampeonato(), campeonato.get().getSenha())){
+                        Jogador novoJogador = new Jogador();
+                        novoJogador.setModalidadeEsportiva(campeonato.get().getModalidadeEsportiva());
+                        novoJogador.setAcademico(academico.get());
+                        novoJogador.setTime(timeEncontrado.get());
+                        return novoJogador.toDto(jogadorRepository.save(novoJogador));
+                    }else {
+                        throw new PasswordInvalidoException("Senha do campeonato invalida!");
+                    }
+                } else {
+                    throw new CampeonatoInvalidoException("O campeonato ja esta finalizado!");
                 }
-            } else {
-                throw new CampeonatoInvalidoException("O campeonato ja esta finalizado!");
+            }else {
+                throw new TimeInvalidoException("Limite de jogadores no time excedido!");
             }
         } else{
-            throw new TimeInvalidoException("Um time com esse nome ja esta cadastrado!");
+            throw new TimeInvalidoException("Time invalido!");
         }
     }
 
@@ -303,20 +323,24 @@ public class CampeonatoService {
         if (campeonato.isPresent() && academico.isPresent()){
             Optional<Time> timeEncontrado = timeRepository.findByNomeAndCampeonato(academico.get().getUsuario().getUsername(), campeonato.get());
             if (timeEncontrado.isEmpty()) {
-                if (campeonato.get().getDataFim().isAfter(OffsetDateTime.now()) && campeonato.get().getSituacaoCampeonato() != TipoSituacao.FINALIZADO && campeonato.get().getLimiteParticipantes() == 1) {
-                    if (campeonato.get().getPrivacidadeCampeonato() == TipoPrivacidadeCampeonato.PUBLICO || passwordEncoder.matches(senhaCampeonato, campeonato.get().getSenha())){
-                        Time timeCriado = new Time();
-                        timeCriado.setNome(academico.get().getUsuario().getUsername());
-                        timeCriado.setCampeonato(campeonato.get());
+                if (campeonato.get().getDataFim().isAfter(OffsetDateTime.now()) && campeonato.get().getSituacaoCampeonato() != TipoSituacao.FINALIZADO ) {
+                    if (campeonato.get().getLimiteParticipantes() == 1){
+                        if (campeonato.get().getPrivacidadeCampeonato() == TipoPrivacidadeCampeonato.PUBLICO || passwordEncoder.matches(senhaCampeonato, campeonato.get().getSenha())){
+                            Time timeCriado = new Time();
+                            timeCriado.setNome(academico.get().getUsuario().getUsername());
+                            timeCriado.setCampeonato(campeonato.get());
 
-                        Jogador novoJogador = new Jogador();
-                        novoJogador.setModalidadeEsportiva(campeonato.get().getModalidadeEsportiva());
-                        novoJogador.setAcademico(academico.get());
-                        novoJogador.setTime(timeCriado);
-                        jogadorRepository.save(novoJogador);
-                        return timeCriado.toDto(timeCriado);
+                            Jogador novoJogador = new Jogador();
+                            novoJogador.setModalidadeEsportiva(campeonato.get().getModalidadeEsportiva());
+                            novoJogador.setAcademico(academico.get());
+                            novoJogador.setTime(timeCriado);
+                            jogadorRepository.save(novoJogador);
+                            return timeCriado.toDto(timeCriado);
+                        }else {
+                            throw new PasswordInvalidoException("Senha do campeonato invalida!");
+                        }
                     }else {
-                        throw new PasswordInvalidoException("Senha do campeonato invalida!");
+                        throw new TimeInvalidoException("Limite de jogadores no time excedido!");
                     }
                 } else {
                     throw new CampeonatoInvalidoException("O campeonato ja esta finalizado!");
@@ -338,7 +362,7 @@ public class CampeonatoService {
             ).collect(Collectors.toList());
 
             if (jogadores.isEmpty()) {
-                System.out.println("Nenhum jogador encontrado para o campeonato.");
+                throw new RegistroNaoEncontradoException("Nenhum jogador foi encontrado!");
             }
 
             return jogadores;

@@ -42,6 +42,9 @@ public class ApoioSaude implements Serializable {
     @JoinColumn(name="id_administrador", updatable = false, nullable = false)
     private Administrador administrador;
 
+    @Column(name = "ativo", insertable = false)
+    private boolean ativo;
+
     public void fromDto(ApoioSaudeDto dto) {
         if (dto.nome() != null) {
             this.nome = dto.nome();
@@ -65,7 +68,8 @@ public class ApoioSaude implements Serializable {
                 apoioSaude.getTelefone(),
                 apoioSaude.getDescricao(),
                 apoioSaude.getDataPublicacao(),
-                apoioSaude.getAdministrador() != null ? apoioSaude.getAdministrador().getIdAdministrador() : null
+                apoioSaude.getAdministrador() != null ? apoioSaude.getAdministrador().getIdAdministrador() : null,
+                apoioSaude.ativo
         );
     }
 }

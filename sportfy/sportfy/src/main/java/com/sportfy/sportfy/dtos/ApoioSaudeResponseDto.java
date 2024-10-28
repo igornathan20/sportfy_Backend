@@ -9,6 +9,7 @@ public record ApoioSaudeResponseDto(
         String telefone,
         String descricao,
         OffsetDateTime dataPublicacao,
-        Long idAdministrador
+        Long idAdministrador,
+        boolean ativo
 ) {}
 

@@ -2,10 +2,12 @@ package com.sportfy.sportfy.controllers;
 
 import com.sportfy.sportfy.dtos.ApoioSaudeDto;
 import com.sportfy.sportfy.dtos.ApoioSaudeResponseDto;
+import com.sportfy.sportfy.dtos.CampeonatoDto;
 import com.sportfy.sportfy.exeptions.AdministradorNaoExisteException;
 import com.sportfy.sportfy.exeptions.RegistroNaoEncontradoException;
 import com.sportfy.sportfy.models.ApoioSaude;
 import com.sportfy.sportfy.services.ApoioSaudeService;
+import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -80,6 +82,21 @@ public class ApoioSaudeController {
         try {
             ApoioSaudeResponseDto apoioSaudeExcluido = apoioSaudeService.excluirApoioSaude(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(apoioSaudeExcluido);
+        } catch (RegistroNaoEncontradoException e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PatchMapping("/desativar/{id}")
+    @PermitAll
+    public ResponseEntity<ApoioSaudeResponseDto> desativarApoioSaude(@PathVariable Long id) {
+        try {
+            ApoioSaudeResponseDto apoioSaude = apoioSaudeService.desativarApoioSaude(id);
+            return ResponseEntity.status(HttpStatus.OK).body(apoioSaude);
         } catch (RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);

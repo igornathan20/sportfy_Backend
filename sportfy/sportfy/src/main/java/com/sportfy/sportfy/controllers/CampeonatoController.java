@@ -186,6 +186,21 @@ public class CampeonatoController {
         }
     }
 
+    @GetMapping("/{idCampeonato}/times")
+    @PermitAll
+    public ResponseEntity<List<TimeDto>> listarTimesCampeonato(@PathVariable Long idCampeonato) {
+        try {
+            List<TimeDto> campeonatos = campeonatoService.listarTimesCampeonato(idCampeonato);
+            return ResponseEntity.status(HttpStatus.OK).body(campeonatos);
+        } catch (RegistroNaoEncontradoException  e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
     @PostMapping("/times/{idAcademico}")
     @PermitAll
     public ResponseEntity<JogadorDto> adicionarJogadorTime(@RequestBody TimeDto timeDto, @PathVariable Long idAcademico) {

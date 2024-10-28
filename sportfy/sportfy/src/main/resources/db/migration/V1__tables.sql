@@ -116,6 +116,7 @@ CREATE TABLE apoio_saude (
 	descricao TEXT NOT NULL,
 	data_publicacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	id_administrador INT NOT NULL,
+	ativo BOOLEAN DEFAULT TRUE,
 	CONSTRAINT fk_apoio_saude_administrador FOREIGN KEY (id_administrador) REFERENCES administrador(id_administrador)
 );
 

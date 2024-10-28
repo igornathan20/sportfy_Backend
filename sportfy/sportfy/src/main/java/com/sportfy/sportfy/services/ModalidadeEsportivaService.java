@@ -146,10 +146,16 @@ public class ModalidadeEsportivaService {
         }
     }
 
-    public List<ModalidadeEsportiva> listarModalidadesInscritas(Long idAcademico) throws AcademicoNaoExisteException{
+    public List<ModalidadeEsportiva> listarModalidadesInscritas(Long idAcademico) throws AcademicoNaoExisteException, RegistroNaoEncontradoException{
         Optional<Academico>academico = academicoRepository.findById(idAcademico);
         if (academico.isPresent()) {
-            return academico.get().getModalidadeEsportivas();
+            if (!academico.get().getModalidadeEsportivas().isEmpty()){
+                return academico.get().getModalidadeEsportivas();
+            }else {
+                throw new RegistroNaoEncontradoException("O academico nao esta inscrito em nenhuma modalidade!");
+            }
+
+
         } else {
             throw new AcademicoNaoExisteException("Usuario não encontrado!");
         }
