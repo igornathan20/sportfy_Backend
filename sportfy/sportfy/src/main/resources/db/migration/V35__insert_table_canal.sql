@@ -32,6 +32,19 @@ INSERT INTO academico (email, curso, id_usuario) VALUES ('michaela@ufpr.br', 'An
 INSERT INTO academico (email, curso, id_usuario) VALUES ('mauro@ufpr.br', 'Engenharia Mecânica', 10);
 
 
+-- DADOS TESTE PRIVACIDADE
+INSERT INTO privacidade (id_academico, mostrar_modalidades_esportivas, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (1, TRUE, FALSE, FALSE, FALSE);
+INSERT INTO privacidade (id_academico, mostrar_modalidades_esportivas, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (2, TRUE, TRUE, FALSE, TRUE);
+INSERT INTO privacidade (id_academico, mostrar_modalidades_esportivas, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (3, FALSE, FALSE, TRUE, FALSE);
+INSERT INTO privacidade (id_academico, mostrar_modalidades_esportivas, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (4, TRUE, FALSE, TRUE, FALSE);
+INSERT INTO privacidade (id_academico, mostrar_modalidades_esportivas, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (5, FALSE, FALSE, TRUE, FALSE);
+INSERT INTO privacidade (id_academico, mostrar_modalidades_esportivas, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (6, TRUE, FALSE, TRUE, TRUE);
+INSERT INTO privacidade (id_academico, mostrar_modalidades_esportivas, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (7, FALSE, FALSE, TRUE, TRUE);
+INSERT INTO privacidade (id_academico, mostrar_modalidades_esportivas, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (8, TRUE, TRUE, FALSE, FALSE);
+INSERT INTO privacidade (id_academico, mostrar_modalidades_esportivas, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (9, TRUE, TRUE, TRUE, TRUE);
+INSERT INTO privacidade (id_academico, mostrar_modalidades_esportivas, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (10, TRUE, TRUE, TRUE, FALSE);
+
+
 -- DADOS TESTE ADMINISTRADOR
 INSERT INTO administrador (id_usuario) VALUES (11);
 INSERT INTO administrador (id_usuario) VALUES (12);
