@@ -78,6 +78,37 @@ INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('meta d
 INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('fut domingo', 'Tava afim de participar de algum campeonato de futebol no próximo domingo, alguém topa?', 1, 4);
 INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Modalidade para cinuca', 'Galera queria saber o que vocês acham de ter uma modalidade acadêmica para cinuca? Tava pensando em criar...', 1, 12);
 INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('novidade', 'Pessoal olha o que eu descobri: prática esportiva oferece inúmeros benefícios para a saúde física e mental. Fisicamente, melhora a capacidade cardiovascular, fortalece os músculos e ossos, além de ajudar na manutenção de um peso saudável. Mentalmente, o esporte promove a liberação de endorfinas, reduzindo o estresse, a ansiedade e o risco de depressão. Também desenvolve habilidades sociais, como trabalho em equipe, e melhora a disciplina e a autoconfiança. Esses fatores contribuem para uma melhor qualidade de vida e bem-estar geral. Bora praticar mais.', 1, 8);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Corrida noturna', 'Alguém animado para uma corrida à noite? Podemos fazer um grupo pra isso.', 1, 5);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Yoga ao ar livre', 'Pessoal, pensei em fazer uma sessão de yoga ao ar livre. Alguém se interessa?', 1, 6);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Desafio semanal', 'Que tal uma meta de passos por dia? Quem chega a 10 mil todos os dias essa semana?', 1, 7);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Treino funcional', 'Vou fazer um treino funcional no parque. Quem topa?', 1, 8);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Futebol no sábado', 'Bora marcar um futebol para o próximo sábado? Precisamos de mais dois jogadores.', 1, 9);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Trilha no fim de semana', 'Quem tá afim de fazer uma trilha no domingo? Previsão de tempo tá ótima!', 1, 10);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Dicas para alongamento', 'Alguém tem dicas de alongamentos para fazer antes da corrida?', 1, 11);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Campeonato de vôlei', 'Estou organizando um campeonato de vôlei, quem quiser participar manda mensagem!', 1, 12);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Desafio de flexões', 'Quem consegue fazer 50 flexões por dia essa semana?', 1, 13);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Passeio ciclístico', 'Vamos organizar um passeio ciclístico para o próximo mês. Quem anima?', 1, 14);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Novas regras para futsal', 'Estava pensando em novas regras para nosso jogo de futsal, que tal discutirmos?', 1, 1);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Treino de natação', 'Quem quiser participar do treino de natação, confirme aqui!', 1, 2);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Maratona de filmes esportivos', 'Pessoal, maratona de filmes de esportes hoje à noite. Qualquer um pode vir!', 1, 3);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Aula de skate', 'Alguém com experiência no skate que possa ensinar o básico?', 1, 4);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Crossfit ao ar livre', 'Galera, bora fazer um treino de crossfit no parque? Preciso de companhia!', 1, 5);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Exercícios de respiração', 'Pessoal, aprendi alguns exercícios de respiração. Posso ensinar pra quem quiser.', 1, 6);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Boliche na sexta', 'Que tal uma partida de boliche na sexta-feira? Só para descontrair.', 1, 7);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Polo aquático', 'Alguém sabe jogar polo aquático? Podíamos montar um time.', 1, 8);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Treino HIIT', 'Proponho um treino HIIT amanhã de manhã. Quem topa?', 1, 9);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Racha de basquete', 'Quem anima para um racha de basquete amanhã à tarde?', 1, 10);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Arremesso de peso', 'Alguém tem dicas para melhorar no arremesso de peso?', 1, 11);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Treino de MMA', 'Galera, treino de MMA aberto para iniciantes e avançados!', 1, 12);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Caminhada para iniciantes', 'Caminhada para quem quer começar a se exercitar, vamos juntos!', 1, 13);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Corrida com obstáculos', 'Corrida com obstáculos na areia, quem se habilita?', 1, 14);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Aula de boxe', 'Aula de boxe para iniciantes, alguém interessado?', 1, 1);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Dicas de alimentação', 'Pessoal, alguém tem boas dicas de alimentação para atletas?', 1, 2);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Campeonato de tênis', 'Alguém sabe onde podemos organizar um campeonato de tênis?', 1, 3);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Golfe para todos', 'Sessão de golfe amanhã, quem quiser aprender mais sobre o esporte é bem-vindo!', 1, 4);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Futebol de areia', 'Vamos fazer um futebol de areia na praia sábado?', 1, 5);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Dicas de corrida', 'Algum corredor experiente para dar umas dicas?', 1, 6);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Treino de alto rendimento', 'Estou montando uma rotina de treino de alto rendimento, interessados?', 1, 7);
 
 
 -- DADOS TESTE CURTIDA_PUBLICACAO
@@ -87,11 +118,9 @@ INSERT INTO curtida_publicacao (id_publicacao, id_usuario) VALUES (1, 7);
 INSERT INTO curtida_publicacao (id_publicacao, id_usuario) VALUES (1, 8);
 INSERT INTO curtida_publicacao (id_publicacao, id_usuario) VALUES (1, 9);
 INSERT INTO curtida_publicacao (id_publicacao, id_usuario) VALUES (1, 10);
-
 INSERT INTO curtida_publicacao (id_publicacao, id_usuario) VALUES (2, 3);
 INSERT INTO curtida_publicacao (id_publicacao, id_usuario) VALUES (2, 6);
 INSERT INTO curtida_publicacao (id_publicacao, id_usuario) VALUES (2, 9);
-
 INSERT INTO curtida_publicacao (id_publicacao, id_usuario) VALUES (3, 1);
 INSERT INTO curtida_publicacao (id_publicacao, id_usuario) VALUES (3, 2);
 INSERT INTO curtida_publicacao (id_publicacao, id_usuario) VALUES (3, 3);
@@ -107,15 +136,20 @@ INSERT INTO curtida_publicacao (id_publicacao, id_usuario) VALUES (3, 12);
 INSERT INTO curtida_publicacao (id_publicacao, id_usuario) VALUES (3, 13);
 INSERT INTO curtida_publicacao (id_publicacao, id_usuario) VALUES (3, 14);
 INSERT INTO curtida_publicacao (id_publicacao, id_usuario) VALUES (3, 15);
-
 INSERT INTO curtida_publicacao (id_publicacao, id_usuario) VALUES (5, 8);
 INSERT INTO curtida_publicacao (id_publicacao, id_usuario) VALUES (5, 10);
-
 INSERT INTO curtida_publicacao (id_publicacao, id_usuario) VALUES (6, 4);
 INSERT INTO curtida_publicacao (id_publicacao, id_usuario) VALUES (6, 6);
 INSERT INTO curtida_publicacao (id_publicacao, id_usuario) VALUES (6, 7);
 INSERT INTO curtida_publicacao (id_publicacao, id_usuario) VALUES (6, 8);
 INSERT INTO curtida_publicacao (id_publicacao, id_usuario) VALUES (6, 13);
+INSERT INTO curtida_publicacao (id_publicacao, id_usuario) VALUES (10, 13);
+INSERT INTO curtida_publicacao (id_publicacao, id_usuario) VALUES (10, 14);
+INSERT INTO curtida_publicacao (id_publicacao, id_usuario) VALUES (10, 15);
+INSERT INTO curtida_publicacao (id_publicacao, id_usuario) VALUES (13, 8);
+INSERT INTO curtida_publicacao (id_publicacao, id_usuario) VALUES (16, 10);
+INSERT INTO curtida_publicacao (id_publicacao, id_usuario) VALUES (19, 4);
+INSERT INTO curtida_publicacao (id_publicacao, id_usuario) VALUES (26, 8);
 
 
 -- DADOS TESTE COMENTARIO
@@ -123,9 +157,7 @@ INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Eu consig
 INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('quase certeza que sim', 1, 7);
 INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('consigo depois das 18h', 1, 8);
 INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Vai ser dahora piazada, vou criar o campeonato às 18h então.', 1, 1);
-
 INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('eu to fazendo um que estou achando bem legal de concluir o cubo mágico 3 vezes por dia', 2, 1);
-
 INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Parabéns!!', 3, 1);
 INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Nice!', 3, 2);
 INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Bom demais!', 3, 4);
@@ -141,11 +173,44 @@ INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('camisa 10
 INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Brabíssimo!', 3, 14);
 INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('joga y joga!', 3, 15);
 INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Obrigado a todos pelas mensagens!', 3, 3);
-
 INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Putz vou viajar se não eu participaria de algum também', 4, 1);
-
 INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Eu gostei da ideia', 5, 4);
 INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('boa, conheço alguns acadêmicos que jogam além de mim tbm', 5, 9);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Eu topo participar também!', 7, 3);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Pode contar comigo nesse treino!', 8, 6);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Alguém mais vai para essa corrida?', 9, 5);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Ótima ideia! Vamos marcar logo.', 10, 8);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Eu já faço isso todo dia, super apoio!', 11, 7);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Show, vou me organizar para estar lá!', 12, 9);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Isso vai ser épico!', 13, 10);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Podemos gravar para o canal também?', 14, 11);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Bora nessa!', 15, 12);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Ótima iniciativa! Com certeza estarei lá.', 15, 1);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Esse evento vai ser incrível!', 15, 2);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Alguém sabe a que horas vai começar?', 15, 3);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Contem comigo! Vou levar alguns amigos também.', 15, 4);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Essa é uma ótima oportunidade para aprender mais.', 15, 5);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Se precisarem de ajuda com a organização, podem me chamar.', 15, 6);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Estou muito animado para isso!', 15, 7);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Não vejo a hora! Vai ser ótimo.', 15, 8);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Boa! Faz tempo que espero por algo assim.', 15, 9);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Alguém vai de carona? Posso ajudar com a gasolina.', 15, 10);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Show de bola! Vou estar presente!', 15, 11);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Galera, posso filmar para registrar o evento?', 15, 12);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Quem aí está treinando para isso? Preciso de um parceiro.', 15, 13);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Vai ser bom demais, já estou ansioso!', 15, 14);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Levem água e lanches, vai ser um dia longo!', 15, 1);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Tava esperando por algo assim!', 16, 4);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Quem quiser dicas de flexão, só chamar!', 17, 13);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Eu sou iniciante mas quero tentar!', 18, 2);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Quem não quer perder essa, comenta aí!', 19, 14);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Super indico essa rotina, já fiz e é top!', 20, 1);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Alguém tem fotos de quando fizemos isso ano passado?', 21, 3);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Achei muito bom o último treino!', 22, 5);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Preciso dessa disciplina no meu treino também!', 23, 4);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Treino foi puxado, mas valeu muito!', 24, 6);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Top, vou me preparar para o próximo!', 25, 8);
+INSERT INTO comentario (descricao, id_publicacao, id_usuario) VALUES ('Quem ainda não participou, recomendo muito!', 26, 9);
 
 
 -- DADOS TESTE CURTIDA_COMENTARIO

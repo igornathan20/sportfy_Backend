@@ -33,18 +33,12 @@ public record PublicacaoDto(
 
     Long idModalidadeEsportiva,
 
-    List<UsuarioDto> listaUsuarioCurtida,
-
-    List<ComentarioDto> listaComentario
+    List<UsuarioDto> listaUsuarioCurtida
 ) {
     public static PublicacaoDto fromPublicacaoBD(Publicacao publicacao) {
         List<UsuarioDto> listaUsuarioCurtida = new ArrayList<UsuarioDto>();
-        List<ComentarioDto> listaComentario = new ArrayList<ComentarioDto>();
         if (publicacao.getListaCurtidaPublicacao() != null && !publicacao.getListaCurtidaPublicacao().isEmpty()) {
             listaUsuarioCurtida = publicacao.getListaCurtidaPublicacao().stream().map(curtidaPublicacao -> UsuarioDto.fromUsuarioBD(curtidaPublicacao.getUsuario())).collect(Collectors.toList());
-        }
-        if (publicacao.getListaComentario() != null && !publicacao.getListaComentario().isEmpty()) {
-            listaComentario = publicacao.getListaComentario().stream().map(comentario -> ComentarioDto.fromComentarioBD(comentario)).collect(Collectors.toList());
         }
         return new PublicacaoDto(
             publicacao.getIdPublicacao(),
@@ -54,8 +48,7 @@ public record PublicacaoDto(
             publicacao.getCanal().getIdCanal(),
             UsuarioDto.fromUsuarioBD(publicacao.getUsuario()),
             publicacao.getIdModalidadeEsportiva(),
-            listaUsuarioCurtida,
-            listaComentario
+            listaUsuarioCurtida
         );
     }
 }

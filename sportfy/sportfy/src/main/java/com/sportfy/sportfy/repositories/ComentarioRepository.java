@@ -1,5 +1,7 @@
 package com.sportfy.sportfy.repositories;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,4 +18,5 @@ public interface ComentarioRepository extends JpaRepository<Comentario, Long> {
     @Modifying
     @Query("DELETE FROM Comentario c WHERE c.idComentario = :idComentario")
     void deleteComentarioById(@Param("idComentario") Long idComentario);
+    Page<Comentario> findByPublicacaoIdPublicacao(Long idPublicacao, Pageable pageable);
 }
