@@ -31,6 +31,7 @@ public class ApoioSaudeService {
             ApoioSaude novoRegistro = new ApoioSaude();
             novoRegistro.fromDto(apoioSaudeDto);
             novoRegistro.setAdministrador(administrador.get());
+            novoRegistro.setAtivo(true);
             return ApoioSaude.toDto(apoioSaudeRepository.save(novoRegistro));
         }else {
             throw new AdministradorNaoExisteException("O Usuario nao existe!");

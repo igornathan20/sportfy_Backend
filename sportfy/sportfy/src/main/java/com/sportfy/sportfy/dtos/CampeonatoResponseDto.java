@@ -15,9 +15,9 @@ public record CampeonatoResponseDto(
         int limiteParticipantes,
         boolean ativo,
         EnderecoDto endereco,
-        int privacidadeCampeonato,
+        String privacidadeCampeonato,
         Long idAcademico,
         Long idModalidadeEsportiva,
-        int situacaoCampeonato
+        String situacaoCampeonato
 ) {
 }

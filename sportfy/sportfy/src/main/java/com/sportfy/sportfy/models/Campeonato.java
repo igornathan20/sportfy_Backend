@@ -3,6 +3,7 @@ package com.sportfy.sportfy.models;
 import java.io.Serializable;
 
 import com.sportfy.sportfy.dtos.CampeonatoDto;
+import com.sportfy.sportfy.dtos.CampeonatoResponseDto;
 import com.sportfy.sportfy.dtos.EnderecoDto;
 import com.sportfy.sportfy.enums.TipoFasePartida;
 import com.sportfy.sportfy.enums.TipoPrivacidadeCampeonato;
@@ -125,10 +126,10 @@ public class Campeonato implements Serializable {
 
 
         switch (dto.privacidadeCampeonato()) {
-            case 0:
+            case "PUBLICO":
                 setPrivacidadeCampeonato(TipoPrivacidadeCampeonato.PUBLICO);
                 break;
-            case 1:
+            case "PRIVADO":
                 setPrivacidadeCampeonato(TipoPrivacidadeCampeonato.PRIVADO);
                 break;
             default:
@@ -136,13 +137,13 @@ public class Campeonato implements Serializable {
         }
 
          switch (dto.situacaoCampeonato()) {
-                case 0:
+                case "EM_ABERTO":
                     setSituacaoCampeonato(TipoSituacao.EM_ABERTO);
                     break;
-                case 1:
+                case "INICIADO":
                     setSituacaoCampeonato(TipoSituacao.INICIADO);
                     break;
-                case 2:
+                case "FINALIZADO":
                     setSituacaoCampeonato(TipoSituacao.FINALIZADO);
                     break;
                 default:
@@ -151,11 +152,10 @@ public class Campeonato implements Serializable {
     }
 
 
-    public CampeonatoDto toDto(Campeonato campeonato) {
-        return new CampeonatoDto(
+    public CampeonatoResponseDto toResponseDto(Campeonato campeonato) {
+        return new CampeonatoResponseDto(
                 campeonato.getIdCampeonato(),
                 campeonato.getCodigo(),
-                "",
                 campeonato.getTitulo(),
                 campeonato.getDescricao(),
                 campeonato.getAposta(),
@@ -166,10 +166,10 @@ public class Campeonato implements Serializable {
                 campeonato.getLimiteParticipantes(),
                 campeonato.isAtivo(),
                 EnderecoDto.fromEntity(campeonato.getEndereco()),
-                campeonato.getPrivacidadeCampeonato().ordinal(),
+                campeonato.getPrivacidadeCampeonato().name(),
                 campeonato.academico.getIdAcademico(),
                 campeonato.getModalidadeEsportiva().getIdModalidadeEsportiva(),
-                campeonato.getSituacaoCampeonato().ordinal()
+                campeonato.getSituacaoCampeonato().name()
         );
     }
 

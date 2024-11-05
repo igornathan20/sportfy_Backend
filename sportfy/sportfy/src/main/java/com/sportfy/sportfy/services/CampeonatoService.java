@@ -41,7 +41,7 @@ public class CampeonatoService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public CampeonatoDto criarCampeonato(CampeonatoDto campeonatoDto) throws AcademicoNaoExisteException, ModalidadeNaoExistenteException, CampeonatoInvalidoException {
+    public CampeonatoResponseDto criarCampeonato(CampeonatoDto campeonatoDto) throws AcademicoNaoExisteException, ModalidadeNaoExistenteException, CampeonatoInvalidoException {
         Optional<Academico> academico = academicoRepository.findById(campeonatoDto.idAcademico());
         Optional<ModalidadeEsportiva> modalidade = modalidadeEsportivaRepository.findById(campeonatoDto.idModalidadeEsportiva());
         Optional<List<Campeonato>> campeonatos = campeonatoRepository.findByTituloAndAtivo(campeonatoDto.titulo(), true);
@@ -62,7 +62,7 @@ public class CampeonatoService {
                         if (campeonatoDto.senha() != null){
                             novoCampeonato.setSenha(passwordEncoder.encode(campeonatoDto.senha()));
                         }
-                        return novoCampeonato.toDto(campeonatoRepository.save(novoCampeonato));
+                        return novoCampeonato.toResponseDto(campeonatoRepository.save(novoCampeonato));
                     } catch (Exception e) {
                         return null;
                     }
@@ -77,7 +77,7 @@ public class CampeonatoService {
         }
     }
 
-    public CampeonatoDto editarCampeonato(Long idCampeonato, CampeonatoDto campeonatoDto) throws RegistroNaoEncontradoException {
+    public CampeonatoResponseDto editarCampeonato(Long idCampeonato, CampeonatoDto campeonatoDto) throws RegistroNaoEncontradoException {
         Optional<Campeonato> campeonato = campeonatoRepository.findById(idCampeonato);
 
         if (campeonato.isPresent()) {
@@ -90,7 +90,7 @@ public class CampeonatoService {
                 if (campeonatoDto.senha() != null){
                     editCampeonato.setSenha(passwordEncoder.encode(campeonatoDto.senha()));
                 }
-                return editCampeonato.toDto(campeonatoRepository.save(editCampeonato));
+                return editCampeonato.toResponseDto(campeonatoRepository.save(editCampeonato));
             } catch (Exception e) {
                 return null;
             }
@@ -99,10 +99,10 @@ public class CampeonatoService {
         }
     }
 
-    public List<CampeonatoDto> listarTodosCampeonatos() throws RegistroNaoEncontradoException {
-        List<CampeonatoDto> campeonatos = campeonatoRepository.findAll().stream()
+    public List<CampeonatoResponseDto> listarTodosCampeonatos() throws RegistroNaoEncontradoException {
+        List<CampeonatoResponseDto> campeonatos = campeonatoRepository.findAll().stream()
                 .filter(Campeonato::isAtivo)
-                .map(campeonato ->  campeonato.toDto(campeonato)
+                .map(campeonato ->  campeonato.toResponseDto(campeonato)
         ).collect(Collectors.toList());
 
         if (campeonatos.isEmpty()) {
@@ -112,7 +112,7 @@ public class CampeonatoService {
         }
     }
 
-    public List<CampeonatoDto> listarCampeonatosComFiltro(CampeonatoDto campeonatoDto) throws RegistroNaoEncontradoException {
+    public List<CampeonatoResponseDto> listarCampeonatosComFiltro(CampeonatoDto campeonatoDto) throws RegistroNaoEncontradoException {
         Specification<Campeonato> spec = Specification.where(null);
 
         if (campeonatoDto.codigo() != null && !campeonatoDto.codigo().isEmpty()) {
@@ -140,7 +140,7 @@ public class CampeonatoService {
                     criteriaBuilder.equal(root.get("ativo"), campeonatoDto.ativo()));
         }
 
-        if (campeonatoDto.privacidadeCampeonato() != 0) {
+        if (campeonatoDto.privacidadeCampeonato() != "PUBLICO") {
             spec = spec.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.equal(root.get("privacidadeCampeonato"), campeonatoDto.privacidadeCampeonato()));
         }
@@ -155,13 +155,13 @@ public class CampeonatoService {
                     criteriaBuilder.equal(root.get("idModalidadeEsportiva"), campeonatoDto.idModalidadeEsportiva()));
         }
 
-        if (campeonatoDto.situacaoCampeonato() != 0) {
+        if (campeonatoDto.situacaoCampeonato() != "EM_ABERTO") {
             spec = spec.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.equal(root.get("situacaoCampeonato"), campeonatoDto.situacaoCampeonato()));
         }
 
-        List<CampeonatoDto> campeonatos = campeonatoRepository.findAll(spec).stream().map(
-                campeonato -> campeonato.toDto(campeonato)
+        List<CampeonatoResponseDto> campeonatos = campeonatoRepository.findAll(spec).stream().map(
+                campeonato -> campeonato.toResponseDto(campeonato)
         ).collect(Collectors.toList());
 
         if (campeonatos.isEmpty()) {
@@ -170,15 +170,15 @@ public class CampeonatoService {
         return campeonatos;
     }
 
-    public List<CampeonatoDto> listarCampeonatosInscritos(Long idAcademico) throws RegistroNaoEncontradoException, AcademicoNaoExisteException {
+    public List<CampeonatoResponseDto> listarCampeonatosInscritos(Long idAcademico) throws RegistroNaoEncontradoException, AcademicoNaoExisteException {
         Optional<Academico> academico = academicoRepository.findById(idAcademico);
 
         if (academico.isPresent()) {
             List<Jogador> participacoesCampeonatos = jogadorRepository.findByAcademico(academico.get());
-            List<CampeonatoDto> campeonatos = new ArrayList<CampeonatoDto>();
+            List<CampeonatoResponseDto> campeonatos = new ArrayList<CampeonatoResponseDto>();
 
             for (int i = 0; i < participacoesCampeonatos.size(); i++){
-                campeonatos.add(participacoesCampeonatos.get(i).getTime().getCampeonato().toDto(participacoesCampeonatos.get(i).getTime().getCampeonato()));
+                campeonatos.add(participacoesCampeonatos.get(i).getTime().getCampeonato().toResponseDto(participacoesCampeonatos.get(i).getTime().getCampeonato()));
             }
 
             if (campeonatos.isEmpty()) {
@@ -190,12 +190,12 @@ public class CampeonatoService {
         }
     }
 
-    public List<CampeonatoDto> listarCampeonatosCriados(Long idAcademico) throws RegistroNaoEncontradoException, AcademicoNaoExisteException {
+    public List<CampeonatoResponseDto> listarCampeonatosCriados(Long idAcademico) throws RegistroNaoEncontradoException, AcademicoNaoExisteException {
         Optional<Academico> academico = academicoRepository.findById(idAcademico);
 
         if (academico.isPresent()) {
-            List<CampeonatoDto> campeonatosCriados = campeonatoRepository.findByAcademico(academico.get()).stream().map(
-                    campeonato -> campeonato.toDto(campeonato)
+            List<CampeonatoResponseDto> campeonatosCriados = campeonatoRepository.findByAcademico(academico.get()).stream().map(
+                    campeonato -> campeonato.toResponseDto(campeonato)
             ).collect(Collectors.toList());
 
             if (campeonatosCriados.isEmpty()) {
@@ -219,13 +219,13 @@ public class CampeonatoService {
         }
     }
 
-    public CampeonatoDto desativarCampeonato(Long id) throws RegistroNaoEncontradoException {
+    public CampeonatoResponseDto desativarCampeonato(Long id) throws RegistroNaoEncontradoException {
         Optional<Campeonato> campeonato = campeonatoRepository.findById(id);
 
         if (campeonato.isPresent()) {
             Campeonato campeonatoDesativado = campeonato.get();
             campeonatoDesativado.setAtivo(false);
-            return campeonato.get().toDto(campeonatoRepository.save(campeonatoDesativado));
+            return campeonato.get().toResponseDto(campeonatoRepository.save(campeonatoDesativado));
         } else {
             throw new RegistroNaoEncontradoException("Registro de apoio a saude nao encontrado!");
         }
@@ -398,21 +398,21 @@ public class CampeonatoService {
         return new ArrayList<>(academicosEnfrentados);
     }
 
-    public JogadorDto mudarSituacaoJogador(Long idJogador, int situacao ) throws TipoInvalidoException, RegistroNaoEncontradoException{
+    public JogadorDto mudarSituacaoJogador(Long idJogador, String situacao ) throws TipoInvalidoException, RegistroNaoEncontradoException{
         Optional<Jogador> jogador = jogadorRepository.findById(idJogador);
 
         if (jogador.isPresent()){
             switch (situacao){
-                case 0:
+                case "EM_ABERTO":
                     jogador.get().setSituacaoJogador(TipoSituacaoJogador.EM_ABERTO);
                     break;
-                case 1:
+                case "ATIVO":
                     jogador.get().setSituacaoJogador(TipoSituacaoJogador.ATIVO);
                     break;
-                case 2:
+                case "BLOQUEADO":
                     jogador.get().setSituacaoJogador(TipoSituacaoJogador.BLOQUEADO);
                     break;
-                case 3:
+                case "FINALIZADO":
                     jogador.get().setSituacaoJogador(TipoSituacaoJogador.FINALIZADO);
                     break;
                 default:
@@ -758,16 +758,16 @@ public class CampeonatoService {
         }
     }
 
-    public List<CampeonatoDto> buscarHistoricoCampeonatoOutrosUsuarios(Long idAcademico) throws AcademicoNaoExisteException, ConteudoPrivadoException{
+    public List<CampeonatoResponseDto> buscarHistoricoCampeonatoOutrosUsuarios(Long idAcademico) throws AcademicoNaoExisteException, ConteudoPrivadoException{
         Optional<Academico> academico = academicoRepository.findById(idAcademico);
 
         if (academico.isPresent()){
             Privacidade privacidade = privacidadeRepository.findByIdAcademico(idAcademico);
             if (privacidade.isMostrarHistoricoCampeonatos()) {
                 List<Jogador> participacoesCampeonatos = jogadorRepository.findByAcademico(academico.get());
-                List<CampeonatoDto> campeonatos = new ArrayList<CampeonatoDto>();
+                List<CampeonatoResponseDto> campeonatos = new ArrayList<CampeonatoResponseDto>();
                 for (int i = 0; i < participacoesCampeonatos.size(); i++){
-                    campeonatos.add(participacoesCampeonatos.get(i).getTime().getCampeonato().toDto(participacoesCampeonatos.get(i).getTime().getCampeonato()));
+                    campeonatos.add(participacoesCampeonatos.get(i).getTime().getCampeonato().toResponseDto(participacoesCampeonatos.get(i).getTime().getCampeonato()));
                 }
                return campeonatos;
             }else {
