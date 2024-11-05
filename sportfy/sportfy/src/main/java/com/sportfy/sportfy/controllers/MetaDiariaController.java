@@ -15,6 +15,12 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/metaDiaria")
+@CrossOrigin(
+        origins = {"http://*", "http://localhost:8081", "http://localhost:3000"},
+        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.PATCH, RequestMethod.OPTIONS},
+        allowedHeaders = "*",
+        allowCredentials = "true"
+)
 public class MetaDiariaController {
     @Autowired
     private MetaDiariaService metaDiariaService;

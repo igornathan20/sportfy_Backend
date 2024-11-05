@@ -16,6 +16,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/academico")
+@CrossOrigin(
+        origins = {"http://*", "http://localhost:8081", "http://localhost:3000"},
+        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.PATCH, RequestMethod.OPTIONS},
+        allowedHeaders = "*",
+        allowCredentials = "true"
+)
 @RequiredArgsConstructor
 public class AcademicoController {
 
