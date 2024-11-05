@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.OffsetDateTime;
 import java.util.*;
 
 @Repository
@@ -14,6 +15,9 @@ public interface ModalidadeEsportivaRepository extends JpaRepository<ModalidadeE
     Optional<ModalidadeEsportiva> findByNome(String nome);
 
     List<ModalidadeEsportiva> findByAtivo(boolean ativo);
+
+    @Query("SELECT m FROM ModalidadeEsportiva m WHERE m.dataCriacao BETWEEN :dataInicio AND CURRENT_TIMESTAMP")
+    List<ModalidadeEsportiva> findByDataCriacaoInLast30Days(@Param("dataInicio") OffsetDateTime dataInicio);
 
     @Query("SELECT DISTINCT m FROM ModalidadeEsportiva m LEFT JOIN FETCH m.listaMetaEsportiva metas WHERE m.ativo = true AND metas.ativo = true")
     List<ModalidadeEsportiva> findByAtivoTrueWithActiveMetas();
