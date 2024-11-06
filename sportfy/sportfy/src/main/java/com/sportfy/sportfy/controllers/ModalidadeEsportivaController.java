@@ -1,6 +1,7 @@
 package com.sportfy.sportfy.controllers;
 
 import com.sportfy.sportfy.dtos.EstatisticasGeraisModalidadeDto;
+import com.sportfy.sportfy.dtos.MetaEsportivaDto;
 import com.sportfy.sportfy.dtos.ModalidadeEsportivaDto;
 import com.sportfy.sportfy.exeptions.*;
 import com.sportfy.sportfy.models.ModalidadeEsportiva;
@@ -27,9 +28,9 @@ public class ModalidadeEsportivaController {
     ModalidadeEsportivaService modalidadeEsportivaService;
 
     @PostMapping()
-    public ResponseEntity<Object> criarModalidade(@RequestBody ModalidadeEsportivaDto modalidade) {
+    public ResponseEntity<ModalidadeEsportivaDto> criarModalidade(@RequestBody ModalidadeEsportivaDto modalidade) {
         try {
-            Object novaModalidade = modalidadeEsportivaService.criarModalidade(modalidade);
+            ModalidadeEsportivaDto novaModalidade = modalidadeEsportivaService.criarModalidade(modalidade);
             return ResponseEntity.status(HttpStatus.CREATED).body(novaModalidade);
         } catch (ModalidadeJaExisteException e) {
             System.out.println("Erro " + e.getMessage());
@@ -41,9 +42,9 @@ public class ModalidadeEsportivaController {
     }
 
     @PutMapping()
-    public ResponseEntity<Object> editarModalidade(@RequestBody ModalidadeEsportivaDto modalidade) {
+    public ResponseEntity<ModalidadeEsportivaDto> editarModalidade(@RequestBody ModalidadeEsportivaDto modalidade) {
         try {
-            Object modalidadeEditada = modalidadeEsportivaService.editarModalidade(modalidade);
+            ModalidadeEsportivaDto modalidadeEditada = modalidadeEsportivaService.editarModalidade(modalidade);
             return ResponseEntity.status(HttpStatus.OK).body(modalidadeEditada);
         } catch (ModalidadeNaoExistenteException e) {
             System.out.println("Erro " + e.getMessage());
@@ -71,10 +72,10 @@ public class ModalidadeEsportivaController {
         }
     }
 
-    @GetMapping("/buscar/{nome}")
-    public ResponseEntity<Object> buscarModalidade(@PathVariable String nome) {
+    @GetMapping("/buscar")
+    public ResponseEntity<List<ModalidadeEsportivaDto>> buscarModalidade(@RequestParam String nome) {
         try {
-            Object modalidade = modalidadeEsportivaService.buscarModalidades(nome);
+            List<ModalidadeEsportivaDto> modalidade = modalidadeEsportivaService.buscarModalidades(nome);
             return ResponseEntity.status(HttpStatus.OK).body(modalidade);
         } catch (ModalidadeNaoExistenteException e) {
             System.out.println("Erro " + e.getMessage());
@@ -114,9 +115,9 @@ public class ModalidadeEsportivaController {
     }
 
     @GetMapping("/listar/{idAcademico}")
-    public ResponseEntity<List<ModalidadeEsportiva>> listarModalidadesAcademico(@PathVariable Long idAcademico) {
+    public ResponseEntity<List<ModalidadeEsportivaDto>> listarModalidadesAcademico(@PathVariable Long idAcademico) {
         try {
-            List<ModalidadeEsportiva> modalidadeAcademico = modalidadeEsportivaService.listarModalidadesInscritas(idAcademico);
+            List<ModalidadeEsportivaDto> modalidadeAcademico = modalidadeEsportivaService.listarModalidadesInscritas(idAcademico);
             return ResponseEntity.status(HttpStatus.OK).body(modalidadeAcademico);
         } catch (AcademicoNaoExisteException | RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
@@ -129,9 +130,9 @@ public class ModalidadeEsportivaController {
 
 
     @GetMapping("/buscar/{idAcademico}/modalidade")
-    public ResponseEntity<List<ModalidadeEsportiva>> listarModalidadesOutroUsuario(@PathVariable Long idAcademico) {
+    public ResponseEntity<List<ModalidadeEsportivaDto>> listarModalidadesOutroUsuario(@PathVariable Long idAcademico) {
         try {
-            List<ModalidadeEsportiva> modalidadeAcademico = modalidadeEsportivaService.listarModalidadesOutroUsuario(idAcademico);
+            List<ModalidadeEsportivaDto> modalidadeAcademico = modalidadeEsportivaService.listarModalidadesOutroUsuario(idAcademico);
             return ResponseEntity.status(HttpStatus.OK).body(modalidadeAcademico);
         } catch (AcademicoNaoExisteException e) {
             System.out.println("Erro " + e.getMessage());
@@ -170,6 +171,62 @@ public class ModalidadeEsportivaController {
         } catch (RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PostMapping("/metaEsportiva")
+    public ResponseEntity<MetaEsportivaDto> adicionarMetaEsportiva(@RequestBody MetaEsportivaDto metaEsportivaDto) {
+        try {
+            MetaEsportivaDto novaMeta = modalidadeEsportivaService.adicionarMetaEsportiva(metaEsportivaDto);
+            return ResponseEntity.status(HttpStatus.OK).body(novaMeta);
+        } catch (TipoInvalidoException | ModalidadeNaoExistenteException e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PutMapping("/metaEsportiva/{id}")
+    public ResponseEntity<MetaEsportivaDto> atualizarMetaEsportiva(@PathVariable Long id, @RequestBody MetaEsportivaDto metaEsportivaDto) {
+        try {
+            MetaEsportivaDto metaAtualizada = modalidadeEsportivaService.atualizarMetaEsportiva(metaEsportivaDto, id);
+            return ResponseEntity.status(HttpStatus.OK).body(metaAtualizada);
+        } catch (RegistroNaoEncontradoException | ModalidadeNaoExistenteException e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PatchMapping("metaEsportiva/{id}")
+    public ResponseEntity<Void> desativarMetaEsportiva(@PathVariable Long id) {
+        try {
+            modalidadeEsportivaService.desativarMetaEsportiva(id);
+            return ResponseEntity.noContent().build();
+        } catch (RegistroNaoEncontradoException e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @GetMapping("/metaEsportiva/listar/{idModalidade}")
+    public ResponseEntity<List<MetaEsportivaDto>> listarMetaEsportivaPorModalidade(@PathVariable Long idModalidade) {
+        try {
+            List<MetaEsportivaDto> metas = modalidadeEsportivaService.listarMetaEsportivaPorModalidade(idModalidade);
+            return ResponseEntity.status(HttpStatus.OK).body(metas);
+        } catch (RegistroNaoEncontradoException | ModalidadeNaoExistenteException e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } catch (Exception e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

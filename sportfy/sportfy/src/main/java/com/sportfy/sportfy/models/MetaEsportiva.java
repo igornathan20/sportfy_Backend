@@ -34,10 +34,15 @@ public class MetaEsportiva implements Serializable {
     @JoinColumn(name="id_modalidade_esportiva", updatable = false, nullable = false)
     private ModalidadeEsportiva modalidadeEsportiva;
 
-    public void cadastrar(MetaEsportivaDto metaEsportivaDto) {
-        this.titulo = metaEsportivaDto.titulo();
-        this.descricao = metaEsportivaDto.descricao();
-        this.foto = metaEsportivaDto.foto();
+    public void fromDto(MetaEsportivaDto metaEsportivaDto) {
+        if (metaEsportivaDto.titulo() != null) {
+            this.titulo = metaEsportivaDto.titulo();
+        }
+        if (metaEsportivaDto.descricao() != null) {
+            this.descricao = metaEsportivaDto.descricao();
+        }
+        if (metaEsportivaDto.foto() != null) {
+            this.foto = metaEsportivaDto.foto();
+        }
     }
-
 }

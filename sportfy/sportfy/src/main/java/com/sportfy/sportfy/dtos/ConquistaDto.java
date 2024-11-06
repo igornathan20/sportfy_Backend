@@ -15,7 +15,7 @@ public record ConquistaDto (
             conquista.getIdConquista(),
             conquista.getDataConquista(),
             conquista.getAcademico().getIdAcademico(),
-            MetaEsportivaDto.fromMetaEsportivaBD(conquista.getMetaEsportiva())
+            MetaEsportivaDto.toDto(conquista.getMetaEsportiva())
         );
     }
 }

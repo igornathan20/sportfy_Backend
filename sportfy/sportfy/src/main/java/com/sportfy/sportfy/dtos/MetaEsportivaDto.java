@@ -13,12 +13,11 @@ public record MetaEsportivaDto(
     @Size(min = 1, max = 255, message = "Descrição deve ter entre 1 e 255 caracteres")
     String descricao,
 
-    @Size(min = 1, max = 255, message = "Descrição deve ter entre 1 e 500 caracteres")
     String foto,
 
     Long idModalidadeEsportiva
 ) {
-    public static MetaEsportivaDto fromMetaEsportivaBD(MetaEsportiva metaEsportiva) {
+    public static MetaEsportivaDto toDto(MetaEsportiva metaEsportiva) {
         return new MetaEsportivaDto(
             metaEsportiva.getIdMetaEsportiva(),
             metaEsportiva.getTitulo(),

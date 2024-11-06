@@ -20,4 +20,6 @@ public interface ModalidadeEsportivaRepository extends JpaRepository<ModalidadeE
     
     @Query("SELECT m FROM ModalidadeEsportiva m LEFT JOIN FETCH m.listaMetaEsportiva metas WHERE m.nome = :nome AND m.ativo = true AND metas.ativo = true")
     Optional<ModalidadeEsportiva> findByNomeAndAtivoTrueWithActiveMetas(@Param("nome") String nome);
+
+    List<ModalidadeEsportiva> findByNomeContainingAndAtivoTrue(String nome);
 }
