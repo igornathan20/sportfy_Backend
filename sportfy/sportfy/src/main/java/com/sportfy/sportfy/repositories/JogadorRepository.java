@@ -10,9 +10,10 @@ import java.util.Optional;
 @Repository
 public interface JogadorRepository extends JpaRepository<Jogador, Long> {
     List<Jogador> findByAcademico(Academico academico);
+    List<Jogador> findByAcademicoIdAcademico(Long idAcademico);
+    List<Jogador> findByAcademicoIdAcademicoAndModalidadeEsportivaIdModalidadeEsportiva(Long idAcademico, Long idModalidadeEsportiva);
     Optional<Jogador> findByAcademicoAndTimeCampeonato( Academico academico, Campeonato Campeonato);
     List<Jogador> findByAcademicoAndTimeCampeonatoModalidadeEsportiva( Academico academico, ModalidadeEsportiva modalidadeEsportiva);
     List<Jogador> findByTimeCampeonato( Campeonato campeonato);
     List<Jogador> findByTime( Time time);
-
 }
