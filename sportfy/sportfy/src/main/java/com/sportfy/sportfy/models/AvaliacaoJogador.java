@@ -7,8 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.Serializable;
-
 @Entity
 @Table(name="avaliacao")
 @Setter
@@ -23,8 +21,12 @@ public class AvaliacaoJogador {
     private Long idAvaliacao;
 
     @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="id_jogador", updatable = false, nullable = false)
-    private Jogador jogador;
+    @JoinColumn(name="id_academico_avaliado", updatable = false, nullable = false)
+    private Academico academicoAvaliado;
+
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="id_modalidade_esportiva", updatable = false, nullable = false)
+    private ModalidadeEsportiva modalidadeEsportiva;
 
     @Column(name="nota", updatable = false, nullable = false)
     private int nota;
@@ -36,7 +38,8 @@ public class AvaliacaoJogador {
     public AvaliacaoJogadorDto toDto(AvaliacaoJogador avaliacao) {
         return new AvaliacaoJogadorDto(
                 avaliacao.getIdAvaliacao(),
-                avaliacao.getJogador().getIdJogador(),
+                avaliacao.getAcademicoAvaliado().getIdAcademico(),
+                avaliacao.getModalidadeEsportiva().getIdModalidadeEsportiva(),
                 avaliacao.getNota(),
                 avaliacao.getAvaliador() != null ? avaliacao.getAvaliador().getIdAcademico() : null
         );

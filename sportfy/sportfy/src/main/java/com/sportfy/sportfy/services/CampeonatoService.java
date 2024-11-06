@@ -675,15 +675,17 @@ public class CampeonatoService {
         throw new RegistroNaoEncontradoException("nao foi encontrado registro da partida!");
     }
 
-    public AvaliacaoJogadorDto avaliarJogador (Long idAvaliador, Long idJogador, int nota )throws AcademicoNaoExisteException, RegistroNaoEncontradoException{
+    public AvaliacaoJogadorDto avaliarJogador (Long idAvaliador, Long idAcademicoAvaliado, Long idModalidade, int nota )throws AcademicoNaoExisteException, RegistroNaoEncontradoException{
         Optional<Academico> avaliador = academicoRepository.findById(idAvaliador);
-        Optional<Jogador> jogador = jogadorRepository.findById(idJogador);
+        Optional<Academico> academicoAvaliado = academicoRepository.findById(idAcademicoAvaliado);
+        Optional<ModalidadeEsportiva> modalidadeEsportiva = modalidadeEsportivaRepository.findById(idModalidade);
 
-        if(avaliador.isPresent()){
-            if (jogador.isPresent()){
+        if(avaliador.isPresent() && academicoAvaliado.isPresent()){
+            if (modalidadeEsportiva.isPresent()){
                 AvaliacaoJogador avaliacao = new AvaliacaoJogador();
-                avaliacao.setJogador(jogador.get());
+                avaliacao.setAcademicoAvaliado(academicoAvaliado.get());
                 avaliacao.setAvaliador(avaliador.get());
+                avaliacao.setModalidadeEsportiva(modalidadeEsportiva.get());
                 avaliacao.setNota(nota);
                 return avaliacao.toDto(avaliacaoJogadorRepository.save(avaliacao));
             }else {
@@ -694,54 +696,18 @@ public class CampeonatoService {
         }
     }
 
-    public float recuperaAvaliacaoNoCampeonato(Long idCampeonato, Long idAcademico) throws AcademicoNaoExisteException, CampeonatoInvalidoException, RegistroNaoEncontradoException{
-        Optional<Academico> academico = academicoRepository.findById(idAcademico);
-        Optional<Campeonato> campeonato = campeonatoRepository.findById(idCampeonato);
 
-        if (academico.isPresent()){
-            if (campeonato.isPresent()){
-                Optional<Jogador> jogador = jogadorRepository.findByAcademicoAndTimeCampeonato(academico.get(), campeonato.get());
-                if (jogador.isPresent()){
-                    float media = 0;
-                    int contador = 0;
-
-                    List<AvaliacaoJogador> avaliacoes = avaliacaoJogadorRepository.findByJogador(jogador.get());
-                    for(int i = 0; i < avaliacoes.size(); i++){
-                        if (avaliacoes.get(i).getNota() != 0){
-                            contador ++;
-                            media += avaliacoes.get(i).getNota();
-                        }
-                    }
-                    media = media / contador;
-                    return media;
-                }else {
-                    throw new RegistroNaoEncontradoException("Nenhum registro do jogador encontrado!");
-                }
-            }else {
-                throw new CampeonatoInvalidoException("Campeonato nao existente!");
-            }
-        }else {
-            throw new AcademicoNaoExisteException("Academico nao encontrado!");
-        }
-    }
-
-    public float recuperaAvaliacaoPorModalidade(Long idModalidade, Long idAcademico) throws AcademicoNaoExisteException, ModalidadeNaoExistenteException{
+    public AvaliacaoResponseDto recuperaAvaliacaoPorModalidade(Long idModalidade, Long idAcademico) throws AcademicoNaoExisteException, ModalidadeNaoExistenteException{
         Optional<Academico> academico = academicoRepository.findById(idAcademico);
         Optional<ModalidadeEsportiva> modalidadeEsportiva = modalidadeEsportivaRepository.findById(idModalidade);
 
         if (academico.isPresent()){
             if (modalidadeEsportiva.isPresent()){
-
-                List<Jogador> jogador = jogadorRepository.findByAcademicoAndTimeCampeonatoModalidadeEsportiva(academico.get(), modalidadeEsportiva.get());
-                List<AvaliacaoJogador> avaliacoes = new ArrayList<>();
+                List<AvaliacaoJogador> avaliacoes = avaliacaoJogadorRepository.findByAcademicoAvaliadoAndModalidadeEsportiva(academico.get(),modalidadeEsportiva.get());
                 float media = 0;
                 int contador = 0;
 
-                for(int x = 0; x < jogador.size(); x++) {
-                    avaliacoes = avaliacaoJogadorRepository.findByJogador(jogador.get(x));
-                }
-
-                for (int y = 0; y < avaliacoes.size();y++ ){
+                for (int y = 0; y < avaliacoes.size(); y++ ){
                     if (avaliacoes.get(y).getNota() != 0){
                         contador ++;
                         media += avaliacoes.get(y).getNota();
@@ -749,7 +715,7 @@ public class CampeonatoService {
                 }
 
                 media = media / contador;
-                return media;
+                return new AvaliacaoResponseDto(media, contador);
             }else {
                 throw new ModalidadeNaoExistenteException("Modalidade esportiva nao existente!");
             }

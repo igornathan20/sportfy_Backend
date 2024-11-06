@@ -33,7 +33,7 @@ public class Jogador implements Serializable {
     @JoinTable(
             name = "avaliacao",
             joinColumns = @JoinColumn(name = "id_avaliacao"),
-            inverseJoinColumns = @JoinColumn(name = "id_jogador")
+            inverseJoinColumns = @JoinColumn(name = "id_academico_avaliado")
     )
     private List<AvaliacaoJogador> avaliacoes;
 

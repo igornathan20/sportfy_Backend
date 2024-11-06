@@ -355,9 +355,9 @@ public class CampeonatoController {
 
     @PostMapping("/avaliar")
     @PermitAll
-    public ResponseEntity<AvaliacaoJogadorDto> avaliarJogador(@RequestParam Long idAvaliador, @RequestParam Long idJogador, @RequestParam int nota) {
+    public ResponseEntity<AvaliacaoJogadorDto> avaliarJogador(@RequestParam Long idAvaliador, @RequestParam Long idAcademico, @RequestParam Long idModalidade, @RequestParam int nota) {
         try {
-            AvaliacaoJogadorDto avaliacao = campeonatoService.avaliarJogador(idAvaliador, idJogador, nota);
+            AvaliacaoJogadorDto avaliacao = campeonatoService.avaliarJogador(idAvaliador, idAcademico, idModalidade, nota);
             return ResponseEntity.ok(avaliacao);
         } catch (AcademicoNaoExisteException | RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
@@ -368,27 +368,12 @@ public class CampeonatoController {
         }
     }
 
-    @GetMapping("/{idCampeonato}/avaliacao/{idAcademico}")
-    @PermitAll
-    public ResponseEntity<Float> recuperaAvaliacaoNoCampeonato(@PathVariable Long idCampeonato, @PathVariable Long idAcademico) {
-        try {
-            float media = campeonatoService.recuperaAvaliacaoNoCampeonato(idCampeonato, idAcademico);
-            return ResponseEntity.ok(media);
-        } catch (AcademicoNaoExisteException | CampeonatoInvalidoException | RegistroNaoEncontradoException e) {
-            System.out.println("Erro " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
     @GetMapping("/avaliacao/{idAcademico}/modalidade/{idModalidade}")
     @PermitAll
-    public ResponseEntity<Float> recuperaAvaliacaoPorModalidade(@PathVariable Long idModalidade, @PathVariable Long idAcademico) {
+    public ResponseEntity<AvaliacaoResponseDto> recuperaAvaliacaoPorModalidade(@PathVariable Long idModalidade, @PathVariable Long idAcademico) {
         try {
-            float media = campeonatoService.recuperaAvaliacaoPorModalidade(idModalidade, idAcademico);
-            return ResponseEntity.ok(media);
+            AvaliacaoResponseDto avaliacaoResponse = campeonatoService.recuperaAvaliacaoPorModalidade(idModalidade, idAcademico);
+            return ResponseEntity.ok(avaliacaoResponse);
         } catch (AcademicoNaoExisteException | ModalidadeNaoExistenteException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
