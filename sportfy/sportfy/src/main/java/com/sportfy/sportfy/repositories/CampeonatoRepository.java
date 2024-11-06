@@ -20,6 +20,8 @@ public interface CampeonatoRepository extends JpaRepository<Campeonato, Long>, J
     boolean existsByCodigo(String codigo);
     List<Campeonato> findByModalidadeEsportiva(ModalidadeEsportiva modalidadeEsportiva);
     List<Campeonato> findByAcademico(Academico academico);
+    List<Campeonato> findByAcademicoIdAcademico(Long idAcademico);
+    List<Campeonato> findByAcademicoIdAcademicoAndModalidadeEsportivaIdModalidadeEsportiva(Long idAcademico, Long idModalidadeEsportiva);
     Optional<List<Campeonato>> findByTituloAndAtivo(String titulo, boolean ativo);
     @Query("SELECT c FROM Campeonato c WHERE c.situacaoCampeonato = :situacao AND c.dataCriacao BETWEEN :dataInicio AND CURRENT_TIMESTAMP")
     List<Campeonato> findBySituacaoAndDataCriacaoInLast30Days(@Param("situacao") TipoSituacao situacao, @Param("dataInicio") OffsetDateTime dataInicio);
