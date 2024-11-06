@@ -170,6 +170,38 @@ public class CampeonatoService {
         return campeonatos;
     }
 
+    public List<CampeonatoResponseDto> listarCampeonatosPorModalidadesInscritas(Long idAcademico) throws RegistroNaoEncontradoException, AcademicoNaoExisteException {
+        Optional<Academico> academico = academicoRepository.findById(idAcademico);
+
+        if (academico.isPresent()) {
+            List<CampeonatoResponseDto> campeonatosAcademico = new ArrayList<>();
+            List<ModalidadeEsportiva> modalidadesEsportivas = academico.get().getModalidadeEsportivas();
+
+            if (modalidadesEsportivas.isEmpty()) {
+                throw new RegistroNaoEncontradoException("Usuário não cadastrado em nenhuma modalidade!");
+            } else {
+                for (ModalidadeEsportiva modalidade : modalidadesEsportivas) {
+                    System.out.println("modalidade: " + modalidade.getNome());
+                    List<Campeonato> campeonatosEncontrados = campeonatoRepository.findByModalidadeEsportiva(modalidade);
+
+                    // Adiciona cada campeonato encontrado à lista de campeonatos do acadêmico
+                    campeonatosEncontrados.stream()
+                            .map(campeonato -> campeonato.toResponseDto(campeonato))
+                            .forEach(campeonatosAcademico::add);
+                }
+            }
+
+            if (campeonatosAcademico.isEmpty()) {
+                throw new RegistroNaoEncontradoException("Nenhum campeonato encontrado!");
+            }
+
+            return campeonatosAcademico;
+        } else {
+            throw new AcademicoNaoExisteException("Acadêmico não encontrado!");
+        }
+    }
+
+
     public List<CampeonatoResponseDto> listarCampeonatosInscritos(Long idAcademico) throws RegistroNaoEncontradoException, AcademicoNaoExisteException {
         Optional<Academico> academico = academicoRepository.findById(idAcademico);
 

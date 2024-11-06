@@ -116,6 +116,21 @@ public class CampeonatoController {
 
     @GetMapping("/{idAcademico}/listar")
     @PermitAll
+    public ResponseEntity<List<CampeonatoResponseDto>> listarCampeonatosPorModalidadeInscrita(@PathVariable Long idAcademico) {
+        try {
+            List<CampeonatoResponseDto> campeonatos = campeonatoService.listarCampeonatosPorModalidadesInscritas(idAcademico);
+            return ResponseEntity.status(HttpStatus.OK).body(campeonatos);
+        } catch (RegistroNaoEncontradoException | AcademicoNaoExisteException e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/{idAcademico}/inscritos")
+    @PermitAll
     public ResponseEntity<List<CampeonatoResponseDto>> listarCampeonatosInscritos(@PathVariable Long idAcademico) {
         try {
             List<CampeonatoResponseDto> campeonatos = campeonatoService.listarCampeonatosInscritos(idAcademico);
