@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Size;
 
 import java.time.OffsetDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public record AcademicoResponseDto(
@@ -22,7 +23,8 @@ public record AcademicoResponseDto(
         OffsetDateTime dataNascimento,
         OffsetDateTime dataCriacao,
         boolean ativo,
-        TipoPermissao permissao
+        TipoPermissao permissao,
+        List<ModalidadeAcademicoDto> modalidades
 ) {
     public static AcademicoResponseDto fromAcademicoBD(Academico academico) {
         return new AcademicoResponseDto(
@@ -36,7 +38,9 @@ public record AcademicoResponseDto(
                 academico.getUsuario().getDataNascimento(),
                 academico.getUsuario().getDataCriacao(),
                 academico.getUsuario().isAtivo(),
-                academico.getUsuario().getPermissao()
+                academico.getUsuario().getPermissao(),
+                academico.getModalidadeEsportivas().stream().map(
+                        m -> new ModalidadeAcademicoDto(m.getIdModalidadeEsportiva(), m.getNome())).toList()
         );
     }
 }

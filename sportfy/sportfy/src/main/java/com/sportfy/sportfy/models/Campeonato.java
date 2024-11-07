@@ -8,11 +8,13 @@ import com.sportfy.sportfy.dtos.EnderecoDto;
 import com.sportfy.sportfy.enums.TipoFasePartida;
 import com.sportfy.sportfy.enums.TipoPrivacidadeCampeonato;
 import com.sportfy.sportfy.enums.TipoSituacao;
+import com.sportfy.sportfy.exeptions.TipoInvalidoException;
 import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -110,8 +112,11 @@ public class Campeonato implements Serializable {
             setDataInicio(dto.dataInicio());
         }
 
-        if (dto.dataFim() != null) {
-            setDataFim(dto.dataFim());
+        if (dataFim != null) {
+            if (dataFim.isBefore(OffsetDateTime.now())) {
+                throw new Exception("Data de fim não pode ser no passado!");
+            }
+            this.dataFim = dataFim;
         }
 
         if (dto.limiteTimes() != 0) {
