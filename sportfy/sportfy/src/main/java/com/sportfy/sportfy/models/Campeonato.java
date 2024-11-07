@@ -16,6 +16,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 @Entity
@@ -112,11 +113,12 @@ public class Campeonato implements Serializable {
             setDataInicio(dto.dataInicio());
         }
 
-        if (dataFim != null) {
-            if (dataFim.isBefore(OffsetDateTime.now())) {
+        if (dto.dataFim() != null) {
+            OffsetDateTime nowInUTC = OffsetDateTime.now(ZoneOffset.UTC);
+            if (dto.dataFim().isBefore(nowInUTC)) {
                 throw new Exception("Data de fim não pode ser no passado!");
             }
-            this.dataFim = dataFim;
+            setDataFim(dto.dataFim());
         }
 
         if (dto.limiteTimes() != 0) {
