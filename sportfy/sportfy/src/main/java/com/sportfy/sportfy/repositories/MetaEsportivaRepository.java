@@ -13,4 +13,5 @@ public interface MetaEsportivaRepository extends JpaRepository<MetaEsportiva, Lo
     List<MetaEsportiva> findByModalidadeEsportivaIdModalidadeEsportiva(Long idModalidadeEsportiva);
     Optional<MetaEsportiva> findByTitulo(String titulo);
     List<MetaEsportiva> findByModalidadeEsportivaAndAtivo(ModalidadeEsportiva modalidadeEsportiva, boolean ativo);
+    List<MetaEsportiva> findByModalidadeEsportivaAtivoAndAtivo(boolean ativoModalidade, boolean ativoMeta);
 }

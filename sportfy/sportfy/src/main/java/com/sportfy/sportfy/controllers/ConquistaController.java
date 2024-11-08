@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import com.sportfy.sportfy.dtos.ConquistaDto;
+import com.sportfy.sportfy.dtos.MetaEsportivaConquistaDto;
 import com.sportfy.sportfy.exeptions.ConquistaJaExistenteException;
-import com.sportfy.sportfy.exeptions.ConquistaNaoExistenteException;
+import com.sportfy.sportfy.exeptions.MetaEsportivaNaoExisteException;
 import com.sportfy.sportfy.services.ConquistaService;
 
 @RestController
@@ -27,7 +27,7 @@ public class ConquistaController {
 
     @PostMapping("/conquistar/{idAcademico}/{idMetaEsportiva}")
     //@PreAuthorize("hasRole('ROLE_ACADEMICO')")
-    public ResponseEntity<Object> curtirPublicacao(@PathVariable("idAcademico") Long idAcademico, @PathVariable("idMetaEsportiva") Long idMetaEsportiva) {
+    public ResponseEntity<Object> conquistar(@PathVariable("idAcademico") Long idAcademico, @PathVariable("idMetaEsportiva") Long idMetaEsportiva) {
         try {
             Object novaConquista = conquistaService.conquistar(idAcademico, idMetaEsportiva);
             return ResponseEntity.status(HttpStatus.CREATED).body(novaConquista);
@@ -44,9 +44,9 @@ public class ConquistaController {
     //@PreAuthorize("hasRole('ROLE_ACADEMICO')")
     public ResponseEntity<?> listarConquistas(@PathVariable("idAcademico") Long idAcademico) {
         try {
-            List<ConquistaDto> listaConquista = conquistaService.listarConquistas(idAcademico);
+            List<MetaEsportivaConquistaDto> listaConquista = conquistaService.listarConquistas(idAcademico);
             return ResponseEntity.status(HttpStatus.OK).body(listaConquista);
-        } catch (ConquistaNaoExistenteException e) {
+        } catch (MetaEsportivaNaoExisteException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
