@@ -8,6 +8,8 @@ import com.sportfy.sportfy.repositories.*;
 import com.sportfy.sportfy.util.EnviarEmail;
 import com.sportfy.sportfy.util.GeraSenha;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -166,10 +168,10 @@ public class AcademicoService {
         }).orElseThrow(() -> new AcademicoNaoExisteException("Academico não existe!"));
     }
 
-    public List<AcademicoResponseDto> listar() throws ListaAcademicosVaziaException {
-        Optional<List<Academico>> listaAcademicoBD = academicoRepository.findByUsuarioAtivo(true);
-        if (listaAcademicoBD.isPresent()) {
-            List<AcademicoResponseDto> listaAcademicoDto = listaAcademicoBD.get().stream().map(academicoBD -> AcademicoResponseDto.fromAcademicoBD(academicoBD)).collect(Collectors.toList());
+    public Page<AcademicoResponseDto> listar(Pageable pageable) throws ListaAcademicosVaziaException {
+        Page<Academico> listaAcademicoBD = academicoRepository.findByUsuarioAtivo(true, pageable);
+        if (!listaAcademicoBD.isEmpty()) {
+            Page<AcademicoResponseDto> listaAcademicoDto = listaAcademicoBD.map(AcademicoResponseDto::fromAcademicoBD);
             return listaAcademicoDto;
         } else {
             throw new ListaAcademicosVaziaException("Lista de acadêmicos vazia!");

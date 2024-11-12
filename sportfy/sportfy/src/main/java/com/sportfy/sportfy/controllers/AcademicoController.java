@@ -8,6 +8,8 @@ import com.sportfy.sportfy.services.AcademicoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -102,9 +104,9 @@ public class AcademicoController {
 
     @GetMapping("/listar")
     //@PreAuthorize("hasRole('ROLE_ACADEMICO')")
-    public ResponseEntity<List<AcademicoResponseDto>> listar() {
+    public ResponseEntity<Page<AcademicoResponseDto>> listar(Pageable pageable) {
         try {
-            List<AcademicoResponseDto> listaAcademico = academicoService.listar();
+            Page<AcademicoResponseDto> listaAcademico = academicoService.listar(pageable);
             return ResponseEntity.status(HttpStatus.OK).body(listaAcademico);
         } catch (ListaAcademicosVaziaException e) {
             System.out.println("Erro " + e.getMessage());

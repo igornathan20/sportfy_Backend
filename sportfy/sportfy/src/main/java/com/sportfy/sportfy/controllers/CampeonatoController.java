@@ -6,6 +6,8 @@ import com.sportfy.sportfy.models.*;
 import com.sportfy.sportfy.services.CampeonatoService;
 import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,9 +64,9 @@ public class CampeonatoController {
 
     @GetMapping("/listar")
     @PermitAll
-    public ResponseEntity<List<CampeonatoResponseDto>> listarTodosCampeonatos() {
+    public ResponseEntity<Page<CampeonatoResponseDto>> listarTodosCampeonatos(Pageable page) {
         try {
-            List<CampeonatoResponseDto> campeonatos = campeonatoService.listarTodosCampeonatos();
+            Page<CampeonatoResponseDto> campeonatos = campeonatoService.listarTodosCampeonatos(page);
             return new ResponseEntity<>(campeonatos, HttpStatus.OK);
         } catch (RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
@@ -116,9 +118,9 @@ public class CampeonatoController {
 
     @GetMapping("/{idAcademico}/listar")
     @PermitAll
-    public ResponseEntity<List<CampeonatoResponseDto>> listarCampeonatosPorModalidadeInscrita(@PathVariable Long idAcademico) {
+    public ResponseEntity<Page<CampeonatoResponseDto>> listarCampeonatosPorModalidadeInscrita(@PathVariable Long idAcademico, Pageable pageable) {
         try {
-            List<CampeonatoResponseDto> campeonatos = campeonatoService.listarCampeonatosPorModalidadesInscritas(idAcademico);
+            Page<CampeonatoResponseDto> campeonatos = campeonatoService.listarCampeonatosPorModalidadesInscritas(idAcademico, pageable);
             return ResponseEntity.status(HttpStatus.OK).body(campeonatos);
         } catch (RegistroNaoEncontradoException | AcademicoNaoExisteException e) {
             System.out.println("Erro " + e.getMessage());
@@ -131,9 +133,9 @@ public class CampeonatoController {
 
     @GetMapping("/{idAcademico}/inscritos")
     @PermitAll
-    public ResponseEntity<List<CampeonatoResponseDto>> listarCampeonatosInscritos(@PathVariable Long idAcademico) {
+    public ResponseEntity<Page<CampeonatoResponseDto>> listarCampeonatosInscritos(@PathVariable Long idAcademico, Pageable pageable) {
         try {
-            List<CampeonatoResponseDto> campeonatos = campeonatoService.listarCampeonatosInscritos(idAcademico);
+            Page<CampeonatoResponseDto> campeonatos = campeonatoService.listarCampeonatosInscritos(idAcademico, pageable);
             return ResponseEntity.status(HttpStatus.OK).body(campeonatos);
         } catch (RegistroNaoEncontradoException | AcademicoNaoExisteException e) {
             System.out.println("Erro " + e.getMessage());
@@ -146,9 +148,9 @@ public class CampeonatoController {
 
     @GetMapping("/{idAcademico}/meusCampeonatos")
     @PermitAll
-    public ResponseEntity<List<CampeonatoResponseDto>> listarCampeonatosCriados(@PathVariable Long idAcademico) {
+    public ResponseEntity<Page<CampeonatoResponseDto>> listarCampeonatosCriados(@PathVariable Long idAcademico, Pageable pageable) {
         try {
-            List<CampeonatoResponseDto> campeonatos = campeonatoService.listarCampeonatosCriados(idAcademico);
+            Page<CampeonatoResponseDto> campeonatos = campeonatoService.listarCampeonatosCriados(idAcademico, pageable);
             return ResponseEntity.status(HttpStatus.OK).body(campeonatos);
         } catch (RegistroNaoEncontradoException | AcademicoNaoExisteException e) {
             System.out.println("Erro " + e.getMessage());
@@ -260,9 +262,9 @@ public class CampeonatoController {
 
     @GetMapping("/{idCampeonato}/jogadores")
     @PermitAll
-    public ResponseEntity<List<JogadorDto>> listarJogadoresPorCampeonato(@PathVariable Long idCampeonato) {
+    public ResponseEntity<Page<JogadorDto>> listarJogadoresPorCampeonato(@PathVariable Long idCampeonato, Pageable pageable) {
         try {
-            List<JogadorDto> jogadores = campeonatoService.listarJogadoresCampeonato(idCampeonato);
+            Page<JogadorDto> jogadores = campeonatoService.listarJogadoresCampeonato(idCampeonato, pageable);
             return ResponseEntity.status(HttpStatus.OK).body(jogadores);
         } catch (RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
@@ -274,11 +276,14 @@ public class CampeonatoController {
     }
 
     @GetMapping("/{idAcademico}/jogadores-enfrentados")
-    public ResponseEntity<List<AcademicoDto>> listarJogadoresEnfrentados(@PathVariable Long idAcademico) {
+    public ResponseEntity<Page<AcademicoDto>> listarJogadoresEnfrentados(@PathVariable Long idAcademico, Pageable pageable) {
         try {
-            List<AcademicoDto> jogadoresEnfrentados = campeonatoService.listarJogadoresEnfrentados(idAcademico);
+            Page<AcademicoDto> jogadoresEnfrentados = campeonatoService.listarJogadoresEnfrentados(idAcademico, pageable);
             return ResponseEntity.ok(jogadoresEnfrentados);
         } catch (RegistroNaoEncontradoException e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (AcademicoNaoExisteException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } catch (Exception e) {

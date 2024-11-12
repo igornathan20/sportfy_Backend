@@ -9,6 +9,9 @@ import com.sportfy.sportfy.exeptions.*;
 import com.sportfy.sportfy.models.*;
 import com.sportfy.sportfy.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -100,16 +103,13 @@ public class CampeonatoService {
         }
     }
 
-    public List<CampeonatoResponseDto> listarTodosCampeonatos() throws RegistroNaoEncontradoException {
-        List<CampeonatoResponseDto> campeonatos = campeonatoRepository.findAll().stream()
-                .filter(Campeonato::isAtivo)
-                .map(campeonato ->  campeonato.toResponseDto(campeonato)
-        ).collect(Collectors.toList());
+    public Page<CampeonatoResponseDto> listarTodosCampeonatos(Pageable pageable) throws RegistroNaoEncontradoException {
+        Page<Campeonato> campeonatos = campeonatoRepository.findAll(pageable);
 
         if (campeonatos.isEmpty()) {
             throw new RegistroNaoEncontradoException("Nenhum campeonato encontrado!");
         } else {
-            return campeonatos;
+            return campeonatos.map(campeonato -> campeonato.toResponseDto(campeonato));
         }
     }
 
@@ -171,7 +171,8 @@ public class CampeonatoService {
         return campeonatos;
     }
 
-    public List<CampeonatoResponseDto> listarCampeonatosPorModalidadesInscritas(Long idAcademico) throws RegistroNaoEncontradoException, AcademicoNaoExisteException {
+    public Page<CampeonatoResponseDto> listarCampeonatosPorModalidadesInscritas(Long idAcademico, Pageable pageable)
+            throws RegistroNaoEncontradoException, AcademicoNaoExisteException {
         Optional<Academico> academico = academicoRepository.findById(idAcademico);
 
         if (academico.isPresent()) {
@@ -182,7 +183,6 @@ public class CampeonatoService {
                 throw new RegistroNaoEncontradoException("Usuário não cadastrado em nenhuma modalidade!");
             } else {
                 for (ModalidadeEsportiva modalidade : modalidadesEsportivas) {
-                    System.out.println("modalidade: " + modalidade.getNome());
                     List<Campeonato> campeonatosEncontrados = campeonatoRepository.findByModalidadeEsportiva(modalidade);
 
                     // Adiciona cada campeonato encontrado à lista de campeonatos do acadêmico
@@ -196,14 +196,19 @@ public class CampeonatoService {
                 throw new RegistroNaoEncontradoException("Nenhum campeonato encontrado!");
             }
 
-            return campeonatosAcademico;
+            // Aplicar paginação manualmente na lista final de campeonatos
+            int start = (int) pageable.getOffset();
+            int end = Math.min(start + pageable.getPageSize(), campeonatosAcademico.size());
+            List<CampeonatoResponseDto> paginatedList = campeonatosAcademico.subList(start, end);
+
+            return new PageImpl<>(paginatedList, pageable, campeonatosAcademico.size());
         } else {
             throw new AcademicoNaoExisteException("Acadêmico não encontrado!");
         }
     }
 
 
-    public List<CampeonatoResponseDto> listarCampeonatosInscritos(Long idAcademico) throws RegistroNaoEncontradoException, AcademicoNaoExisteException {
+    public Page<CampeonatoResponseDto> listarCampeonatosInscritos(Long idAcademico, Pageable pageable) throws RegistroNaoEncontradoException, AcademicoNaoExisteException {
         Optional<Academico> academico = academicoRepository.findById(idAcademico);
 
         if (academico.isPresent()) {
@@ -217,24 +222,26 @@ public class CampeonatoService {
             if (campeonatos.isEmpty()) {
                 throw new RegistroNaoEncontradoException("Nenhum campeonato encontrado!");
             }
-            return campeonatos;
+            int start = Math.min((int) pageable.getOffset(), campeonatos.size());
+            int end = Math.min((start + pageable.getPageSize()), campeonatos.size());
+            List<CampeonatoResponseDto> paginatedList = campeonatos.subList(start, end);
+
+            return new PageImpl<>(paginatedList, pageable, campeonatos.size());
         } else {
             throw new AcademicoNaoExisteException("Academico não encontrado!");
         }
     }
 
-    public List<CampeonatoResponseDto> listarCampeonatosCriados(Long idAcademico) throws RegistroNaoEncontradoException, AcademicoNaoExisteException {
+    public Page<CampeonatoResponseDto> listarCampeonatosCriados(Long idAcademico, Pageable pageable ) throws RegistroNaoEncontradoException, AcademicoNaoExisteException {
         Optional<Academico> academico = academicoRepository.findById(idAcademico);
 
         if (academico.isPresent()) {
-            List<CampeonatoResponseDto> campeonatosCriados = campeonatoRepository.findByAcademico(academico.get()).stream().map(
-                    campeonato -> campeonato.toResponseDto(campeonato)
-            ).collect(Collectors.toList());
+            Page<Campeonato> campeonatosCriados = campeonatoRepository.findByAcademico(academico.get(), pageable);
 
             if (campeonatosCriados.isEmpty()) {
                 throw new RegistroNaoEncontradoException("Nenhum campeonato encontrado!");
             }
-            return campeonatosCriados;
+            return campeonatosCriados.map(campeonato -> campeonato.toResponseDto(campeonato));
         } else {
             throw new AcademicoNaoExisteException("Academico não encontrado!");
         }
@@ -386,7 +393,7 @@ public class CampeonatoService {
         }
     }
 
-    public List<JogadorDto> listarJogadoresCampeonato(Long idCampeonato) throws RegistroNaoEncontradoException {
+    public Page<JogadorDto> listarJogadoresCampeonato(Long idCampeonato, Pageable pageable) throws RegistroNaoEncontradoException {
         Optional<Campeonato> campeonato = campeonatoRepository.findById(idCampeonato);
 
         if (campeonato.isPresent()) {
@@ -398,15 +405,20 @@ public class CampeonatoService {
                 throw new RegistroNaoEncontradoException("Nenhum jogador foi encontrado!");
             }
 
-            return jogadores;
+            int start = (int) pageable.getOffset();
+            int end = Math.min(start + pageable.getPageSize(), jogadores.size());
+            List<JogadorDto> paginatedList = jogadores.subList(start, end);
+
+            return new PageImpl<>(paginatedList, pageable, jogadores.size());
         } else {
             throw new RegistroNaoEncontradoException("O campeonato com id " + idCampeonato + " não foi encontrado");
         }
     }
 
-    public List<AcademicoDto> listarJogadoresEnfrentados(Long idAcademico) throws RegistroNaoEncontradoException {
+    public Page<AcademicoDto> listarJogadoresEnfrentados(Long idAcademico, Pageable pageable)
+            throws RegistroNaoEncontradoException, AcademicoNaoExisteException {
         Academico academico = academicoRepository.findById(idAcademico)
-                .orElseThrow(() -> new RegistroNaoEncontradoException("O academico com id " + idAcademico + " não foi encontrado"));
+                .orElseThrow(() -> new AcademicoNaoExisteException("O academico com id " + idAcademico + " não foi encontrado"));
 
         // Encontrar todos os times em que o acadêmico jogou
         List<Jogador> participacoesCampeonatos = jogadorRepository.findByAcademico(academico);
@@ -414,21 +426,30 @@ public class CampeonatoService {
                 .map(Jogador::getTime)
                 .collect(Collectors.toList());
 
-        // Encontrar todas as partidas dos meus times, aqui usei o Set<Time> que usa uma tabela de Hash, pode ser melhor para buscas
+        // Encontrar todas as partidas dos meus times e coletar os times envolvidos
         Set<Time> timesPartidas = meusTimes.stream()
                 .flatMap(time -> partidaRepository.findByTime1OrTime2(time, time).stream())
                 .flatMap(partida -> Stream.of(partida.getTime1(), partida.getTime2()))
                 .collect(Collectors.toSet());
 
         // Buscar jogadores enfrentados nos times encontrados e transformar em AcademicoDto
-        Set<AcademicoDto> academicosEnfrentados = timesPartidas.stream()
+        List<AcademicoDto> academicosEnfrentados = timesPartidas.stream()
                 .flatMap(time -> jogadorRepository.findByTime(time).stream())
                 .map(Jogador::getAcademico)
                 .filter(jogador -> !jogador.equals(academico)) // Excluir o próprio acadêmico
                 .map(Academico::toDto)
-                .collect(Collectors.toSet());
+                .distinct()
+                .collect(Collectors.toList());
+        if (academicosEnfrentados.isEmpty()){
+            throw new RegistroNaoEncontradoException("Nenhum jogador enfrentado!");
+        }
 
-        return new ArrayList<>(academicosEnfrentados);
+        // Aplicar paginação manualmente
+        int start = (int) pageable.getOffset();
+        int end = Math.min(start + pageable.getPageSize(), academicosEnfrentados.size());
+        List<AcademicoDto> paginatedList = academicosEnfrentados.subList(start, end);
+
+        return new PageImpl<>(paginatedList, pageable, academicosEnfrentados.size());
     }
 
     public JogadorDto mudarSituacaoJogador(Long idJogador, String situacao ) throws TipoInvalidoException, RegistroNaoEncontradoException{

@@ -59,13 +59,13 @@ public class ModalidadeEsportivaController {
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<?> listarModalidades() {
+    public ResponseEntity<List<ModalidadeEsportivaDto>> listarModalidades() {
         try {
             List<ModalidadeEsportivaDto> listaModalidade = modalidadeEsportivaService.listarModalidades();
             return ResponseEntity.status(HttpStatus.OK).body(listaModalidade);
         } catch (ModalidadeNaoExistenteException e) {
             System.out.println("Erro " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         }  catch (Exception e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

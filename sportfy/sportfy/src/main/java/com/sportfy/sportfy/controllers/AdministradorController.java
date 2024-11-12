@@ -13,6 +13,8 @@ import jakarta.validation.Valid;
 import lombok.*;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -112,9 +114,9 @@ public class AdministradorController {
 
     @GetMapping("/listar")
     //@PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
-    public ResponseEntity<List<AdministradorResponseDto>> listar() {
+    public ResponseEntity<Page<AdministradorResponseDto>> listar(Pageable pageable) {
         try {
-            List<AdministradorResponseDto> listaAdministrador = administradorService.listar();
+            Page<AdministradorResponseDto> listaAdministrador = administradorService.listar(pageable);
             return ResponseEntity.status(HttpStatus.OK).body(listaAdministrador);
         } catch (ListaAdministradoresVaziaException e) {
             System.out.println("Erro " + e.getMessage());

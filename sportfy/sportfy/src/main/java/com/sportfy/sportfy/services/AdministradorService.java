@@ -15,6 +15,8 @@ import com.sportfy.sportfy.repositories.AdministradorRepository;
 import com.sportfy.sportfy.repositories.PermissaoRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -102,10 +104,10 @@ public class AdministradorService {
         }).orElseThrow(() -> new AdministradorNaoExisteException("Administrador não existe!"));
     }
 
-    public List<AdministradorResponseDto> listar() throws ListaAdministradoresVaziaException {
-        Optional<List<Administrador>> listaAdministradorBD = administradorRepository.findByUsuarioAtivo(true);
-        if (listaAdministradorBD.isPresent()) {
-            List<AdministradorResponseDto> listaAdministradorDto = listaAdministradorBD.get().stream().map(administradorBD -> AdministradorResponseDto.fromEntity(administradorBD)).collect(Collectors.toList());
+    public Page<AdministradorResponseDto> listar(Pageable pageable) throws ListaAdministradoresVaziaException {
+        Page<Administrador> listaAdministradorBD = administradorRepository.findByUsuarioAtivo(true, pageable);
+        if (!listaAdministradorBD.isEmpty()) {
+            Page<AdministradorResponseDto> listaAdministradorDto = listaAdministradorBD.map(AdministradorResponseDto::fromEntity);
             return listaAdministradorDto;
         } else {
             throw new ListaAdministradoresVaziaException("Lista de administradores vazia!");
