@@ -405,9 +405,9 @@ public class CampeonatoController {
 
     @GetMapping("/historico/{idAcademico}")
     @PermitAll
-    public ResponseEntity<List<CampeonatoResponseDto>> buscarHistoricoCampeonatoOutrosUsuarios( @PathVariable Long idAcademico) {
+    public ResponseEntity<Page<CampeonatoResponseDto>> buscarHistoricoCampeonatoOutrosUsuarios( @PathVariable Long idAcademico, Pageable pageable) {
         try {
-            List<CampeonatoResponseDto> campeonatos = campeonatoService.buscarHistoricoCampeonatoOutrosUsuarios(idAcademico);
+            Page<CampeonatoResponseDto> campeonatos = campeonatoService.buscarHistoricoCampeonatoOutrosUsuarios(idAcademico, pageable);
             return ResponseEntity.ok(campeonatos);
         } catch (AcademicoNaoExisteException e) {
             System.out.println("Erro " + e.getMessage());
@@ -415,6 +415,9 @@ public class CampeonatoController {
         } catch (ConteudoPrivadoException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }catch (RegistroNaoEncontradoException e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } catch (Exception e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

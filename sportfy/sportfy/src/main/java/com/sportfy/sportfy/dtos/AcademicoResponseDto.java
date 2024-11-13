@@ -39,8 +39,13 @@ public record AcademicoResponseDto(
                 academico.getUsuario().getDataCriacao(),
                 academico.getUsuario().isAtivo(),
                 academico.getUsuario().getPermissao(),
-                academico.getModalidadeEsportivas().stream().map(
-                        m -> new ModalidadeAcademicoDto(m.getIdModalidadeEsportiva(), m.getNome())).toList()
-        );
+                academico.getModalidadeEsportivas() == null || academico.getModalidadeEsportivas().isEmpty()
+                        ? List.of()
+                        : academico.getModalidadeEsportivas().stream()
+                        .map(m -> new ModalidadeAcademicoDto(m.getIdModalidadeEsportiva(), m.getNome()))
+                        .collect(Collectors.toList()));
+        }
+
     }
-}
+
+

@@ -778,7 +778,7 @@ public class CampeonatoService {
         }
     }
 
-    public List<CampeonatoResponseDto> buscarHistoricoCampeonatoOutrosUsuarios(Long idAcademico) throws AcademicoNaoExisteException, ConteudoPrivadoException{
+    public Page<CampeonatoResponseDto> buscarHistoricoCampeonatoOutrosUsuarios(Long idAcademico, Pageable pageable) throws RegistroNaoEncontradoException, AcademicoNaoExisteException, ConteudoPrivadoException{
         Optional<Academico> academico = academicoRepository.findById(idAcademico);
 
         if (academico.isPresent()){
@@ -789,7 +789,15 @@ public class CampeonatoService {
                 for (int i = 0; i < participacoesCampeonatos.size(); i++){
                     campeonatos.add(participacoesCampeonatos.get(i).getTime().getCampeonato().toResponseDto(participacoesCampeonatos.get(i).getTime().getCampeonato()));
                 }
-               return campeonatos;
+                if (campeonatos.isEmpty()){
+                    throw new RegistroNaoEncontradoException("Nenhum campeonato encontrado!");
+                }
+
+                int start = (int) pageable.getOffset();
+                int end = Math.min(start + pageable.getPageSize(), campeonatos.size());
+                List<CampeonatoResponseDto> paginatedList = campeonatos.subList(start, end);
+
+                return new PageImpl<>(paginatedList, pageable, campeonatos.size());
             }else {
                 throw new ConteudoPrivadoException("O usuario definiu seu historico como privadas!");
             }
