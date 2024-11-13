@@ -218,9 +218,9 @@ public class AcademicoController {
     }
 
     @GetMapping("/uso/{idAcademico}")
-    public ResponseEntity<EstatisticasDeUsoDto> getEstatisticasDeUso(@PathVariable Long idAcademico) {
+    public ResponseEntity<EstatisticasPessoaisDto> getEstatisticasDeUso(@PathVariable Long idAcademico) {
         try {
-            EstatisticasDeUsoDto estatisticasDeUso = academicoService.estatisticasDeUso(idAcademico);
+            EstatisticasPessoaisDto estatisticasDeUso = academicoService.estatisticasDeUso(idAcademico);
             return ResponseEntity.ok(estatisticasDeUso);
         } catch (AcademicoNaoExisteException | ModalidadeNaoExistenteException | RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());

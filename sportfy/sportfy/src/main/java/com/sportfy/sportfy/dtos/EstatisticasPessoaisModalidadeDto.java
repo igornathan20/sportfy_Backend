@@ -4,6 +4,7 @@ public record EstatisticasPessoaisModalidadeDto(
         String modalidade,
         int vitorias,
         int derrotas,
-        int jogos
+        int jogos,
+        AvaliacaoResponseDto avaliacao
 ) {
 }

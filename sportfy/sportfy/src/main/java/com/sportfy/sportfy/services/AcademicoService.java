@@ -2,6 +2,7 @@ package com.sportfy.sportfy.services;
 
 import com.sportfy.sportfy.dtos.*;
 import com.sportfy.sportfy.enums.TipoPermissao;
+import com.sportfy.sportfy.enums.TipoSituacaoMetaDiaria;
 import com.sportfy.sportfy.exeptions.*;
 import com.sportfy.sportfy.models.*;
 import com.sportfy.sportfy.repositories.*;
@@ -42,6 +43,12 @@ public class AcademicoService {
     private PrivacidadeRepository privacidadeRepository;
     @Autowired
     private NotificacaoRepository notificacaoRepository;
+    @Autowired
+    MetaDiariaRepository metaDiariaRepository;
+    @Autowired
+    PublicacaoRepository publicacaoRepository;
+    @Autowired
+    CampeonatoService campeonatoService;
 
 
     public AcademicoResponseDto cadastrar(AcademicoDto academicoDto) throws EmailInvalidoException, OutroUsuarioComDadosJaExistentes, PermissaoNaoExisteException {
@@ -258,6 +265,8 @@ public class AcademicoService {
                 int vitorias = 0;
                 int derrotas = 0;
                 int totalPartidas = 0;
+                AvaliacaoResponseDto avaliacao = campeonatoService.recuperaAvaliacaoPorModalidade(idModalidade,idAcademico);
+
 
                 if (participacoesCampeonatos == null){
                     throw new RegistroNaoEncontradoException("O jogador nao participou de nenhum campeonato!");
@@ -289,7 +298,7 @@ public class AcademicoService {
                         }
                     }
                 }
-                return new EstatisticasPessoaisModalidadeDto(modalidadeEsportiva.get().getNome(), vitorias, derrotas, totalPartidas );
+                return new EstatisticasPessoaisModalidadeDto(modalidadeEsportiva.get().getNome(), vitorias, derrotas, totalPartidas, avaliacao );
             }else {
                 throw new AcademicoNaoExisteException("Academico nao encontrado!");
             }
@@ -310,6 +319,8 @@ public class AcademicoService {
                     int vitorias = 0;
                     int derrotas = 0;
                     int totalPartidas = 0;
+                    AvaliacaoResponseDto avaliacao = campeonatoService.recuperaAvaliacaoPorModalidade(idModalidade,idAcademico);
+
 
                     if (participacoesCampeonatos == null) {
                         throw new RegistroNaoEncontradoException("O jogador nao participou de nenhum campeonato!");
@@ -341,7 +352,7 @@ public class AcademicoService {
                             }
                         }
                     }
-                    return new EstatisticasPessoaisModalidadeDto(modalidadeEsportiva.get().getNome(), vitorias, derrotas, totalPartidas);
+                    return new EstatisticasPessoaisModalidadeDto(modalidadeEsportiva.get().getNome(), vitorias, derrotas, totalPartidas, avaliacao);
                 }else {
                     throw new ConteudoPrivadoException("O usuario definiu suas estatisticas como privadas!");
                 }
@@ -353,16 +364,31 @@ public class AcademicoService {
         }
     }
 
-    public EstatisticasDeUsoDto estatisticasDeUso(Long idAcademico)throws AcademicoNaoExisteException, ModalidadeNaoExistenteException, RegistroNaoEncontradoException{
+    public EstatisticasPessoaisDto estatisticasDeUso(Long idAcademico)throws AcademicoNaoExisteException, ModalidadeNaoExistenteException, RegistroNaoEncontradoException{
         Optional<Academico> academico = academicoRepository.findById(idAcademico);
 
         if (academico.isPresent()){
+            OffsetDateTime dataInscricao = academico.get().getUsuario().getDataCriacao();
             List<AcademicoModalidadeEsportiva> academicoModalidade = academicoModalidadeEsportivaReposity.findByAcademico(academico.get());
             List<Jogador> participacoesCampeonatos = jogadorRepository.findByAcademico(academico.get());
-            //fazer para buscar posts posteriormente
-            return new EstatisticasDeUsoDto(participacoesCampeonatos.size(), academicoModalidade.size());
+
+            List<MetaDiaria> metasDiarias = metaDiariaRepository.findByAcademico(academico.get());
+            int metasDiariasRealizadas = (int) metasDiarias.stream()
+                    .filter(metaDiaria -> TipoSituacaoMetaDiaria.CONCLUIDA.equals(metaDiaria.getTipoSituacaoMetaDiaria()))
+                    .count();
+            int metasDiariasAberto = (int) metasDiarias.stream()
+                    .filter(metaDiaria -> TipoSituacaoMetaDiaria.EM_ANDAMENTO.equals(metaDiaria.getTipoSituacaoMetaDiaria()))
+                    .count();
+
+            List<Publicacao> posts = publicacaoRepository.findByUsuario(academico.get().getUsuario());
+
+            return new EstatisticasPessoaisDto(dataInscricao, participacoesCampeonatos.size(),
+                                                academicoModalidade.size(), metasDiariasRealizadas,
+                                                metasDiariasAberto,
+                                                posts.size()
+                    );
         }else {
-            throw new ModalidadeNaoExistenteException("Modalidade nao encontrada!");
+            throw new AcademicoNaoExisteException("Academico nao encontrado!");
         }
     }
 

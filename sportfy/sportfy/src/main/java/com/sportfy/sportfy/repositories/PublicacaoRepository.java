@@ -3,6 +3,7 @@ package com.sportfy.sportfy.repositories;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+import com.sportfy.sportfy.models.Usuario;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,4 +18,6 @@ public interface PublicacaoRepository extends JpaRepository<Publicacao, Long> {
     Page<Publicacao> findByCanalIdCanal(Long idCanal, Pageable pageable);
     @Query("SELECT p FROM Publicacao p WHERE p.dataPublicacao BETWEEN :dataInicio AND CURRENT_TIMESTAMP")
     List<Publicacao> findByDataPublicacaoInLast30Days(@Param("dataInicio") OffsetDateTime dataInicio);
+    List<Publicacao> findByUsuario(Usuario usuario);
+
 }
