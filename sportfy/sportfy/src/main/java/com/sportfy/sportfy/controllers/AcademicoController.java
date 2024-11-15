@@ -2,8 +2,10 @@ package com.sportfy.sportfy.controllers;
 
 import com.sportfy.sportfy.dtos.*;
 import com.sportfy.sportfy.exeptions.*;
+import com.sportfy.sportfy.models.Curso;
 import com.sportfy.sportfy.models.Notificacao;
 import com.sportfy.sportfy.models.Privacidade;
+import com.sportfy.sportfy.repositories.CursoRepository;
 import com.sportfy.sportfy.services.AcademicoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/academico")
@@ -29,6 +32,9 @@ public class AcademicoController {
 
     @Autowired
     AcademicoService academicoService;
+    @Autowired
+    private CursoRepository cursoRepository;
+
 
     @PostMapping("/cadastrar")
     //@PreAuthorize("hasRole('ROLE_ACADEMICO')")
@@ -203,7 +209,7 @@ public class AcademicoController {
     @GetMapping("/buscar/estatisticas/{idAcademico}/modalidade/{idModalidade}")
     public ResponseEntity<EstatisticasPessoaisModalidadeDto> obterEstatisticasOutroUsuarioPorModalidade(@PathVariable Long idAcademico, @PathVariable Long idModalidade) {
         try {
-            EstatisticasPessoaisModalidadeDto estatisticas = academicoService.estatisticasPessoaisPorModalidade(idAcademico, idModalidade);
+            EstatisticasPessoaisModalidadeDto estatisticas = academicoService.estatisticasOutroUsuarioPorModalidade(idAcademico, idModalidade);
             return ResponseEntity.ok(estatisticas);
         } catch (AcademicoNaoExisteException | ModalidadeNaoExistenteException e) {
             System.out.println("Erro " + e.getMessage());
@@ -211,6 +217,9 @@ public class AcademicoController {
         } catch (RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        } catch (ConteudoPrivadoException e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         } catch (Exception e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -229,5 +238,12 @@ public class AcademicoController {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @GetMapping("/cursos/ufpr")
+    public List<String> listarCursosUfpr() {
+        return cursoRepository.findAll().stream()
+                .map(Curso::getNome)
+                .collect(Collectors.toList());
     }
 }
