@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import com.sportfy.sportfy.services.AuthService;
 
@@ -26,7 +27,7 @@ public class AuthController {
         try {
             Object token = authService.efetuarLogin(dados);
             return ResponseEntity.status(HttpStatus.OK).body(token);
-        }catch (BadCredentialsException e){
+        } catch (BadCredentialsException | UsernameNotFoundException e){
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         } catch (Exception e){
