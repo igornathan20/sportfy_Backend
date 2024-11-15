@@ -10,4 +10,5 @@ import java.util.List;
 
 public interface AvaliacaoJogadorRepository extends JpaRepository<AvaliacaoJogador, Long> {
     List<AvaliacaoJogador> findByAcademicoAvaliadoAndModalidadeEsportiva(Academico academico, ModalidadeEsportiva modalidadeEsportiva);
+    List<AvaliacaoJogador> findByAcademicoAvaliado(Academico academico);
 }

@@ -403,6 +403,21 @@ public class CampeonatoController {
         }
     }
 
+    @GetMapping("/avaliacao/{idAcademico}/mediaAvaliacao")
+    @PermitAll
+    public ResponseEntity<MediaAvaliacaoDto> recuperaMediaAvaliacao(@PathVariable Long idAcademico) {
+        try {
+            MediaAvaliacaoDto avaliacaoResponse = campeonatoService.recuperaMediaAvaliacoes(idAcademico);
+            return ResponseEntity.ok(avaliacaoResponse);
+        } catch (AcademicoNaoExisteException e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
     @GetMapping("/historico/{idAcademico}")
     @PermitAll
     public ResponseEntity<Page<CampeonatoResponseDto>> buscarHistoricoCampeonatoOutrosUsuarios( @PathVariable Long idAcademico, Pageable pageable) {
