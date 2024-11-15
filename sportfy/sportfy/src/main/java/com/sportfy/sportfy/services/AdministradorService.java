@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -67,12 +68,13 @@ public class AdministradorService {
         }
     }
 
-    public AdministradorResponseDto atualizar(Long idAdministrador, AdministradorDto administradorDto) throws AdministradorNaoExisteException, OutroUsuarioComDadosJaExistentes, RoleNaoPermitidaException, PermissaoNaoExisteException {
+    public AdministradorResponseDto atualizar(Long idAdministrador, AdministradorDto administradorDto, String usuarioAutenticado) throws AdministradorNaoExisteException, AccessDeniedException, OutroUsuarioComDadosJaExistentes, RoleNaoPermitidaException, PermissaoNaoExisteException {
         Optional<Administrador> administradorBD = administradorRepository.findByIdAdministradorAndUsuarioAtivo(idAdministrador, true);
         if (administradorBD.isPresent()) {
-            Optional<Administrador> administradorExistente = administradorRepository.findByUsuarioUsername(administradorDto.username());
-            if (!administradorExistente.isPresent() || administradorExistente.get().getUsuario().getIdUsuario().equals(administradorBD.get().getUsuario().getIdUsuario())) {
-                 Administrador administradorAtualizado = new Administrador();
+            if (administradorBD.get().getUsuario().getUsername().equals(usuarioAutenticado)){
+                Optional<Administrador> administradorExistente = administradorRepository.findByUsuarioUsername(administradorDto.username());
+                if (!administradorExistente.isPresent() || administradorExistente.get().getUsuario().getIdUsuario().equals(administradorBD.get().getUsuario().getIdUsuario())) {
+                    Administrador administradorAtualizado = new Administrador();
                     administradorAtualizado.atualizar(administradorBD.get().getIdAdministrador(), administradorBD.get().getUsuario().getIdUsuario(), administradorDto);
                     administradorAtualizado.getUsuario().setPermissao(TipoPermissao.ADMINISTRADOR);
                     if (administradorDto.password() == null || administradorDto.password().isEmpty()) {
@@ -82,8 +84,11 @@ public class AdministradorService {
                     }
                     Administrador administradorSalvo = administradorRepository.save(administradorAtualizado);
                     return AdministradorResponseDto.fromEntity(administradorSalvo);
-            } else {
-                throw new OutroUsuarioComDadosJaExistentes("Outro usuário com username já existente!");
+                } else {
+                    throw new OutroUsuarioComDadosJaExistentes("Outro usuário com username já existente!");
+                }
+            }else {
+                throw new AccessDeniedException("Voce não tem permissão para alterar esse recurso!");
             }
         } else {
             throw new AdministradorNaoExisteException("Administrador não existe!");

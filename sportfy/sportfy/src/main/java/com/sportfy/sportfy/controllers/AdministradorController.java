@@ -17,6 +17,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 
@@ -59,10 +61,12 @@ public class AdministradorController {
     }
 
     @PutMapping("/atualizar/{idAdministrador}")
-    //@PreAuthorize("hasRole('ROLE_ADMINISTRADOR_MASTER')")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     public ResponseEntity<AdministradorResponseDto> atualizar(@PathVariable("idAdministrador") Long idAdministrador, @RequestBody @Valid AdministradorDto administrador) {
         try {
-            AdministradorResponseDto administradorAtualizado = administradorService.atualizar(idAdministrador, administrador);
+            var authentication = SecurityContextHolder.getContext().getAuthentication();
+            var usuarioAutenticado = ((UserDetails) authentication.getPrincipal()).getUsername();
+            AdministradorResponseDto administradorAtualizado = administradorService.atualizar(idAdministrador, administrador, usuarioAutenticado);
             return ResponseEntity.status(HttpStatus.OK).body(administradorAtualizado);
         } catch (AdministradorNaoExisteException e) {
             System.out.println("Erro " + e.getMessage());

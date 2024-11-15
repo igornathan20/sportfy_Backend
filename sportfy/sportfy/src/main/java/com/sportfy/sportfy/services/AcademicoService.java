@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.AccessDeniedException;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -119,7 +120,7 @@ public class AcademicoService {
         }
     }
     
-    public AcademicoResponseDto atualizar(Long idAcademico, AcademicoDto academicoDto) throws EmailInvalidoException, AcademicoNaoExisteException, OutroUsuarioComDadosJaExistentes {
+    public AcademicoResponseDto atualizar(Long idAcademico, AcademicoDto academicoDto, String usuarioAutenticado) throws EmailInvalidoException,AccessDeniedException, AcademicoNaoExisteException, OutroUsuarioComDadosJaExistentes {
         if (!isEmailFromUfpr(academicoDto.email())) {
             throw new EmailInvalidoException("Email invalido!");
         }
@@ -127,38 +128,41 @@ public class AcademicoService {
         if (!academicoBD.isPresent()) {
             throw new AcademicoNaoExisteException("Academico não existe!");
         }
-    
-        Optional<List<Academico>> academicoExistente = academicoRepository.findByUsuarioUsernameOrEmail(academicoDto.username(), academicoDto.email());
-        if (academicoExistente.isPresent()) {
-            List<Academico> academicos = academicoExistente.get();
-            boolean usernameOrEmailExists = academicos.stream()
-                .anyMatch(academico -> !academico.getIdAcademico().equals(academicoBD.get().getIdAcademico()));
-    
-            if (usernameOrEmailExists) {
-                boolean usernameExists = academicos.stream()
-                    .anyMatch(academico -> !academico.getIdAcademico().equals(academicoBD.get().getIdAcademico())
-                            && academico.getUsuario().getUsername().equals(academicoDto.username()));
-    
-                if (usernameExists) {
-                    throw new OutroUsuarioComDadosJaExistentes("Outro usuário com username já existente!");
-                } else {
-                    throw new OutroUsuarioComDadosJaExistentes("Outro usuário com email já existente!");
+        if (academicoBD.get().getUsuario().getUsername().equals(usuarioAutenticado)){
+            Optional<List<Academico>> academicoExistente = academicoRepository.findByUsuarioUsernameOrEmail(academicoDto.username(), academicoDto.email());
+            if (academicoExistente.isPresent()) {
+                List<Academico> academicos = academicoExistente.get();
+                boolean usernameOrEmailExists = academicos.stream()
+                        .anyMatch(academico -> !academico.getIdAcademico().equals(academicoBD.get().getIdAcademico()));
+
+                if (usernameOrEmailExists) {
+                    boolean usernameExists = academicos.stream()
+                            .anyMatch(academico -> !academico.getIdAcademico().equals(academicoBD.get().getIdAcademico())
+                                    && academico.getUsuario().getUsername().equals(academicoDto.username()));
+
+                    if (usernameExists) {
+                        throw new OutroUsuarioComDadosJaExistentes("Outro usuário com username já existente!");
+                    } else {
+                        throw new OutroUsuarioComDadosJaExistentes("Outro usuário com email já existente!");
+                    }
                 }
             }
-        }
-    
-        Academico academicoAtualizado = new Academico();
-        academicoAtualizado.atualizar(academicoBD.get().getIdAcademico(), academicoBD.get().getUsuario().getIdUsuario(), academicoDto);
-        academicoAtualizado.getUsuario().setDataCriacao(academicoBD.get().getUsuario().getDataCriacao());
-        academicoAtualizado.getUsuario().setPermissao(academicoBD.get().getUsuario().getPermissao());
-        if (academicoDto.password() == null || academicoDto.password().isEmpty()) {
-            academicoAtualizado.getUsuario().setPassword(academicoBD.get().getUsuario().getPassword());
-        } else {
-            academicoAtualizado.getUsuario().setPassword(passwordEncoder.encode(academicoDto.password()));
-        }
 
-        Academico academicoSalvo = academicoRepository.save(academicoAtualizado);
-        return AcademicoResponseDto.fromAcademicoBD(academicoSalvo);
+            Academico academicoAtualizado = new Academico();
+            academicoAtualizado.atualizar(academicoBD.get().getIdAcademico(), academicoBD.get().getUsuario().getIdUsuario(), academicoDto);
+            academicoAtualizado.getUsuario().setDataCriacao(academicoBD.get().getUsuario().getDataCriacao());
+            academicoAtualizado.getUsuario().setPermissao(academicoBD.get().getUsuario().getPermissao());
+            if (academicoDto.password() == null || academicoDto.password().isEmpty()) {
+                academicoAtualizado.getUsuario().setPassword(academicoBD.get().getUsuario().getPassword());
+            } else {
+                academicoAtualizado.getUsuario().setPassword(passwordEncoder.encode(academicoDto.password()));
+            }
+
+            Academico academicoSalvo = academicoRepository.save(academicoAtualizado);
+            return AcademicoResponseDto.fromAcademicoBD(academicoSalvo);
+        }else {
+            throw new AccessDeniedException("Voce não tem permissão para alterar esse recurso!");
+        }
     }
     
     public AcademicoResponseDto inativar(Long idAcademico) throws AcademicoNaoExisteException {
@@ -171,6 +175,12 @@ public class AcademicoService {
 
     public AcademicoResponseDto consultar(Long idUsuario) throws AcademicoNaoExisteException {
         return academicoRepository.findByUsuarioIdUsuarioAndUsuarioAtivo(idUsuario, true).map(academicoBD -> {
+            return AcademicoResponseDto.fromAcademicoBD(academicoBD);
+        }).orElseThrow(() -> new AcademicoNaoExisteException("Academico não existe!"));
+    }
+
+    public AcademicoResponseDto buscarPorUsername(String userName) throws AcademicoNaoExisteException {
+        return academicoRepository.findByUsuarioUsername(userName).map(academicoBD -> {
             return AcademicoResponseDto.fromAcademicoBD(academicoBD);
         }).orElseThrow(() -> new AcademicoNaoExisteException("Academico não existe!"));
     }
@@ -211,15 +221,21 @@ public class AcademicoService {
         return notificacoes.toDto(notificacoes);
     }
 
-    public Notificacao alteraNotificacao(NotificacaoDto userNotificacao){
-        Notificacao notificacao = notificacaoRepository.findByIdAcademico(userNotificacao.idAcademico());
+    public Notificacao alteraNotificacao(NotificacaoDto userNotificacao, String academicoAutenticado) throws AccessDeniedException{
+        Optional<Academico> academico = academicoRepository.findById(userNotificacao.idAcademico());
 
-        notificacao.setNotificarCampeonatos(userNotificacao.campeonatos());
-        notificacao.setNotificarPosts(userNotificacao.posts());
-        notificacao.setNotificarComentarios(userNotificacao.comentarios());
-        notificacao.setNotificarLikes(userNotificacao.likes());
+        if (academico.get().getUsuario().getUsername().equals(academicoAutenticado)){
+            Notificacao notificacao = notificacaoRepository.findByIdAcademico(userNotificacao.idAcademico());
 
-        return notificacaoRepository.save(notificacao);
+            notificacao.setNotificarCampeonatos(userNotificacao.campeonatos());
+            notificacao.setNotificarPosts(userNotificacao.posts());
+            notificacao.setNotificarComentarios(userNotificacao.comentarios());
+            notificacao.setNotificarLikes(userNotificacao.likes());
+
+            return notificacaoRepository.save(notificacao);
+        } else {
+            throw new AccessDeniedException("Você não tem permissão para editar este recurso.");
+        }
     }
 
     public boolean retornaPrivacidade(Long idAcademico, String tipo){
@@ -244,15 +260,21 @@ public class AcademicoService {
         return privacidade.toDto(privacidade);
     }
 
-    public Privacidade alteraPrivacidade(PrivacidadeDto userPrivacidade){
-        Privacidade privacidade = privacidadeRepository.findByIdAcademico(userPrivacidade.idAcademico());
+    public Privacidade alteraPrivacidade(PrivacidadeDto userPrivacidade, String academicoAutenticado) throws AccessDeniedException{
+        Optional<Academico> academico = academicoRepository.findById(userPrivacidade.idAcademico());
 
-        privacidade.setMostrarConquistas(userPrivacidade.mostrarConquistas());
-        privacidade.setMostrarHistoricoCampeonatos(userPrivacidade.mostrarHistoricoCampeonatos());
-        privacidade.setMostrarModalidadesEsportivas(userPrivacidade.mostrarModalidadesEsportivas());
-        privacidade.setMostrarEstatisticasModalidadesEsportivas(userPrivacidade.mostrarEstatisticasModalidadesEsportivas());
+        if (academico.get().getUsuario().getUsername().equals(academicoAutenticado)){
+            Privacidade privacidade = privacidadeRepository.findByIdAcademico(userPrivacidade.idAcademico());
 
-        return privacidadeRepository.save(privacidade);
+            privacidade.setMostrarConquistas(userPrivacidade.mostrarConquistas());
+            privacidade.setMostrarHistoricoCampeonatos(userPrivacidade.mostrarHistoricoCampeonatos());
+            privacidade.setMostrarModalidadesEsportivas(userPrivacidade.mostrarModalidadesEsportivas());
+            privacidade.setMostrarEstatisticasModalidadesEsportivas(userPrivacidade.mostrarEstatisticasModalidadesEsportivas());
+
+            return privacidadeRepository.save(privacidade);
+        }else {
+            throw new AccessDeniedException("Você não tem permissão para editar este recurso.");
+        }
     }
 
     public EstatisticasPessoaisModalidadeDto estatisticasPessoaisPorModalidade(Long idAcademico , Long idModalidade)throws AcademicoNaoExisteException, ModalidadeNaoExistenteException, RegistroNaoEncontradoException{

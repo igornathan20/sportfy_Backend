@@ -11,8 +11,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -51,11 +54,19 @@ public class CampeonatoController {
     @PermitAll
     public ResponseEntity<CampeonatoResponseDto> editarCampeonato(@PathVariable Long idCampeonato, @RequestBody CampeonatoDto campeonatoDto) {
         try {
-            CampeonatoResponseDto campeonato = campeonatoService.editarCampeonato(idCampeonato, campeonatoDto);
+            var authentication = SecurityContextHolder.getContext().getAuthentication();
+            var usuarioAutenticado = ((UserDetails) authentication.getPrincipal()).getUsername();
+            CampeonatoResponseDto campeonato = campeonatoService.editarCampeonato(idCampeonato, campeonatoDto, usuarioAutenticado);
             return ResponseEntity.status(HttpStatus.OK).body(campeonato);
         } catch (RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (AccessDeniedException e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        } catch (TipoInvalidoException e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         } catch (Exception e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -180,12 +191,17 @@ public class CampeonatoController {
     @PermitAll
     public ResponseEntity<CampeonatoResponseDto> desativarCampeonato(@PathVariable Long id) {
         try {
-            CampeonatoResponseDto campeonato = campeonatoService.desativarCampeonato(id);
+            var authentication = SecurityContextHolder.getContext().getAuthentication();
+            var usuarioAutenticado = ((UserDetails) authentication.getPrincipal()).getUsername();
+            CampeonatoResponseDto campeonato = campeonatoService.desativarCampeonato(id, usuarioAutenticado);
             return ResponseEntity.status(HttpStatus.OK).body(campeonato);
         } catch (RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        } catch (Exception e) {
+        } catch (AccessDeniedException e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }catch (Exception e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -296,7 +312,9 @@ public class CampeonatoController {
     @PermitAll
     public ResponseEntity<JogadorDto> mudarSituacaoJogador(@PathVariable Long id, @RequestParam String situacao) {
         try {
-            JogadorDto jogadorAtualizado = campeonatoService.mudarSituacaoJogador(id, situacao);
+            var authentication = SecurityContextHolder.getContext().getAuthentication();
+            var usuarioAutenticado = ((UserDetails) authentication.getPrincipal()).getUsername();
+            JogadorDto jogadorAtualizado = campeonatoService.mudarSituacaoJogador(id, situacao, usuarioAutenticado);
             return ResponseEntity.ok(jogadorAtualizado);
         } catch (TipoInvalidoException e) {
             System.out.println("Erro " + e.getMessage());
@@ -304,6 +322,9 @@ public class CampeonatoController {
         } catch (RegistroNaoEncontradoException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }catch (AccessDeniedException e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }catch (Exception e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -314,11 +335,16 @@ public class CampeonatoController {
     @PermitAll
     public ResponseEntity<List<PartidaDto>> definirPrimeiraFase(@PathVariable Long idCampeonato) {
         try {
-            List<PartidaDto> partidas = campeonatoService.definirPrimeiraFase(idCampeonato);
+            var authentication = SecurityContextHolder.getContext().getAuthentication();
+            var usuarioAutenticado = ((UserDetails) authentication.getPrincipal()).getUsername();
+            List<PartidaDto> partidas = campeonatoService.definirPrimeiraFase(idCampeonato, usuarioAutenticado);
             return ResponseEntity.status(HttpStatus.OK).body(partidas);
         } catch (RegistroNaoEncontradoException e){
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (AccessDeniedException e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         } catch (Exception e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -344,14 +370,19 @@ public class CampeonatoController {
     @PermitAll
     public ResponseEntity<List<PartidaDto>> avancarDeFase(@PathVariable Long idCampeonato) {
         try {
-            List<PartidaDto> partidas = campeonatoService.avancarDeFase(idCampeonato);
+            var authentication = SecurityContextHolder.getContext().getAuthentication();
+            var usuarioAutenticado = ((UserDetails) authentication.getPrincipal()).getUsername();
+            List<PartidaDto> partidas = campeonatoService.avancarDeFase(idCampeonato, usuarioAutenticado);
             return ResponseEntity.status(HttpStatus.OK).body(partidas);
         }catch (RegistroNaoEncontradoException e){
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }catch (AvancarFaseException e){
             System.out.println("Erro " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (AccessDeniedException e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         } catch(Exception e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

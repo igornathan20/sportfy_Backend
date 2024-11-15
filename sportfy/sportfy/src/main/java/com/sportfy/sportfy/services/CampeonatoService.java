@@ -16,6 +16,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.AccessDeniedException;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -81,22 +82,26 @@ public class CampeonatoService {
         }
     }
 
-    public CampeonatoResponseDto editarCampeonato(Long idCampeonato, CampeonatoDto campeonatoDto) throws RegistroNaoEncontradoException {
+    public CampeonatoResponseDto editarCampeonato(Long idCampeonato, CampeonatoDto campeonatoDto, String usuarioAutenticado) throws AccessDeniedException, RegistroNaoEncontradoException, TipoInvalidoException {
         Optional<Campeonato> campeonato = campeonatoRepository.findById(idCampeonato);
 
         if (campeonato.isPresent()) {
-            Campeonato editCampeonato = campeonato.get();
-            try {
-                editCampeonato.toEntity(campeonatoDto);
-                Endereco enderecoCampeonato = editCampeonato.getEndereco();
-                enderecoCampeonato.toEntity(campeonatoDto.endereco());
-                editCampeonato.setEndereco(enderecoCampeonato);
-                if (campeonatoDto.senha() != null){
-                    editCampeonato.setSenha(passwordEncoder.encode(campeonatoDto.senha()));
+            if (campeonato.get().getAcademico().getUsuario().getUsername().equals(usuarioAutenticado)){
+                Campeonato editCampeonato = campeonato.get();
+                try {
+                    editCampeonato.toEntity(campeonatoDto);
+                    Endereco enderecoCampeonato = editCampeonato.getEndereco();
+                    enderecoCampeonato.toEntity(campeonatoDto.endereco());
+                    editCampeonato.setEndereco(enderecoCampeonato);
+                    if (campeonatoDto.senha() != null) {
+                        editCampeonato.setSenha(passwordEncoder.encode(campeonatoDto.senha()));
+                    }
+                    return editCampeonato.toResponseDto(campeonatoRepository.save(editCampeonato));
+                } catch (Exception e) {
+                    throw new TipoInvalidoException("Data de fim não pode ser no passado!");
                 }
-                return editCampeonato.toResponseDto(campeonatoRepository.save(editCampeonato));
-            } catch (Exception e) {
-                return null;
+            }else {
+                throw new AccessDeniedException("Voce não tem permissão para alterar esse recurso!");
             }
         } else {
             throw new RegistroNaoEncontradoException("Campeonato não encontrado!");
@@ -259,13 +264,18 @@ public class CampeonatoService {
         }
     }
 
-    public CampeonatoResponseDto desativarCampeonato(Long id) throws RegistroNaoEncontradoException {
+    public CampeonatoResponseDto desativarCampeonato(Long id, String usuarioAutenticado) throws RegistroNaoEncontradoException, AccessDeniedException {
         Optional<Campeonato> campeonato = campeonatoRepository.findById(id);
 
         if (campeonato.isPresent()) {
-            Campeonato campeonatoDesativado = campeonato.get();
-            campeonatoDesativado.setAtivo(false);
-            return campeonato.get().toResponseDto(campeonatoRepository.save(campeonatoDesativado));
+            if (campeonato.get().getAcademico().getUsuario().getUsername().equals(usuarioAutenticado)){
+                Campeonato campeonatoDesativado = campeonato.get();
+                campeonatoDesativado.setAtivo(false);
+                return campeonato.get().toResponseDto(campeonatoRepository.save(campeonatoDesativado));
+            }else {
+                throw new AccessDeniedException("Voce não tem permissão para alterar esse recurso!");
+            }
+
         } else {
             throw new RegistroNaoEncontradoException("Registro de apoio a saude nao encontrado!");
         }
@@ -452,111 +462,119 @@ public class CampeonatoService {
         return new PageImpl<>(paginatedList, pageable, academicosEnfrentados.size());
     }
 
-    public JogadorDto mudarSituacaoJogador(Long idJogador, String situacao ) throws TipoInvalidoException, RegistroNaoEncontradoException{
+    public JogadorDto mudarSituacaoJogador(Long idJogador, String situacao, String usuarioAutenticado ) throws TipoInvalidoException, RegistroNaoEncontradoException, AccessDeniedException{
         Optional<Jogador> jogador = jogadorRepository.findById(idJogador);
 
         if (jogador.isPresent()){
-            switch (situacao){
-                case "EM_ABERTO":
-                    jogador.get().setSituacaoJogador(TipoSituacaoJogador.EM_ABERTO);
-                    break;
-                case "ATIVO":
-                    jogador.get().setSituacaoJogador(TipoSituacaoJogador.ATIVO);
-                    break;
-                case "BLOQUEADO":
-                    jogador.get().setSituacaoJogador(TipoSituacaoJogador.BLOQUEADO);
-                    break;
-                case "FINALIZADO":
-                    jogador.get().setSituacaoJogador(TipoSituacaoJogador.FINALIZADO);
-                    break;
-                default:
-                    throw new TipoInvalidoException("O tipo situação do jogador é invalido!");
+            if (jogador.get().getTime().getCampeonato().getAcademico().getUsuario().getUsername().equals(usuarioAutenticado)){
+                switch (situacao){
+                    case "EM_ABERTO":
+                        jogador.get().setSituacaoJogador(TipoSituacaoJogador.EM_ABERTO);
+                        break;
+                    case "ATIVO":
+                        jogador.get().setSituacaoJogador(TipoSituacaoJogador.ATIVO);
+                        break;
+                    case "BLOQUEADO":
+                        jogador.get().setSituacaoJogador(TipoSituacaoJogador.BLOQUEADO);
+                        break;
+                    case "FINALIZADO":
+                        jogador.get().setSituacaoJogador(TipoSituacaoJogador.FINALIZADO);
+                        break;
+                    default:
+                        throw new TipoInvalidoException("O tipo situação do jogador é invalido!");
+                }
+                return jogador.get().toDto(jogadorRepository.save(jogador.get()));
+            }else {
+                throw new AccessDeniedException("Voce não tem permissão para alterar esse recurso!");
             }
-            return jogador.get().toDto(jogadorRepository.save(jogador.get()));
         }else {
             throw new RegistroNaoEncontradoException("Nenhum registro do jogador foi encontrado!");
         }
     }
 
-    public List<PartidaDto> definirPrimeiraFase(Long idCampeonato) throws RegistroNaoEncontradoException{
+    public List<PartidaDto> definirPrimeiraFase(Long idCampeonato, String usuarioAutenticado) throws RegistroNaoEncontradoException, AccessDeniedException{
         Optional<Campeonato> campeonato = campeonatoRepository.findById(idCampeonato);
         if (campeonato.isPresent()){
-            List<Time> times = timeRepository.findByCampeonato(campeonato.get());
+            if (campeonato.get().getAcademico().getUsuario().getUsername().equals(usuarioAutenticado)){
+                List<Time> times = timeRepository.findByCampeonato(campeonato.get());
 
-            for (int i = 0; i < times.size();i ++){
-                List<Jogador> jogador = jogadorRepository.findByTime(times.get(i));
-                if (campeonato.get().getLimiteParticipantes() == 1) {
-                    if (jogador.getFirst().getSituacaoJogador() == TipoSituacaoJogador.BLOQUEADO) {
-                        jogadorRepository.delete(jogador.getFirst());
-                        timeRepository.delete(times.get(i));
-                        times.remove(times.get(i));
-                    }
-                }
-                if (campeonato.get().getLimiteParticipantes() > 1){
-                    for (Jogador j : jogador) {
-                        if (j.getSituacaoJogador() == TipoSituacaoJogador.BLOQUEADO) {
-                            jogadorRepository.delete(j);
+                for (int i = 0; i < times.size();i ++){
+                    List<Jogador> jogador = jogadorRepository.findByTime(times.get(i));
+                    if (campeonato.get().getLimiteParticipantes() == 1) {
+                        if (jogador.getFirst().getSituacaoJogador() == TipoSituacaoJogador.BLOQUEADO) {
+                            jogadorRepository.delete(jogador.getFirst());
+                            timeRepository.delete(times.get(i));
+                            times.remove(times.get(i));
                         }
                     }
-                    if (jogador.isEmpty()){
-                        timeRepository.delete(times.get(i));
-                        times.remove(times.get(i));
+                    if (campeonato.get().getLimiteParticipantes() > 1){
+                        for (Jogador j : jogador) {
+                            if (j.getSituacaoJogador() == TipoSituacaoJogador.BLOQUEADO) {
+                                jogadorRepository.delete(j);
+                            }
+                        }
+                        if (jogador.isEmpty()){
+                            timeRepository.delete(times.get(i));
+                            times.remove(times.get(i));
+                        }
                     }
                 }
+
+
+                int numeroDeTimes = times.size();
+                int numeroMaximoTimes = calcularProximaPotenciaDeDois(numeroDeTimes);
+                switch (numeroMaximoTimes){
+                    case 2:
+                        campeonato.get().setFaseAtual(TipoFasePartida.FINAL);
+                        break;
+                    case 4:
+                        campeonato.get().setFaseAtual(TipoFasePartida.SEMI);
+                        break;
+                    case 8:
+                        campeonato.get().setFaseAtual(TipoFasePartida.QUARTAS);
+                        break;
+                    case 16:
+                        campeonato.get().setFaseAtual(TipoFasePartida.OITAVAS);
+                        break;
+                    default:
+                        //numero maximo de times excedido
+                }
+
+                while (times.size() < numeroMaximoTimes) {
+                    times.add(null);
+                }
+
+                embaralharTimes(times);
+                List<Partida> partidas = new ArrayList<>();
+
+                for (int i = 0; i < times.size(); i += 2) {
+                    Time time1 = times.get(i);
+                    Time time2 = times.get(i + 1);
+
+                    Partida partida = new Partida();
+                    Resultado resultado = new Resultado();
+                    partida.setCampeonato(campeonato.get());
+                    partida.setTime1(time1);
+                    partida.setTime2(time2);
+                    partida.setFasePartida(campeonato.get().getFaseAtual());
+                    partida.setResultado(resultado);
+                    partidas.add(partida);
+                }
+
+                List<Jogador> jogadores = jogadorRepository.findByTimeCampeonato(campeonato.get());
+                for (int i = 0; i < jogadores.size(); i++){
+                    jogadores.get(i).setSituacaoJogador(TipoSituacaoJogador.ATIVO);
+                    jogadorRepository.save(jogadores.get(i));
+                }
+
+                //campeonato.setPartidas(partidas);
+                partidaRepository.saveAll(partidas);
+                campeonato.get().setSituacaoCampeonato(TipoSituacao.INICIADO);
+                campeonatoRepository.save(campeonato.get());
+                return partidas.stream().map(p -> p.toDto(p)).collect(Collectors.toList());
+            }else {
+                throw new AccessDeniedException("Voce não tem permissão para alterar esse recurso!");
             }
-
-
-            int numeroDeTimes = times.size();
-            int numeroMaximoTimes = calcularProximaPotenciaDeDois(numeroDeTimes);
-            switch (numeroMaximoTimes){
-                case 2:
-                    campeonato.get().setFaseAtual(TipoFasePartida.FINAL);
-                    break;
-                case 4:
-                    campeonato.get().setFaseAtual(TipoFasePartida.SEMI);
-                    break;
-                case 8:
-                    campeonato.get().setFaseAtual(TipoFasePartida.QUARTAS);
-                    break;
-                case 16:
-                    campeonato.get().setFaseAtual(TipoFasePartida.OITAVAS);
-                    break;
-                default:
-                    //numero maximo de times excedido
-            }
-
-            while (times.size() < numeroMaximoTimes) {
-                times.add(null);
-            }
-
-            embaralharTimes(times);
-            List<Partida> partidas = new ArrayList<>();
-
-            for (int i = 0; i < times.size(); i += 2) {
-                Time time1 = times.get(i);
-                Time time2 = times.get(i + 1);
-
-                Partida partida = new Partida();
-                Resultado resultado = new Resultado();
-                partida.setCampeonato(campeonato.get());
-                partida.setTime1(time1);
-                partida.setTime2(time2);
-                partida.setFasePartida(campeonato.get().getFaseAtual());
-                partida.setResultado(resultado);
-                partidas.add(partida);
-            }
-
-            List<Jogador> jogadores = jogadorRepository.findByTimeCampeonato(campeonato.get());
-            for (int i = 0; i < jogadores.size(); i++){
-                jogadores.get(i).setSituacaoJogador(TipoSituacaoJogador.ATIVO);
-                jogadorRepository.save(jogadores.get(i));
-            }
-
-            //campeonato.setPartidas(partidas);
-            partidaRepository.saveAll(partidas);
-            campeonato.get().setSituacaoCampeonato(TipoSituacao.INICIADO);
-            campeonatoRepository.save(campeonato.get());
-            return partidas.stream().map(p -> p.toDto(p)).collect(Collectors.toList());
         }else {
             throw new RegistroNaoEncontradoException("Campeonato nao encontrado!");
         }
@@ -592,83 +610,87 @@ public class CampeonatoService {
     }
 
 
-    public List<PartidaDto> avancarDeFase(Long idCampeonato) throws RegistroNaoEncontradoException, AvancarFaseException{
+    public List<PartidaDto> avancarDeFase(Long idCampeonato, String usuarioAutenticado) throws RegistroNaoEncontradoException, AvancarFaseException, AccessDeniedException{
         Optional<Campeonato> campeonato = campeonatoRepository.findById(idCampeonato);
         if (campeonato.isPresent()) {
-            List<Partida> partidasFaseAnterior = partidaRepository.findByCampeonatoAndFasePartida(campeonato.get(), campeonato.get().getFaseAtual());
-            List<Time> times = new ArrayList<>();
+            if (campeonato.get().getAcademico().getUsuario().getUsername().equals(usuarioAutenticado)){
+                List<Partida> partidasFaseAnterior = partidaRepository.findByCampeonatoAndFasePartida(campeonato.get(), campeonato.get().getFaseAtual());
+                List<Time> times = new ArrayList<>();
 
-            for (int i = 0; i < partidasFaseAnterior.size(); i++) {
-                if (partidasFaseAnterior.get(i).getTime1() == null) {
-                    partidasFaseAnterior.get(i).getResultado().setVencedor(partidasFaseAnterior.get(i).getTime2());
-                }
-                if (partidasFaseAnterior.get(i).getTime2() == null) {
-                    partidasFaseAnterior.get(i).getResultado().setVencedor(partidasFaseAnterior.get(i).getTime1());
-                }
-                if (partidasFaseAnterior.get(i).getResultado().getPontuacaoTime1() == partidasFaseAnterior.get(i).getResultado().getPontuacaoTime2()) {
-                    throw new AvancarFaseException("Não é possivel avancar de fase pois existem partidas sem vencedor definido!");
-                }
-                times.add(partidasFaseAnterior.get(i).getResultado().getVencedor());
-                partidasFaseAnterior.get(i).setSituacaoPartida(TipoSituacao.FINALIZADO);
-            }
-
-            for (int i = 0; i < times.size();i ++){
-                List<Jogador> jogador = jogadorRepository.findByTime(times.get(i));
-                if (campeonato.get().getLimiteParticipantes() == 1) {
-                    if (jogador.getFirst().getSituacaoJogador() == TipoSituacaoJogador.BLOQUEADO) {
-                        jogadorRepository.delete(jogador.getFirst());
-                        timeRepository.delete(times.get(i));
-                        times.remove(times.get(i));
+                for (int i = 0; i < partidasFaseAnterior.size(); i++) {
+                    if (partidasFaseAnterior.get(i).getTime1() == null) {
+                        partidasFaseAnterior.get(i).getResultado().setVencedor(partidasFaseAnterior.get(i).getTime2());
                     }
+                    if (partidasFaseAnterior.get(i).getTime2() == null) {
+                        partidasFaseAnterior.get(i).getResultado().setVencedor(partidasFaseAnterior.get(i).getTime1());
+                    }
+                    if (partidasFaseAnterior.get(i).getResultado().getPontuacaoTime1() == partidasFaseAnterior.get(i).getResultado().getPontuacaoTime2()) {
+                        throw new AvancarFaseException("Não é possivel avancar de fase pois existem partidas sem vencedor definido!");
+                    }
+                    times.add(partidasFaseAnterior.get(i).getResultado().getVencedor());
+                    partidasFaseAnterior.get(i).setSituacaoPartida(TipoSituacao.FINALIZADO);
                 }
-                if (campeonato.get().getLimiteParticipantes() > 1){
-                    for (Jogador j : jogador) {
-                        if (j.getSituacaoJogador() == TipoSituacaoJogador.BLOQUEADO) {
-                            jogadorRepository.delete(j);
+
+                for (int i = 0; i < times.size();i ++){
+                    List<Jogador> jogador = jogadorRepository.findByTime(times.get(i));
+                    if (campeonato.get().getLimiteParticipantes() == 1) {
+                        if (jogador.getFirst().getSituacaoJogador() == TipoSituacaoJogador.BLOQUEADO) {
+                            jogadorRepository.delete(jogador.getFirst());
+                            timeRepository.delete(times.get(i));
+                            times.remove(times.get(i));
                         }
                     }
-                    if (jogador.isEmpty()){
-                        timeRepository.delete(times.get(i));
-                        times.remove(times.get(i));
+                    if (campeonato.get().getLimiteParticipantes() > 1){
+                        for (Jogador j : jogador) {
+                            if (j.getSituacaoJogador() == TipoSituacaoJogador.BLOQUEADO) {
+                                jogadorRepository.delete(j);
+                            }
+                        }
+                        if (jogador.isEmpty()){
+                            timeRepository.delete(times.get(i));
+                            times.remove(times.get(i));
+                        }
                     }
                 }
+
+                int numeroDeTimes = times.size();
+
+                switch (campeonato.get().getFaseAtual()) {
+                    case TipoFasePartida.OITAVAS:
+                        campeonato.get().setFaseAtual(TipoFasePartida.QUARTAS);
+                        break;
+                    case TipoFasePartida.QUARTAS:
+                        campeonato.get().setFaseAtual(TipoFasePartida.SEMI);
+                        break;
+                    case TipoFasePartida.SEMI:
+                        campeonato.get().setFaseAtual(TipoFasePartida.FINAL);
+                        break;
+                    case TipoFasePartida.FINAL:
+                        finalizarCampeonato(campeonato.get());
+                        return new ArrayList<>();
+                    default:
+                        //fase invalida
+                }
+
+                List<Partida> partidas = new ArrayList<>();
+
+                for (int i = 0; i < times.size(); i += 2) {
+                    Time time1 = times.get(i);
+                    Time time2 = times.get(i + 1);
+
+                    Partida partida = new Partida();
+                    partida.setCampeonato(campeonato.get());
+                    partida.setTime1(time1);
+                    partida.setTime2(time2);
+                    partida.setFasePartida(campeonato.get().getFaseAtual());
+                    partidas.add(partida);
+                }
+
+                //campeonato.setPartidas(partidas);
+                return partidaRepository.saveAll(partidas).stream().map(p -> p.toDto(p)).collect(Collectors.toList());
+            }else {
+                throw new AccessDeniedException("Voce não tem permissão para alterar esse recurso!");
             }
-
-            int numeroDeTimes = times.size();
-
-            switch (campeonato.get().getFaseAtual()) {
-                case TipoFasePartida.OITAVAS:
-                    campeonato.get().setFaseAtual(TipoFasePartida.QUARTAS);
-                    break;
-                case TipoFasePartida.QUARTAS:
-                    campeonato.get().setFaseAtual(TipoFasePartida.SEMI);
-                    break;
-                case TipoFasePartida.SEMI:
-                    campeonato.get().setFaseAtual(TipoFasePartida.FINAL);
-                    break;
-                case TipoFasePartida.FINAL:
-                    finalizarCampeonato(campeonato.get());
-                    return new ArrayList<>();
-                default:
-                    //fase invalida
-            }
-
-            List<Partida> partidas = new ArrayList<>();
-
-            for (int i = 0; i < times.size(); i += 2) {
-                Time time1 = times.get(i);
-                Time time2 = times.get(i + 1);
-
-                Partida partida = new Partida();
-                partida.setCampeonato(campeonato.get());
-                partida.setTime1(time1);
-                partida.setTime2(time2);
-                partida.setFasePartida(campeonato.get().getFaseAtual());
-                partidas.add(partida);
-            }
-
-            //campeonato.setPartidas(partidas);
-            return partidaRepository.saveAll(partidas).stream().map(p -> p.toDto(p)).collect(Collectors.toList());
         }else {
             throw new RegistroNaoEncontradoException("Campeonato nao encontrado!");
         }

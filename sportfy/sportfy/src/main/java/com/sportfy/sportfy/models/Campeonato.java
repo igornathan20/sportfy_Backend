@@ -96,7 +96,7 @@ public class Campeonato implements Serializable {
     )
     private List<Partida> partidas;
 
-    public void toEntity(CampeonatoDto dto) throws Exception {
+    public void toEntity(CampeonatoDto dto) throws TipoInvalidoException {
         if (dto.titulo() != null) {
             setTitulo(dto.titulo());
         }
@@ -116,7 +116,7 @@ public class Campeonato implements Serializable {
         if (dto.dataFim() != null) {
             OffsetDateTime nowInUTC = OffsetDateTime.now(ZoneOffset.UTC);
             if (dto.dataFim().isBefore(nowInUTC)) {
-                throw new Exception("Data de fim não pode ser no passado!");
+                throw new TipoInvalidoException("Data de fim não pode ser no passado!");
             }
             setDataFim(dto.dataFim());
         }
@@ -140,7 +140,7 @@ public class Campeonato implements Serializable {
                 setPrivacidadeCampeonato(TipoPrivacidadeCampeonato.PRIVADO);
                 break;
             default:
-                throw new Exception("Tipo de privacidade invalido!");
+                throw new TipoInvalidoException("Tipo de privacidade invalido!");
         }
 
          switch (dto.situacaoCampeonato()) {
@@ -154,7 +154,7 @@ public class Campeonato implements Serializable {
                     setSituacaoCampeonato(TipoSituacao.FINALIZADO);
                     break;
                 default:
-                    throw new Exception("Situação do campeonato inválida!");
+                    throw new TipoInvalidoException("Situação do campeonato inválida!");
          }
     }
 
