@@ -66,7 +66,6 @@ public class CampeonatoService {
                         if (campeonatoDto.senha() != null){
                             novoCampeonato.setSenha(passwordEncoder.encode(campeonatoDto.senha()));
                         }
-                        System.out.println("teste: " + novoCampeonato.getDataFim() + novoCampeonato.getTitulo());
                         return novoCampeonato.toResponseDto(campeonatoRepository.save(novoCampeonato));
                     } catch (Exception e) {
                         return null;

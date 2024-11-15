@@ -121,8 +121,10 @@ public class Campeonato implements Serializable {
             setDataFim(dto.dataFim());
         }
 
-        if (dto.limiteTimes() != 0) {
+        if (dto.limiteTimes() != 0 && dto.limiteTimes() < 17) {
             setLimiteTimes(dto.limiteTimes());
+        }else {
+            throw new TipoInvalidoException("Limite de times invalido!");
         }
 
         if (dto.limiteParticipantes() != 0) {
