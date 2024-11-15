@@ -29,7 +29,7 @@ public class PublicacaoController {
     private PublicacaoService publicacaoService;
 
     @PostMapping("/cadastrarPublicacao")
-    //@PreAuthorize("hasRole('ROLE_ACADEMICO') or hasRole('ROLE_ADMINISTRADOR')
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Object> cadastrarPublicacao(@RequestBody @Valid PublicacaoDto publicacao) {
         try {
             Object publicacaoCriada = publicacaoService.cadastrarPublicacao(publicacao);
@@ -41,7 +41,7 @@ public class PublicacaoController {
     }
 
     @PutMapping("/atualizarPublicacao/{idPublicacao}")
-    //@PreAuthorize("hasRole('ROLE_ACADEMICO') or hasRole('ROLE_ADMINISTRADOR')
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Object> atualizarPublicacao(@PathVariable("idPublicacao") Long idPublicacao, @RequestBody @Valid PublicacaoDto publicacao) {
         try {
             Object publicacaoAtualizada = publicacaoService.atualizarPublicacao(idPublicacao, publicacao);
@@ -56,7 +56,7 @@ public class PublicacaoController {
     }
 
     @DeleteMapping("/removerPublicacao/{idPublicacao}")
-    //@PreAuthorize("hasRole('ROLE_ACADEMICO') or hasRole('ROLE_ADMINISTRADOR')
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Object> removerPublicacao(@PathVariable("idPublicacao") Long idPublicacao) {
         try {
             Object publicacaoRemovida = publicacaoService.removerPublicacao(idPublicacao);
@@ -71,7 +71,7 @@ public class PublicacaoController {
     }
 
     @PostMapping("/curtirPublicacao/{idUsuario}/{idPublicacao}")
-    //@PreAuthorize("hasRole('ROLE_ACADEMICO') or hasRole('ROLE_ADMINISTRADOR')
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Object> curtirPublicacao(@PathVariable("idUsuario") Long idUsuario, @PathVariable("idPublicacao") Long idPublicacao) {
         try {
             Object publicacaoCurtida = publicacaoService.curtirPublicacao(idUsuario, idPublicacao);
@@ -89,7 +89,7 @@ public class PublicacaoController {
     }
 
     @DeleteMapping("/removerCurtidaPublicacao/{idUsuario}/{idPublicacao}")
-    //@PreAuthorize("hasRole('ROLE_ACADEMICO') or hasRole('ROLE_ADMINISTRADOR')
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Object> removerCurtidaPublicacao(@PathVariable("idUsuario") Long idUsuario, @PathVariable("idPublicacao") Long idPublicacao) {
         try {
             Object isCurtidaPublicacaoRemovida = publicacaoService.removerCurtidaPublicacao(idUsuario, idPublicacao);
@@ -107,6 +107,7 @@ public class PublicacaoController {
     }
 
     @GetMapping("/{idCanal}/publicacoes")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Page<PublicacaoDto>> listarPublicacoesPorCanal(@PathVariable Long idCanal, Pageable pageable) {
         try {
             Page<PublicacaoDto> publicacoes = publicacaoService.listarPublicacoesPorCanal(idCanal, pageable);

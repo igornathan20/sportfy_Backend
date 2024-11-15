@@ -26,7 +26,7 @@ public class ConquistaController {
     private ConquistaService conquistaService;
 
     @PostMapping("/conquistar/{idAcademico}/{idMetaEsportiva}")
-    //@PreAuthorize("hasRole('ROLE_ACADEMICO')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Object> conquistar(@PathVariable("idAcademico") Long idAcademico, @PathVariable("idMetaEsportiva") Long idMetaEsportiva) {
         try {
             Object novaConquista = conquistaService.conquistar(idAcademico, idMetaEsportiva);
@@ -41,7 +41,7 @@ public class ConquistaController {
     }
 
     @GetMapping("/listarConquistas/{idAcademico}")
-    //@PreAuthorize("hasRole('ROLE_ACADEMICO')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<?> listarConquistas(@PathVariable("idAcademico") Long idAcademico) {
         try {
             List<MetaEsportivaConquistaDto> listaConquista = conquistaService.listarConquistas(idAcademico);

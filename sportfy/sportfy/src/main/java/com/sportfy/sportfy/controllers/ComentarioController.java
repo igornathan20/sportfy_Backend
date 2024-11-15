@@ -29,7 +29,7 @@ public class ComentarioController {
     private ComentarioService comentarioService;
 
     @PostMapping("/cadastrarComentario")
-    //@PreAuthorize("hasRole('ROLE_ACADEMICO') or hasRole('ROLE_ADMINISTRADOR')
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Object> cadastrarComentario(@RequestBody @Valid ComentarioDto comentario) {
         try {
             Object comentarioCriada = comentarioService.cadastrarComentario(comentario);
@@ -41,7 +41,7 @@ public class ComentarioController {
     }
 
     @PutMapping("/atualizarComentario/{idComentario}")
-    //@PreAuthorize("hasRole('ROLE_ACADEMICO') or hasRole('ROLE_ADMINISTRADOR')
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Object> atualizarComentario(@PathVariable("idComentario") Long idComentario, @RequestBody @Valid ComentarioDto comentario) {
         try {
             Object comentarioAtualizado = comentarioService.atualizarComentario(idComentario, comentario);
@@ -56,7 +56,7 @@ public class ComentarioController {
     }
 
     @DeleteMapping("/removerComentario/{idComentario}")
-    //@PreAuthorize("hasRole('ROLE_ACADEMICO') or hasRole('ROLE_ADMINISTRADOR')
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Object> removerComentario(@PathVariable("idComentario") Long idComentario) {
         try {
             Object comentarioRemovido = comentarioService.removerComentario(idComentario);
@@ -71,7 +71,7 @@ public class ComentarioController {
     }
 
     @PostMapping("/curtirComentario/{idUsuario}/{idComentario}")
-    //@PreAuthorize("hasRole('ROLE_ACADEMICO') or hasRole('ROLE_ADMINISTRADOR')
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Object> curtirComentario(@PathVariable("idUsuario") Long idUsuario, @PathVariable("idComentario") Long idComentario) {
         try {
             Object comentarioCurtida = comentarioService.curtirComentario(idUsuario, idComentario);
@@ -89,7 +89,7 @@ public class ComentarioController {
     }
 
     @DeleteMapping("/removerCurtidaComentario/{idUsuario}/{idComentario}")
-    //@PreAuthorize("hasRole('ROLE_ACADEMICO') or hasRole('ROLE_ADMINISTRADOR')
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Object> removerCurtidaComentario(@PathVariable("idUsuario") Long idUsuario, @PathVariable("idComentario") Long idComentario) {
         try {
             Object isCurtidaComentarioRemovida = comentarioService.removerCurtidaComentario(idUsuario, idComentario);
@@ -107,6 +107,7 @@ public class ComentarioController {
     }
 
     @GetMapping("/{idPublicacao}/comentarios")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Page<ComentarioDto>> listarComentariosPorPublicacao(@PathVariable Long idPublicacao, Pageable pageable) {
         try {
             Page<ComentarioDto> comentarios = comentarioService.listarComentariosPorPublicacao(idPublicacao, pageable);

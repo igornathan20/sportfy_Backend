@@ -87,7 +87,7 @@ public class AdministradorController {
     }
 
     @DeleteMapping("/inativar/{idAdministrador}")
-    //@PreAuthorize("hasRole('ROLE_ADMINISTRADOR_MASTER')")
+    //@PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     public ResponseEntity<AdministradorResponseDto> inativar(@PathVariable("idAdministrador") Long idAdministrador) {
         try {
             AdministradorResponseDto administradorInativado = administradorService.inativar(idAdministrador);
@@ -102,7 +102,7 @@ public class AdministradorController {
     }
 
     @GetMapping("/consultar/{idUsuario}")
-    //@PreAuthorize("hasRole('ROLE_ADMINISTRADOR') or hasRole('ROLE_ADMINISTRADOR_MASTER')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<AdministradorResponseDto> consultar(@PathVariable("idUsuario") Long idUsuario) {
         try {
             AdministradorResponseDto administradorConsultado = administradorService.consultar(idUsuario);
@@ -117,7 +117,7 @@ public class AdministradorController {
     }
 
     @GetMapping("/listar")
-    //@PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Page<AdministradorResponseDto>> listar(Pageable pageable) {
         try {
             Page<AdministradorResponseDto> listaAdministrador = administradorService.listar(pageable);

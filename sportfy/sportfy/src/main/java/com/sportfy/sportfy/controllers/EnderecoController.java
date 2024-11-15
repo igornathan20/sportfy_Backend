@@ -1,6 +1,7 @@
 package com.sportfy.sportfy.controllers;
 
 import com.sportfy.sportfy.dtos.EnderecoDto;
+import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ public class EnderecoController {
     EnderecoService enderecoService;
 
     @GetMapping("/consultar/{cep}")
+    @PermitAll
     public ResponseEntity<EnderecoDto> consultar(@PathVariable("cep") String cep) {
         try {
             EnderecoDto enderecoConsultado  = enderecoService.consultar(cep);

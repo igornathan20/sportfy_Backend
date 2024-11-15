@@ -1,6 +1,7 @@
 package com.sportfy.sportfy.controllers;
 
 import com.sportfy.sportfy.dtos.DadosAuthDto;
+import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ public class AuthController {
     AuthService authService;
 
     @PostMapping("/efetuarLogin")
+    @PermitAll
     public ResponseEntity<Object> efetuarLogin(@RequestBody @Valid DadosAuthDto dados) {
         try {
             Object token = authService.efetuarLogin(dados);

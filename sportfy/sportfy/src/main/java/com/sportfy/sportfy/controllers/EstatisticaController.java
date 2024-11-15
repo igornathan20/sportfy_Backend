@@ -35,7 +35,7 @@ public class EstatisticaController {
     }
 
     @GetMapping("/visualizarEstatisticasMetasEsportivas/{idAcademico}")
-    //@PreAuthorize("hasRole('ROLE_ACADEMICO')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<?> visualizarEstatisticasMetasEsportivas(@PathVariable Long idAcademico) {
         try {
             EstatisticasMetasEsportivasDto estatisticasMetasEsportivas = estatisticaService.visualizarEstatisticasMetasEsportivas(idAcademico);

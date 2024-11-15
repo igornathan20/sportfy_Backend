@@ -7,6 +7,7 @@ import com.sportfy.sportfy.models.Notificacao;
 import com.sportfy.sportfy.models.Privacidade;
 import com.sportfy.sportfy.repositories.CursoRepository;
 import com.sportfy.sportfy.services.AcademicoService;
+import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,11 +38,11 @@ public class AcademicoController {
     @Autowired
     AcademicoService academicoService;
     @Autowired
-    private CursoRepository cursoRepository;
+    CursoRepository cursoRepository;
 
 
     @PostMapping("/cadastrar")
-    //@PreAuthorize("hasRole('ROLE_ACADEMICO')")
+    @PermitAll
     public ResponseEntity<AcademicoResponseDto> cadastrar(@RequestBody @Valid AcademicoDto academico) {
         try {
             AcademicoResponseDto academicoCriado = academicoService.cadastrar(academico);
@@ -62,7 +63,7 @@ public class AcademicoController {
     }
 
     @PutMapping("/atualizar/{idAcademico}")
-    @PreAuthorize("hasRole('ROLE_ACADEMICO')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<AcademicoResponseDto> atualizar(@PathVariable("idAcademico") Long idAcademico, @RequestBody AcademicoDto academico) {
         try {
             var authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -86,34 +87,9 @@ public class AcademicoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-    @PutMapping("/teste")
-    @PreAuthorize("hasRole('ROLE_ACADEMICO')")
-    public ResponseEntity<Void> teste() {
-        try {
-
-            // Recupera o Authentication do SecurityContext
-            var authentication = SecurityContextHolder.getContext().getAuthentication();
-
-            // Recupera o objeto UserDetails do token
-            var usuarioAutenticado = (UserDetails) authentication.getPrincipal();
-
-            System.out.println("teste nome: " + ((UserDetails) authentication.getPrincipal()).getUsername());
-            System.out.println("teste nome 2: " + usuarioAutenticado.getAuthorities());
-            System.out.println("teste nome 3: " + ((UserDetails) authentication.getPrincipal()).getPassword());
-
-            String username = usuarioAutenticado.getUsername();
-            return ResponseEntity.status(HttpStatus.OK).body(null);
-
-
-
-        } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
 
     @PutMapping("/inativar/{idAcademico}")
-    //@PreAuthorize("hasRole('ROLE_ACADEMICO')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<AcademicoResponseDto> inativar(@PathVariable("idAcademico") Long idAcademico) {
         try {
             AcademicoResponseDto academicoInativado = academicoService.inativar(idAcademico);
@@ -128,7 +104,7 @@ public class AcademicoController {
     }
 
     @GetMapping("/consultar/{idUsuario}")
-    //@PreAuthorize("hasRole('ROLE_ACADEMICO')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<AcademicoResponseDto> consultar(@PathVariable("idUsuario") Long idUsuario) {
         try {
             AcademicoResponseDto academicoConsultado = academicoService.consultar(idUsuario);
@@ -143,7 +119,7 @@ public class AcademicoController {
     }
 
     @GetMapping("/buscar/{userName}")
-    //@PreAuthorize("hasRole('ROLE_ACADEMICO')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<AcademicoResponseDto> buscarPorUsername(@PathVariable String userName) {
         try {
             AcademicoResponseDto academicoConsultado = academicoService.buscarPorUsername(userName);
@@ -158,7 +134,7 @@ public class AcademicoController {
     }
 
     @GetMapping("/listar")
-    //@PreAuthorize("hasRole('ROLE_ACADEMICO')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Page<AcademicoResponseDto>> listar(Pageable pageable) {
         try {
             Page<AcademicoResponseDto> listaAcademico = academicoService.listar(pageable);
@@ -173,6 +149,7 @@ public class AcademicoController {
     }
 
     @GetMapping("/notificacoes/{idAcademico}/{tipoNotificacao}")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Boolean> retornaPreferenciaNotificacao(@PathVariable Long idAcademico, @PathVariable String tipoNotificacao){
         try {
             boolean notificar = academicoService.retornaNotificacao(idAcademico, tipoNotificacao);
@@ -184,6 +161,7 @@ public class AcademicoController {
     }
 
     @GetMapping("/notificacoes/{idAcademico}")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<NotificacaoDto> retornaTodasPreferenciaNotificacao(@PathVariable Long idAcademico){
         try {
             NotificacaoDto notificacoes = academicoService.retornaTodasNotificacoes(idAcademico);
@@ -195,6 +173,7 @@ public class AcademicoController {
     }
 
     @PutMapping ("/notificacoes")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<NotificacaoDto> alteraNotificacao(@RequestBody NotificacaoDto userNotificacao){
         try {
             var authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -211,6 +190,7 @@ public class AcademicoController {
     }
 
     @GetMapping("/privacidade/{idAcademico}/{tipoPrivacidade}")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Boolean> retornaPrivacidade(@PathVariable Long idAcademico, @PathVariable String tipoPrivacidade){
         try {
             boolean privacidade = academicoService.retornaPrivacidade(idAcademico, tipoPrivacidade);
@@ -222,6 +202,7 @@ public class AcademicoController {
     }
 
     @GetMapping("/privacidade/{idAcademico}")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<PrivacidadeDto> retornaTodasPrivacidade(@PathVariable Long idAcademico){
         try {
             PrivacidadeDto privacidade = academicoService.retornaTodasPrivacidade(idAcademico);
@@ -233,7 +214,7 @@ public class AcademicoController {
     }
 
     @PutMapping ("/privacidade")
-    @PreAuthorize("hasRole('ROLE_ACADEMICO')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<PrivacidadeDto> alteraPrivacidade(@RequestBody PrivacidadeDto userPrivacidade){
         try {
             var authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -250,6 +231,7 @@ public class AcademicoController {
     }
 
     @GetMapping("/estatisticas/{idAcademico}/modalidade/{idModalidade}")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<EstatisticasPessoaisModalidadeDto> obterEstatisticasPessoaisPorModalidade(@PathVariable Long idAcademico, @PathVariable Long idModalidade) {
         try {
             EstatisticasPessoaisModalidadeDto estatisticas = academicoService.estatisticasPessoaisPorModalidade(idAcademico, idModalidade);
@@ -267,6 +249,7 @@ public class AcademicoController {
     }
 
     @GetMapping("/buscar/estatisticas/{idAcademico}/modalidade/{idModalidade}")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<EstatisticasPessoaisModalidadeDto> obterEstatisticasOutroUsuarioPorModalidade(@PathVariable Long idAcademico, @PathVariable Long idModalidade) {
         try {
             EstatisticasPessoaisModalidadeDto estatisticas = academicoService.estatisticasOutroUsuarioPorModalidade(idAcademico, idModalidade);
@@ -287,6 +270,7 @@ public class AcademicoController {
     }
 
     @GetMapping("/uso/{idAcademico}")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<EstatisticasPessoaisDto> getEstatisticasDeUso(@PathVariable Long idAcademico) {
         try {
             EstatisticasPessoaisDto estatisticasDeUso = academicoService.estatisticasDeUso(idAcademico);
@@ -301,6 +285,7 @@ public class AcademicoController {
     }
 
     @GetMapping("/cursos/ufpr")
+    @PermitAll
     public List<String> listarCursosUfpr() {
         return cursoRepository.findAll().stream()
                 .map(Curso::getNome)

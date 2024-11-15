@@ -24,7 +24,7 @@ public class CanalController {
     private CanalService canalService;
 
     @GetMapping("/listarCanaisUsuario/{idUsuario}")
-    //@PreAuthorize("hasRole('ROLE_ACADEMICO') or hasRole('ROLE_ADMINISTRADOR')
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<?> listarCanais(@PathVariable("idUsuario") Long idUsuario) {
         try {
             List<CanalDto> listaCanal = canalService.listarCanais(idUsuario);

@@ -26,6 +26,7 @@ public class MetaDiariaController {
     private MetaDiariaService metaDiariaService;
 
     @PostMapping()
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<MetaDiariaDto> criarMeta(@RequestBody MetaDiariaDto metaDiariaDto) {
         try {
             MetaDiariaDto novaMeta = metaDiariaService.criarMeta(metaDiariaDto);
@@ -40,6 +41,7 @@ public class MetaDiariaController {
     }
 
     @PutMapping()
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<MetaDiariaDto> editarMeta(@RequestBody MetaDiariaDto metaDiariaDto) {
         try {
             MetaDiariaDto metaEditada = metaDiariaService.editarMeta(metaDiariaDto);
@@ -54,6 +56,7 @@ public class MetaDiariaController {
     }
 
     @GetMapping("/listar/{idAcademico}")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<List<MetaDiariaDto>> listarMetas(@PathVariable Long idAcademico) {
         try {
             List<MetaDiariaDto> metasDiarias = metaDiariaService.listarMetas(idAcademico);
@@ -71,6 +74,7 @@ public class MetaDiariaController {
     }
 
     @GetMapping("/{idAcademico}/buscar/{nome}")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<List<MetaDiariaDto>> buscarMeta(@PathVariable Long idAcademico,@PathVariable String nome) {
         try {
             List<MetaDiariaDto> metasDiarias = metaDiariaService.buscarMeta(idAcademico, nome);
@@ -88,6 +92,7 @@ public class MetaDiariaController {
     }
 
     @DeleteMapping("/excluir/{id}")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<MetaDiariaDto> excluirMeta(@PathVariable Long id) {
         try {
             MetaDiariaDto metaDiariaExcluida = metaDiariaService.excluirModalidade(id);

@@ -33,7 +33,7 @@ public class CampeonatoController {
     private CampeonatoService campeonatoService;
 
     @PostMapping
-    @PermitAll
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<CampeonatoResponseDto> criarCampeonato(@RequestBody CampeonatoDto campeonatoDto) {
         try {
             CampeonatoResponseDto campeonato = campeonatoService.criarCampeonato(campeonatoDto);
@@ -51,7 +51,7 @@ public class CampeonatoController {
     }
 
     @PutMapping("/{idCampeonato}")
-    @PermitAll
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<CampeonatoResponseDto> editarCampeonato(@PathVariable Long idCampeonato, @RequestBody CampeonatoDto campeonatoDto) {
         try {
             var authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -74,7 +74,7 @@ public class CampeonatoController {
     }
 
     @GetMapping("/listar")
-    @PermitAll
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Page<CampeonatoResponseDto>> listarTodosCampeonatos(Pageable page) {
         try {
             Page<CampeonatoResponseDto> campeonatos = campeonatoService.listarTodosCampeonatos(page);
@@ -89,7 +89,7 @@ public class CampeonatoController {
     }
 
     @GetMapping("/filtrar")
-    @PermitAll
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<List<CampeonatoResponseDto>> listarCampeonatosComFiltro(
             @RequestParam(required = false) String codigo,
             @RequestParam(required = false) String titulo,
@@ -128,7 +128,7 @@ public class CampeonatoController {
     }
 
     @GetMapping("/{idAcademico}/listar")
-    @PermitAll
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Page<CampeonatoResponseDto>> listarCampeonatosPorModalidadeInscrita(@PathVariable Long idAcademico, Pageable pageable) {
         try {
             Page<CampeonatoResponseDto> campeonatos = campeonatoService.listarCampeonatosPorModalidadesInscritas(idAcademico, pageable);
@@ -143,7 +143,7 @@ public class CampeonatoController {
     }
 
     @GetMapping("/{idAcademico}/inscritos")
-    @PermitAll
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Page<CampeonatoResponseDto>> listarCampeonatosInscritos(@PathVariable Long idAcademico, Pageable pageable) {
         try {
             Page<CampeonatoResponseDto> campeonatos = campeonatoService.listarCampeonatosInscritos(idAcademico, pageable);
@@ -158,7 +158,7 @@ public class CampeonatoController {
     }
 
     @GetMapping("/{idAcademico}/meusCampeonatos")
-    @PermitAll
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Page<CampeonatoResponseDto>> listarCampeonatosCriados(@PathVariable Long idAcademico, Pageable pageable) {
         try {
             Page<CampeonatoResponseDto> campeonatos = campeonatoService.listarCampeonatosCriados(idAcademico, pageable);
@@ -173,7 +173,7 @@ public class CampeonatoController {
     }
 
     @DeleteMapping("/{id}")
-    @PermitAll
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Void> excluirCampeonato(@PathVariable Long id) {
         try {
             Optional<Campeonato> campeonato = campeonatoService.excluirCampeonato(id);
@@ -188,7 +188,7 @@ public class CampeonatoController {
     }
 
     @PatchMapping("/desativar/{id}")
-    @PermitAll
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<CampeonatoResponseDto> desativarCampeonato(@PathVariable Long id) {
         try {
             var authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -208,7 +208,7 @@ public class CampeonatoController {
     }
 
     @PostMapping("/times")
-    @PermitAll
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<TimeDto> criarTime(@RequestBody TimeDto novoTime) {
         try {
             TimeDto timeCriado = campeonatoService.criarTime(novoTime);
@@ -226,7 +226,7 @@ public class CampeonatoController {
     }
 
     @GetMapping("/{idCampeonato}/times")
-    @PermitAll
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<List<TimeDto>> listarTimesCampeonato(@PathVariable Long idCampeonato) {
         try {
             List<TimeDto> campeonatos = campeonatoService.listarTimesCampeonato(idCampeonato);
@@ -241,7 +241,7 @@ public class CampeonatoController {
     }
 
     @PostMapping("/times/{idAcademico}")
-    @PermitAll
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<JogadorDto> adicionarJogadorTime(@RequestBody TimeDto timeDto, @PathVariable Long idAcademico) {
         try {
             JogadorDto jogador = campeonatoService.adicionarJogadorTime(timeDto, idAcademico);
@@ -259,7 +259,7 @@ public class CampeonatoController {
     }
 
     @PostMapping("/{idCampeonato}/times/{idAcademico}")
-    @PermitAll
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<TimeDto> criarTimeComUmJogador(@PathVariable Long idCampeonato, @PathVariable Long idAcademico, @RequestBody String senhaCampeonato) {
         try {
             TimeDto timeCriado = campeonatoService.criarTimeComUmJogador(idCampeonato, idAcademico, senhaCampeonato);
@@ -277,7 +277,7 @@ public class CampeonatoController {
     }
 
     @GetMapping("/{idCampeonato}/jogadores")
-    @PermitAll
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Page<JogadorDto>> listarJogadoresPorCampeonato(@PathVariable Long idCampeonato, Pageable pageable) {
         try {
             Page<JogadorDto> jogadores = campeonatoService.listarJogadoresCampeonato(idCampeonato, pageable);
@@ -292,6 +292,7 @@ public class CampeonatoController {
     }
 
     @GetMapping("/{idAcademico}/jogadores-enfrentados")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Page<AcademicoDto>> listarJogadoresEnfrentados(@PathVariable Long idAcademico, Pageable pageable) {
         try {
             Page<AcademicoDto> jogadoresEnfrentados = campeonatoService.listarJogadoresEnfrentados(idAcademico, pageable);
@@ -309,7 +310,7 @@ public class CampeonatoController {
     }
 
     @PutMapping("/{id}/situacao")
-    @PermitAll
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<JogadorDto> mudarSituacaoJogador(@PathVariable Long id, @RequestParam String situacao) {
         try {
             var authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -332,7 +333,7 @@ public class CampeonatoController {
     }
 
     @PostMapping("/{idCampeonato}/primeira-fase")
-    @PermitAll
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<List<PartidaDto>> definirPrimeiraFase(@PathVariable Long idCampeonato) {
         try {
             var authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -352,7 +353,7 @@ public class CampeonatoController {
     }
 
     @GetMapping("/{idCampeonato}/partidas")
-    @PermitAll
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<List<PartidaDto>> listarPartidas(@PathVariable Long idCampeonato) {
         try {
             List<PartidaDto> partidas = campeonatoService.listarPartidas(idCampeonato);
@@ -367,7 +368,7 @@ public class CampeonatoController {
     }
 
     @PostMapping("/{idCampeonato}/avancar-fase")
-    @PermitAll
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<List<PartidaDto>> avancarDeFase(@PathVariable Long idCampeonato) {
         try {
             var authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -390,7 +391,7 @@ public class CampeonatoController {
     }
 
     @PutMapping("/partidas/{idPartida}/pontuacao")
-    @PermitAll
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<PartidaDto> alterarPontuacaoPartida(@PathVariable Long idPartida, @RequestParam int pontuacaoTime1, @RequestParam int pontuacaoTime2) {
         try {
             PartidaDto partida = campeonatoService.alterarPontuacaoPartida(idPartida, pontuacaoTime1, pontuacaoTime2);
@@ -405,7 +406,7 @@ public class CampeonatoController {
     }
 
     @PostMapping("/avaliar")
-    @PermitAll
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<AvaliacaoJogadorDto> avaliarJogador(@RequestParam Long idAvaliador, @RequestParam Long idAcademico, @RequestParam Long idModalidade, @RequestParam int nota) {
         try {
             AvaliacaoJogadorDto avaliacao = campeonatoService.avaliarJogador(idAvaliador, idAcademico, idModalidade, nota);
@@ -420,7 +421,7 @@ public class CampeonatoController {
     }
 
     @GetMapping("/avaliacao/{idAcademico}/modalidade/{idModalidade}")
-    @PermitAll
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<AvaliacaoResponseDto> recuperaAvaliacaoPorModalidade(@PathVariable Long idModalidade, @PathVariable Long idAcademico) {
         try {
             AvaliacaoResponseDto avaliacaoResponse = campeonatoService.recuperaAvaliacaoPorModalidade(idModalidade, idAcademico);
@@ -435,7 +436,7 @@ public class CampeonatoController {
     }
 
     @GetMapping("/avaliacao/{idAcademico}/mediaAvaliacao")
-    @PermitAll
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<MediaAvaliacaoDto> recuperaMediaAvaliacao(@PathVariable Long idAcademico) {
         try {
             MediaAvaliacaoDto avaliacaoResponse = campeonatoService.recuperaMediaAvaliacoes(idAcademico);
@@ -450,7 +451,7 @@ public class CampeonatoController {
     }
 
     @GetMapping("/historico/{idAcademico}")
-    @PermitAll
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Page<CampeonatoResponseDto>> buscarHistoricoCampeonatoOutrosUsuarios( @PathVariable Long idAcademico, Pageable pageable) {
         try {
             Page<CampeonatoResponseDto> campeonatos = campeonatoService.buscarHistoricoCampeonatoOutrosUsuarios(idAcademico, pageable);
