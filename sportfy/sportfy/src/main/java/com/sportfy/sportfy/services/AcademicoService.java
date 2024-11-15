@@ -174,7 +174,7 @@ public class AcademicoService {
     }
 
     public AcademicoResponseDto consultar(Long idUsuario) throws AcademicoNaoExisteException {
-        return academicoRepository.findByUsuarioIdUsuarioAndUsuarioAtivo(idUsuario, true).map(academicoBD -> {
+        return academicoRepository.findByIdAcademicoAndUsuarioAtivo(idUsuario, true).map(academicoBD -> {
             return AcademicoResponseDto.fromAcademicoBD(academicoBD);
         }).orElseThrow(() -> new AcademicoNaoExisteException("Academico não existe!"));
     }
