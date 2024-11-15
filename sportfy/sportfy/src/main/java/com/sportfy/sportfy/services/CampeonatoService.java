@@ -294,7 +294,7 @@ public class CampeonatoService {
     private String gerarCodigoAleatorio(Random random) {
         String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         StringBuilder codigo = new StringBuilder();
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 6; i++) {
             codigo.append(caracteres.charAt(random.nextInt(caracteres.length())));
         }
         return codigo.toString();
