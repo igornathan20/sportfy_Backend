@@ -139,7 +139,7 @@ public class ModalidadeEsportivaController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }catch (ConteudoPrivadoException e){
             System.out.println("Erro " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         } catch (Exception e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

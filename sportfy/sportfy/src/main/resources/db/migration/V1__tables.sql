@@ -264,3 +264,8 @@ CREATE TABLE avaliacao (
     CONSTRAINT fk_modalidade_esportiva FOREIGN KEY (id_modalidade_esportiva) REFERENCES modalidade_esportiva(id_modalidade_esportiva),
     CONSTRAINT fk_academico_avaliador FOREIGN KEY (id_academico_avaliador) REFERENCES academico(id_academico)
 );
+
+CREATE TABLE curso (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL
+);

@@ -768,11 +768,46 @@ public class CampeonatoService {
                     }
                 }
 
-                media = media / contador;
+                if (contador != 0){
+                    media = media / contador;
+                }else {
+                    media = 0;
+                }
                 return new AvaliacaoResponseDto(media, contador);
             }else {
                 throw new ModalidadeNaoExistenteException("Modalidade esportiva nao existente!");
             }
+        }else {
+            throw new AcademicoNaoExisteException("Academico nao encontrado!");
+        }
+    }
+
+    public MediaAvaliacaoDto recuperaMediaAvaliacoes(Long idAcademico) throws AcademicoNaoExisteException{
+        Optional<Academico> academico = academicoRepository.findById(idAcademico);
+
+        if (academico.isPresent()){
+            List<AvaliacaoJogador> avaliacoes = avaliacaoJogadorRepository.findByAcademicoAvaliado(academico.get());
+            double media = 0;
+            int contador = 0;
+            Set<ModalidadeEsportiva> modalidadesSet = new HashSet<>();
+
+            for (int y = 0; y < avaliacoes.size(); y++ ){
+                if (avaliacoes.get(y).getNota() != 0){
+                    contador ++;
+                    media += avaliacoes.get(y).getNota();
+
+                    if (avaliacoes.get(y).getModalidadeEsportiva() != null) {
+                        modalidadesSet.add(avaliacoes.get(y).getModalidadeEsportiva());
+                    }
+                }
+            }
+
+            if (contador != 0){
+                media = media / contador;
+            }else {
+                media = 5;
+            }
+            return new MediaAvaliacaoDto(media, contador, modalidadesSet.size());
         }else {
             throw new AcademicoNaoExisteException("Academico nao encontrado!");
         }
