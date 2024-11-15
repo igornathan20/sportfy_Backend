@@ -14,8 +14,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,20 +62,50 @@ public class AcademicoController {
     }
 
     @PutMapping("/atualizar/{idAcademico}")
-    //@PreAuthorize("hasRole('ROLE_ACADEMICO')")
+    @PreAuthorize("hasRole('ROLE_ACADEMICO')")
     public ResponseEntity<AcademicoResponseDto> atualizar(@PathVariable("idAcademico") Long idAcademico, @RequestBody AcademicoDto academico) {
         try {
-            AcademicoResponseDto academicoAtualizado = academicoService.atualizar(idAcademico, academico);
+            var authentication = SecurityContextHolder.getContext().getAuthentication();
+            var usuarioAutenticado = ((UserDetails) authentication.getPrincipal()).getUsername();
+            AcademicoResponseDto academicoAtualizado = academicoService.atualizar(idAcademico, academico, usuarioAutenticado);
             return ResponseEntity.status(HttpStatus.OK).body(academicoAtualizado);
         } catch (EmailInvalidoException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }catch (AccessDeniedException e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         } catch (AcademicoNaoExisteException e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (OutroUsuarioComDadosJaExistentes e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    @PutMapping("/teste")
+    @PreAuthorize("hasRole('ROLE_ACADEMICO')")
+    public ResponseEntity<Void> teste() {
+        try {
+
+            // Recupera o Authentication do SecurityContext
+            var authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            // Recupera o objeto UserDetails do token
+            var usuarioAutenticado = (UserDetails) authentication.getPrincipal();
+
+            System.out.println("teste nome: " + ((UserDetails) authentication.getPrincipal()).getUsername());
+            System.out.println("teste nome 2: " + usuarioAutenticado.getAuthorities());
+            System.out.println("teste nome 3: " + ((UserDetails) authentication.getPrincipal()).getPassword());
+
+            String username = usuarioAutenticado.getUsername();
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+
+
+
         } catch (Exception e) {
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -98,6 +132,21 @@ public class AcademicoController {
     public ResponseEntity<AcademicoResponseDto> consultar(@PathVariable("idUsuario") Long idUsuario) {
         try {
             AcademicoResponseDto academicoConsultado = academicoService.consultar(idUsuario);
+            return ResponseEntity.status(HttpStatus.OK).body(academicoConsultado);
+        } catch (AcademicoNaoExisteException e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/buscar/{userName}")
+    //@PreAuthorize("hasRole('ROLE_ACADEMICO')")
+    public ResponseEntity<AcademicoResponseDto> buscarPorUsername(@PathVariable String userName) {
+        try {
+            AcademicoResponseDto academicoConsultado = academicoService.buscarPorUsername(userName);
             return ResponseEntity.status(HttpStatus.OK).body(academicoConsultado);
         } catch (AcademicoNaoExisteException e) {
             System.out.println("Erro " + e.getMessage());
@@ -148,8 +197,13 @@ public class AcademicoController {
     @PutMapping ("/notificacoes")
     public ResponseEntity<NotificacaoDto> alteraNotificacao(@RequestBody NotificacaoDto userNotificacao){
         try {
-            Notificacao notificacao = academicoService.alteraNotificacao(userNotificacao);
+            var authentication = SecurityContextHolder.getContext().getAuthentication();
+            var usuarioAutenticado = ((UserDetails) authentication.getPrincipal()).getUsername();
+            Notificacao notificacao = academicoService.alteraNotificacao(userNotificacao, usuarioAutenticado);
             return ResponseEntity.status(HttpStatus.OK).body(NotificacaoDto.toEntity(notificacao));
+        }catch (AccessDeniedException e){
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }catch (Exception e){
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -179,10 +233,16 @@ public class AcademicoController {
     }
 
     @PutMapping ("/privacidade")
+    @PreAuthorize("hasRole('ROLE_ACADEMICO')")
     public ResponseEntity<PrivacidadeDto> alteraPrivacidade(@RequestBody PrivacidadeDto userPrivacidade){
         try {
-            Privacidade privacidade = academicoService.alteraPrivacidade(userPrivacidade);
+            var authentication = SecurityContextHolder.getContext().getAuthentication();
+            var usuarioAutenticado = ((UserDetails) authentication.getPrincipal()).getUsername();
+            Privacidade privacidade = academicoService.alteraPrivacidade(userPrivacidade, usuarioAutenticado);
             return ResponseEntity.status(HttpStatus.OK).body(PrivacidadeDto.fromPrivacidade(privacidade));
+        }catch (AccessDeniedException e){
+            System.out.println("Erro " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }catch (Exception e){
             System.out.println("Erro " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
