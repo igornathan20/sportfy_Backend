@@ -10,8 +10,9 @@ import com.sportfy.sportfy.models.Conquista;
 public interface ConquistaRepository extends JpaRepository<Conquista, Long> {
     List<Conquista> findByMetaEsportivaIdMetaEsportivaAndAtivo(Long idMetaEsportiva, Boolean ativo);
     List<Conquista> findByAcademicoIdAcademicoAndAtivo(Long idAcademico, Boolean ativo);
+    List<Conquista> findByAcademicoIdAcademicoAndConquistadoAndAtivo(Long idAcademico, Boolean conquistado, Boolean ativo);
     List<Conquista> findByAcademicoIdAcademicoAndMetaEsportivaModalidadeEsportivaIdModalidadeEsportiva(Long idAcademico, Long idModalidadeEsportiva);
     Conquista findByIdConquistaAndAcademicoIdAcademicoAndAtivo(Long idConquista, Long idAcademico, Boolean ativo);
-    @Query("SELECT c FROM Conquista c WHERE c.academico.idAcademico = :idAcademico AND c.metaEsportiva.idMetaEsportiva IN :idMetaEsportivas")
-    List<Conquista> findByAcademicoIdAcademicoAndMetaEsportivaIdMetaEsportivaIn(Long idAcademico, List<Long> idMetaEsportivas);
+    @Query("SELECT c FROM Conquista c WHERE c.academico.idAcademico = :idAcademico AND c.metaEsportiva.idMetaEsportiva IN :idMetaEsportivas AND c.conquistado = true")
+    List<Conquista> findConqueredByAcademicoIdAcademicoAndMetaEsportivaIdMetaEsportivaIn(Long idAcademico, List<Long> idMetaEsportivas);    
 }

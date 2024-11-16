@@ -82,7 +82,7 @@ public class EstatisticaService {
     public EstatisticasMetasEsportivasDto visualizarEstatisticasMetasEsportivas(Long idAcademico) {
         Integer totalModalidadesEsportivasInscritas = 0; 
         Integer totalMetasEsportivasInscritas = 0;
-        Integer totalConquistasAlcancadas = conquistaRepository.findByAcademicoIdAcademicoAndAtivo(idAcademico, true).size();
+        Integer totalConquistasAlcancadas = conquistaRepository.findByAcademicoIdAcademicoAndConquistadoAndAtivo(idAcademico, true, true).size();
         Integer totalCampeonatosCriados = campeonatoRepository.findByAcademicoIdAcademico(idAcademico).size();
         Integer totalCampeonatosParticipados = jogadorRepository.findByAcademicoIdAcademico(idAcademico).size();
         List<EstatisticaPorModalidadeEsportivaDto> listaEstatisticaPorModalidadeEsportivaDto = new ArrayList<>();
@@ -97,7 +97,7 @@ public class EstatisticaService {
                 academicoModalidadeEsportiva.getModalidadeEsportiva().getNome(), 
                 academicoModalidadeEsportiva.getModalidadeEsportiva().getFoto(),
                 academicoModalidadeEsportiva.getModalidadeEsportiva().getListaMetaEsportiva().size(), 
-                conquistaRepository.findByAcademicoIdAcademicoAndMetaEsportivaIdMetaEsportivaIn(idAcademico, idMetaEsportivas).size(),
+                conquistaRepository.findConqueredByAcademicoIdAcademicoAndMetaEsportivaIdMetaEsportivaIn(idAcademico, idMetaEsportivas).size(),
                 campeonatoRepository.findByAcademicoIdAcademicoAndModalidadeEsportivaIdModalidadeEsportiva(idAcademico, academicoModalidadeEsportiva.getModalidadeEsportiva().getIdModalidadeEsportiva()).size(),
                 jogadorRepository.findByAcademicoIdAcademicoAndModalidadeEsportivaIdModalidadeEsportiva(idAcademico, academicoModalidadeEsportiva.getModalidadeEsportiva().getIdModalidadeEsportiva()).size()
             );
