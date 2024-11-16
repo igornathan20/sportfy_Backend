@@ -3,8 +3,8 @@ package com.sportfy.sportfy.models;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 import com.sportfy.sportfy.dtos.ModalidadeEsportivaDto;
+import com.sportfy.sportfy.repositories.ConquistaRepository;
 import com.sportfy.sportfy.repositories.MetaEsportivaRepository;
-import com.sportfy.sportfy.repositories.RegraRepository;
 import org.hibernate.annotations.CreationTimestamp;
 import java.util.*;
 import jakarta.persistence.*;
@@ -41,22 +41,21 @@ public class ModalidadeEsportiva implements Serializable {
     @OneToMany(mappedBy="modalidadeEsportiva", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
     private List<MetaEsportiva> listaMetaEsportiva;
 
-    public void inativar(MetaEsportivaRepository metaEsportivaRepository, RegraRepository regraRepository) {
+    public void inativar(MetaEsportivaRepository metaEsportivaRepository, ConquistaRepository conquistaRepository) {
         // Inativar a modalidade esportiva
         this.setAtivo(false);
-        
-        // Excluir todas as regras associadas a essa modalidade
-        List<Regra> regrasAtuais = regraRepository.findByModalidadeEsportivaIdModalidadeEsportiva(this.idModalidadeEsportiva);
-        for (Regra regra : regrasAtuais) {
-            regraRepository.delete(regra); // Remove a regra do banco
-        }
-    
         // Inativar todas as metas associadas a essa modalidade
         List<MetaEsportiva> metasAtuais = metaEsportivaRepository.findByModalidadeEsportivaIdModalidadeEsportiva(this.idModalidadeEsportiva);
         for (MetaEsportiva meta : metasAtuais) {
-            meta.setAtivo(false); // Marca a meta como inativa
-            metaEsportivaRepository.save(meta); // Atualiza a meta no banco
+            meta.setAtivo(false);
+            // Inativar todas as conquistas associadas a essa meta esportiva
+            List<Conquista> conquistasAtuais = conquistaRepository.findByMetaEsportivaIdMetaEsportivaAndAtivo(meta.getIdMetaEsportiva(), true);
+            for (Conquista conquista : conquistasAtuais) {
+                conquista.setAtivo(false);
+            }
+            conquistaRepository.saveAll(conquistasAtuais);
         }
+        metaEsportivaRepository.saveAll(metasAtuais);
     }
 
     public void fromDto(ModalidadeEsportivaDto dto) {

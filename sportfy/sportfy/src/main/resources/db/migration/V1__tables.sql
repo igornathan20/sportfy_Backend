@@ -54,14 +54,6 @@ CREATE TABLE modalidade_esportiva (
 	ativo BOOLEAN DEFAULT TRUE
 );
 
-CREATE TABLE regra (
-	id_regra INT AUTO_INCREMENT PRIMARY KEY,
-	titulo VARCHAR(50) NOT NULL,
-	descricao VARCHAR(255) NOT NULL,
-	id_modalidade_esportiva INT NOT NULL,
-	CONSTRAINT fk_regra_modalidade_esportiva FOREIGN KEY (id_modalidade_esportiva) REFERENCES modalidade_esportiva(id_modalidade_esportiva)
-);
-
 CREATE TABLE academico_modalidade_esportiva (
 	id_academico_modalidade_esportiva INT AUTO_INCREMENT PRIMARY KEY,
 	id_academico INT NOT NULL,
@@ -74,6 +66,8 @@ CREATE TABLE meta_esportiva (
 	id_meta_esportiva INT AUTO_INCREMENT PRIMARY KEY,
 	titulo VARCHAR(50) NOT NULL,
 	descricao VARCHAR(255) NOT NULL,
+	progresso_maximo INT NOT NULL,
+	progresso_item VARCHAR(30) NOT NULL,
 	foto VARCHAR(255),
 	ativo BOOLEAN DEFAULT TRUE,
 	id_modalidade_esportiva INT NOT NULL,
@@ -82,7 +76,10 @@ CREATE TABLE meta_esportiva (
 
 CREATE TABLE conquista (
 	id_conquista INT AUTO_INCREMENT PRIMARY KEY,
-	data_conquista TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	progresso_atual INT DEFAULT 0,
+	data_conquista TIMESTAMP,
+	conquistado BOOLEAN DEFAULT FALSE,
+	ativo BOOLEAN DEFAULT TRUE,
 	id_academico INT NOT NULL,
 	id_meta_esportiva INT NOT NULL,
 	CONSTRAINT fk_conquista_academico FOREIGN KEY (id_academico) REFERENCES academico(id_academico),

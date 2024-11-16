@@ -4,9 +4,6 @@ import com.sportfy.sportfy.dtos.EstatisticasGeraisModalidadeDto;
 import com.sportfy.sportfy.dtos.MetaEsportivaDto;
 import com.sportfy.sportfy.dtos.ModalidadeEsportivaDto;
 import com.sportfy.sportfy.exeptions.*;
-import com.sportfy.sportfy.exeptions.AcademicoNaoExisteException;
-import com.sportfy.sportfy.exeptions.ModalidadeJaExisteException;
-import com.sportfy.sportfy.exeptions.ModalidadeNaoExistenteException;
 import com.sportfy.sportfy.services.ModalidadeEsportivaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -113,7 +110,7 @@ public class ModalidadeEsportivaController {
         try {
             modalidadeEsportivaService.inscreverEmModalidade(idAcademico, idModalidade);
             return ResponseEntity.status(HttpStatus.OK).body(null);
-        } catch (ModalidadeNaoExistenteException | AcademicoNaoExisteException e) {
+        } catch (AcademicoNaoExisteException | ModalidadeNaoExistenteException | InscricaoEmModalidadeNaoExisteException e) {
             logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }catch (Exception e){

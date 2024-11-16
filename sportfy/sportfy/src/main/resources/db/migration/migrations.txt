@@ -107,14 +107,6 @@ CREATE TABLE academico_modalidade_esportiva (
 	CONSTRAINT fk_academico_modalidade_esportiva_modalidade_esportiva FOREIGN KEY (id_modalidade_esportiva) REFERENCES modalidade_esportiva(id_modalidade_esportiva)
 );
 
-CREATE TABLE regra (
-	id_regra INT AUTO_INCREMENT PRIMARY KEY,
-	titulo VARCHAR(50) NOT NULL,
-	descricao VARCHAR(255) NOT NULL,
-	id_modalidade_esportiva INT NOT NULL,
-	CONSTRAINT fk_regra_modalidade_esportiva FOREIGN KEY (id_modalidade_esportiva) REFERENCES modalidade_esportiva(id_modalidade_esportiva)
-);
-
 CREATE TABLE meta_esportiva (
 	id_meta_esportiva INT AUTO_INCREMENT PRIMARY KEY,
 	titulo VARCHAR(50) NOT NULL,

@@ -12,7 +12,13 @@ public record MetaEsportivaDto(
     @Size(min = 1, max = 255, message = "Descrição deve ter entre 1 e 255 caracteres")
     String descricao,
 
+    Integer progressoMaximo,
+
+    String progressoItem,
+
     String foto,
+
+    Boolean ativo,
 
     Long idModalidadeEsportiva
 ) {
@@ -21,7 +27,10 @@ public record MetaEsportivaDto(
             metaEsportiva.getIdMetaEsportiva(),
             metaEsportiva.getTitulo(),
             metaEsportiva.getDescricao(),
+            metaEsportiva.getProgressoMaximo(),
+            metaEsportiva.getProgressoItem(),
             metaEsportiva.getFoto(),
+            metaEsportiva.isAtivo(),
             metaEsportiva.getModalidadeEsportiva().getIdModalidadeEsportiva()
         );
     }

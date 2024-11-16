@@ -82,7 +82,7 @@ public class EstatisticaService {
     public EstatisticasMetasEsportivasDto visualizarEstatisticasMetasEsportivas(Long idAcademico) {
         Integer totalModalidadesEsportivasInscritas = 0; 
         Integer totalMetasEsportivasInscritas = 0;
-        Integer totalConquistasAlcancadas = conquistaRepository.findByAcademicoIdAcademico(idAcademico).size();
+        Integer totalConquistasAlcancadas = conquistaRepository.findByAcademicoIdAcademicoAndAtivo(idAcademico, true).size();
         Integer totalCampeonatosCriados = campeonatoRepository.findByAcademicoIdAcademico(idAcademico).size();
         Integer totalCampeonatosParticipados = jogadorRepository.findByAcademicoIdAcademico(idAcademico).size();
         List<EstatisticaPorModalidadeEsportivaDto> listaEstatisticaPorModalidadeEsportivaDto = new ArrayList<>();

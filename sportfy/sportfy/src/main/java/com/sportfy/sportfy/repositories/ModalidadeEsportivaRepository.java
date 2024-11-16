@@ -12,6 +12,8 @@ import java.util.*;
 public interface ModalidadeEsportivaRepository extends JpaRepository<ModalidadeEsportiva, Long> {
     Optional<ModalidadeEsportiva> findByNome(String nome);
 
+    Optional<ModalidadeEsportiva> findByIdModalidadeEsportivaAndAtivo(Long idModalidadeEsportiva, boolean ativo);
+
     List<ModalidadeEsportiva> findByAtivo(boolean ativo);
 
     @Query("SELECT m FROM ModalidadeEsportiva m WHERE m.dataCriacao BETWEEN :dataInicio AND CURRENT_TIMESTAMP")
