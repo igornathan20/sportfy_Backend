@@ -25,7 +25,7 @@ public class MetaDiariaService {
     public MetaDiariaDto criarMeta(MetaDiariaDto meta) throws AcademicoNaoExisteException{
         Optional<Academico> existAcademico = academicoRepository.findById(meta.idAcademico());
 
-        if (existAcademico.isPresent()){
+        if (existAcademico.isPresent()) {
             MetaDiaria novaMeta = new MetaDiaria();
             novaMeta.updateFromDto(meta);
             novaMeta.setAcademico(existAcademico.get());
@@ -38,7 +38,7 @@ public class MetaDiariaService {
     public MetaDiariaDto editarMeta(MetaDiariaDto meta) throws MetaDiariaNaoExistenteException {
         Optional<MetaDiaria> metaExistente = metaDiariaRepository.findById(meta.idMetaDiaria());
 
-        if (metaExistente.isPresent()){
+        if (metaExistente.isPresent()) {
             MetaDiaria metaEdit = metaExistente.get();
             metaEdit.updateFromDto(meta);
             return MetaDiaria.toDto(metaDiariaRepository.save(metaEdit));
@@ -82,7 +82,7 @@ public class MetaDiariaService {
         }
     }
 
-    public MetaDiariaDto excluirModalidade(Long id)throws MetaDiariaNaoExistenteException{
+    public MetaDiariaDto excluirMeta(Long id)throws MetaDiariaNaoExistenteException{
         Optional<MetaDiaria> metaDiaria = metaDiariaRepository.findById(id);
 
         if (metaDiaria.isPresent()){

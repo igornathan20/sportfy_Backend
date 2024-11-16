@@ -10,6 +10,7 @@ import java.util.*;
 public interface MetaEsportivaRepository extends JpaRepository<MetaEsportiva, Long> {
     List<MetaEsportiva> findByModalidadeEsportivaIdModalidadeEsportiva(Long idModalidadeEsportiva);
     List<MetaEsportiva> findByModalidadeEsportivaIdModalidadeEsportivaAndAtivo(Long idModalidadeEsportiva, boolean ativo);
-    Optional<MetaEsportiva> findByTitulo(String titulo);
+    Optional<MetaEsportiva> findByIdMetaEsportivaAndAtivo(Long idMetaEsportiva, boolean ativo);
+    Optional<MetaEsportiva> findByTituloAndAtivo(String titulo, boolean ativo);
     List<MetaEsportiva> findByModalidadeEsportivaAndAtivo(ModalidadeEsportiva modalidadeEsportiva, boolean ativo);
 }

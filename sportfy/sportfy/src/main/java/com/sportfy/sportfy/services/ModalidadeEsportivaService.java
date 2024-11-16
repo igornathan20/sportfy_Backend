@@ -209,47 +209,48 @@ public class ModalidadeEsportivaService {
     }
 
     public MetaEsportivaDto adicionarMetaEsportiva(MetaEsportivaDto metaEsportiva) throws TipoInvalidoException, ModalidadeNaoExistenteException {
-        Optional<ModalidadeEsportiva> modalidadeExistente = modalidadeEsportivaRepository.findById(metaEsportiva.idModalidadeEsportiva());
-        Optional<MetaEsportiva> metaEsportivaExistente = metaEsportivaRepository.findByTitulo(metaEsportiva.titulo());
+        Optional<ModalidadeEsportiva> modalidadeExistente = modalidadeEsportivaRepository.findByIdModalidadeEsportivaAndAtivo(metaEsportiva.idModalidadeEsportiva(), true);
+        Optional<MetaEsportiva> metaEsportivaExistente = metaEsportivaRepository.findByTituloAndAtivo(metaEsportiva.titulo(), true);
 
-        if (modalidadeExistente.isPresent()){
-            if (metaEsportivaExistente.isEmpty()){
+        if (modalidadeExistente.isPresent()) {
+            if (metaEsportivaExistente.isEmpty()) {
                 MetaEsportiva novaMeta = new MetaEsportiva();
                 novaMeta.fromDto(metaEsportiva);
                 novaMeta.setModalidadeEsportiva(modalidadeExistente.get());
-                return MetaEsportivaDto.toDto(metaEsportivaRepository.save(novaMeta));
-            }else {
+                MetaEsportiva metaCadastrada = metaEsportivaRepository.save(novaMeta);
+                metaCadastrada.cadastrarConquistas(academicoModalidadeEsportivaRepository, conquistaRepository);
+                return MetaEsportivaDto.toDto(metaCadastrada);
+            } else {
                 throw new TipoInvalidoException("Modalidade ja cadastrada!");
             }
-        }else {
-            throw new ModalidadeNaoExistenteException("A modalidade ja existe!");
+        } else {
+            throw new ModalidadeNaoExistenteException("Modalidade não encontrada!");
         }
     }
 
     public MetaEsportivaDto atualizarMetaEsportiva(MetaEsportivaDto metaEsportiva, Long idMeta) throws RegistroNaoEncontradoException, ModalidadeNaoExistenteException {
-        Optional<ModalidadeEsportiva> modalidadeExistente = modalidadeEsportivaRepository.findById(metaEsportiva.idModalidadeEsportiva());
-        Optional<MetaEsportiva> metaEsportivaExistente = metaEsportivaRepository.findById(idMeta);
+        Optional<ModalidadeEsportiva> modalidadeExistente = modalidadeEsportivaRepository.findByIdModalidadeEsportivaAndAtivo(metaEsportiva.idModalidadeEsportiva(), true);
+        Optional<MetaEsportiva> metaEsportivaExistente = metaEsportivaRepository.findByIdMetaEsportivaAndAtivo(metaEsportiva.idMetaEsportiva(), true);
 
-        if (modalidadeExistente.isPresent()){
-            if (metaEsportivaExistente.isPresent()){
-                metaEsportivaExistente.get().fromDto(metaEsportiva);
+        if (modalidadeExistente.isPresent()) {
+            if (metaEsportivaExistente.isPresent()) {
+                metaEsportivaExistente.get().atualizar(metaEsportiva);
                 return MetaEsportivaDto.toDto(metaEsportivaRepository.save(metaEsportivaExistente.get()));
-            }else {
-                throw new RegistroNaoEncontradoException("Modalidade ja cadastrada!");
+            } else {
+                throw new RegistroNaoEncontradoException("Meta esportiva não encontrada!");
             }
-        }else {
-            throw new ModalidadeNaoExistenteException("A modalidade ja existe!");
+        } else {
+            throw new ModalidadeNaoExistenteException("Modalidade não encontrada!");
         }
     }
 
     public void desativarMetaEsportiva(Long idMeta) throws RegistroNaoEncontradoException {
         Optional<MetaEsportiva> metaEsportivaExistente = metaEsportivaRepository.findById(idMeta);
-
         if (metaEsportivaExistente.isPresent()){
-            metaEsportivaExistente.get().setAtivo(false);
+            metaEsportivaExistente.get().desativarConquistas(idMeta, conquistaRepository);
             metaEsportivaRepository.save(metaEsportivaExistente.get());
         }else {
-            throw new RegistroNaoEncontradoException("Modalidade ja cadastrada!");
+            throw new RegistroNaoEncontradoException("Modalidade não encontrada!");
         }
     }
 

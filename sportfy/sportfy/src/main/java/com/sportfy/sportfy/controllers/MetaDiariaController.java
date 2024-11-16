@@ -96,7 +96,7 @@ public class MetaDiariaController {
     //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<MetaDiariaDto> excluirMeta(@PathVariable Long id) {
         try {
-            MetaDiariaDto metaDiariaExcluida = metaDiariaService.excluirModalidade(id);
+            MetaDiariaDto metaDiariaExcluida = metaDiariaService.excluirMeta(id);
             return ResponseEntity.ok(metaDiariaExcluida);
         } catch (MetaDiariaNaoExistenteException e) {
             logger.error(e.getMessage());

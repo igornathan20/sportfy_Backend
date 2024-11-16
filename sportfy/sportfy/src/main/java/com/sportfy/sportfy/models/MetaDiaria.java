@@ -52,16 +52,15 @@ public class MetaDiaria implements Serializable {
         this.progressoItem = dto.progressoItem();
 
         switch (dto.situacaoMetaDiaria()){
+            case 0:
+                this.tipoSituacaoMetaDiaria = TipoSituacaoMetaDiaria.EM_ANDAMENTO;
+                break;
             case 1:
                 this.tipoSituacaoMetaDiaria = TipoSituacaoMetaDiaria.CONCLUIDA;
-                break;
-            case 2:
-                this.tipoSituacaoMetaDiaria = TipoSituacaoMetaDiaria.EM_ANDAMENTO;
                 break;
             default:
                 this.tipoSituacaoMetaDiaria = TipoSituacaoMetaDiaria.EM_ANDAMENTO;
         }
-
     }
 
     public static MetaDiariaDto toDto(MetaDiaria metaDiaria) {

@@ -45,6 +45,19 @@ INSERT INTO privacidade (id_academico, mostrar_modalidades_esportivas, mostrar_h
 INSERT INTO privacidade (id_academico, mostrar_modalidades_esportivas, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (10, TRUE, TRUE, TRUE, FALSE);
 
 
+-- DADOS TESTE NOTIFICACAO
+INSERT INTO notificacao (id_academico, campeonatos, posts, comentarios, likes) VALUES (1, TRUE, TRUE, TRUE, TRUE);
+INSERT INTO notificacao (id_academico, campeonatos, posts, comentarios, likes) VALUES (2, FALSE, TRUE, FALSE, TRUE);
+INSERT INTO notificacao (id_academico, campeonatos, posts, comentarios, likes) VALUES (3, TRUE, FALSE, TRUE, TRUE);
+INSERT INTO notificacao (id_academico, campeonatos, posts, comentarios, likes) VALUES (4, TRUE, FALSE, TRUE, TRUE);
+INSERT INTO notificacao (id_academico, campeonatos, posts, comentarios, likes) VALUES (5, TRUE, TRUE, FALSE, TRUE);
+INSERT INTO notificacao (id_academico, campeonatos, posts, comentarios, likes) VALUES (6, TRUE, TRUE, TRUE, FALSE);
+INSERT INTO notificacao (id_academico, campeonatos, posts, comentarios, likes) VALUES (7, TRUE, TRUE, TRUE, FALSE);
+INSERT INTO notificacao (id_academico, campeonatos, posts, comentarios, likes) VALUES (8, TRUE, TRUE, TRUE, TRUE);
+INSERT INTO notificacao (id_academico, campeonatos, posts, comentarios, likes) VALUES (9, TRUE, TRUE, FALSE, TRUE);
+INSERT INTO notificacao (id_academico, campeonatos, posts, comentarios, likes) VALUES (10, TRUE, TRUE, TRUE, TRUE);
+
+
 -- DADOS TESTE ADMINISTRADOR
 INSERT INTO administrador (id_usuario) VALUES (11);
 INSERT INTO administrador (id_usuario) VALUES (12);
@@ -69,6 +82,48 @@ INSERT INTO usuario_canal (id_usuario, id_canal) VALUES (12, 1);
 INSERT INTO usuario_canal (id_usuario, id_canal) VALUES (13, 1);
 INSERT INTO usuario_canal (id_usuario, id_canal) VALUES (14, 1);
 INSERT INTO usuario_canal (id_usuario, id_canal) VALUES (15, 1);
+
+
+-- DADOS TESTE APOIO_SAUDE
+INSERT INTO apoio_saude (nome, email, telefone, descricao, id_administrador) 
+VALUES ('Orientação Nutricional', 'nutriufprrr@ufpr.br', '41988334455', 'Orientação de necessidades nutricionais com corpo docente da UFPR.', 1);
+INSERT INTO apoio_saude (nome, email, telefone, descricao, id_administrador)
+VALUES ('Apoio Psicológico', 'psicologia@universidade.edu', '41999887766', 'Atendimento psicológico individual e em grupo para alunos em situação de estresse acadêmico.', 1);
+INSERT INTO apoio_saude (nome, email, telefone, descricao, id_administrador) 
+VALUES ('Acompanhamento Pedagógico', 'pedagogia@universidade.edu', '41987654321', 'Suporte pedagógico para organização dos estudos e gestão de tempo.', 2);
+INSERT INTO apoio_saude (nome, email, telefone, descricao, id_administrador) 
+VALUES ('Orientação Física', 'fisioterapia@universidade.edu', '41988776655', 'Orientação sobre práticas físicas para evitar dores relacionadas à postura no estudo.', 3);
+INSERT INTO apoio_saude (nome, email, telefone, descricao, id_administrador) 
+VALUES ('Grupo de Estudos', 'grupodeestudos@universidade.edu', '41977665544', 'Formação de grupos de estudos monitorados para reforço em disciplinas complexas.', 4);
+INSERT INTO apoio_saude (nome, email, telefone, descricao, id_administrador) 
+VALUES ('Atendimento Médico Básico', 'medicina@universidade.edu', '41955443322', 'Consultas básicas e encaminhamentos para especialistas.', 5);
+INSERT INTO apoio_saude (nome, email, telefone, descricao, id_administrador) 
+VALUES ('Suporte de Inclusão', 'inclusao@universidade.edu', '41944332211', 'Apoio a alunos com necessidades especiais para integração acadêmica.', 1);
+INSERT INTO apoio_saude (nome, email, telefone, descricao, id_administrador) 
+VALUES ('Oficina de Ansiedade', 'oficinas@universidade.edu', '41933221100', 'Workshops para lidar com ansiedade em períodos de avaliação.', 2);
+
+
+-- DADOS TESTE META_DIARIA
+INSERT INTO meta_diaria (titulo, objetivo, progresso_maximo, progresso_item, id_academico, tipo_situacao_meta_diaria) 
+VALUES ('Exercício', 'Correr 5 km', 5, 'Km', 2, 'EM_ANDAMENTO');
+INSERT INTO meta_diaria (titulo, objetivo, progresso_maximo, progresso_item, id_academico, tipo_situacao_meta_diaria) 
+VALUES ('Estudo', 'Estudar 3 horas de matemática', 3, 'Horas', 3, 'EM_ANDAMENTO');
+INSERT INTO meta_diaria (titulo, objetivo, progresso_maximo, progresso_item, id_academico, tipo_situacao_meta_diaria) 
+VALUES ('Prática de violão', 'Tocar violão por 1 hora', 60, 'Minutos', 4, 'EM_ANDAMENTO');
+INSERT INTO meta_diaria (titulo, objetivo, progresso_maximo, progresso_item, id_academico, tipo_situacao_meta_diaria) 
+VALUES ('Meditação', 'Meditar por 30 minutos', 30, 'Minutos', 5, 'EM_ANDAMENTO');
+INSERT INTO meta_diaria (titulo, objetivo, progresso_maximo, progresso_item, id_academico, tipo_situacao_meta_diaria) 
+VALUES ('Cozinhar', 'Preparar uma refeição saudável', 1, 'Refeição', 1, 'EM_ANDAMENTO');
+INSERT INTO meta_diaria (titulo, objetivo, progresso_maximo, progresso_item, id_academico, tipo_situacao_meta_diaria) 
+VALUES ('Limpeza', 'Arrumar o quarto', 1, 'Tarefa', 2, 'EM_ANDAMENTO');
+INSERT INTO meta_diaria (titulo, objetivo, progresso_maximo, progresso_item, id_academico, tipo_situacao_meta_diaria) 
+VALUES ('Hobby', 'Pintar 2 quadros', 2, 'Quadros', 3, 'EM_ANDAMENTO');
+INSERT INTO meta_diaria (titulo, objetivo, progresso_maximo, progresso_item, id_academico, tipo_situacao_meta_diaria) 
+VALUES ('Socialização', 'Conversar com 3 amigos', 3, 'Conversas', 4, 'EM_ANDAMENTO');
+INSERT INTO meta_diaria (titulo, objetivo, progresso_maximo, progresso_item, id_academico, tipo_situacao_meta_diaria) 
+VALUES ('Saúde', 'Dormir 8 horas', 8, 'Horas', 5, 'EM_ANDAMENTO');
+INSERT INTO meta_diaria (titulo, objetivo, progresso_maximo, progresso_item, id_academico, tipo_situacao_meta_diaria) 
+VALUES ('Organização', 'Planejar a semana', 1, 'Planejamento', 1, 'EM_ANDAMENTO');
 
 
 -- DADOS TESTE MODALIDADE_ESPORTIVA

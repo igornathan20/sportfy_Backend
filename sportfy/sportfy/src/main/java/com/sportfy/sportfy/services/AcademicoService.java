@@ -1,6 +1,7 @@
 package com.sportfy.sportfy.services;
 
 import com.sportfy.sportfy.dtos.*;
+import com.sportfy.sportfy.enums.TipoCanal;
 import com.sportfy.sportfy.enums.TipoPermissao;
 import com.sportfy.sportfy.enums.TipoSituacaoMetaDiaria;
 import com.sportfy.sportfy.exeptions.*;
@@ -27,27 +28,29 @@ public class AcademicoService {
     @Autowired
     private EnviarEmail email;
     @Autowired
-    AcademicoRepository academicoRepository;
+    private AcademicoRepository academicoRepository;
     @Autowired
-    ModalidadeEsportivaRepository modalidadeEsportivaRepository;
+    private ModalidadeEsportivaRepository modalidadeEsportivaRepository;
     @Autowired
-    PartidaRepository partidaRepository;
+    private PartidaRepository partidaRepository;
     @Autowired
-    JogadorRepository jogadorRepository;
+    private JogadorRepository jogadorRepository;
     @Autowired
-    AcademicoModalidadeEsportivaRepository academicoModalidadeEsportivaReposity;
-    @Autowired
-    private PermissaoRepository permissaoRepository;
+    private AcademicoModalidadeEsportivaRepository academicoModalidadeEsportivaReposity;
     @Autowired
     private PrivacidadeRepository privacidadeRepository;
     @Autowired
     private NotificacaoRepository notificacaoRepository;
     @Autowired
-    MetaDiariaRepository metaDiariaRepository;
+    private MetaDiariaRepository metaDiariaRepository;
     @Autowired
-    PublicacaoRepository publicacaoRepository;
+    private PublicacaoRepository publicacaoRepository;
     @Autowired
-    CampeonatoService campeonatoService;
+    private CampeonatoService campeonatoService;
+    @Autowired
+    private UsuarioCanalRepository usuarioCanalRepository;
+    @Autowired
+    private CanalRepository canalRepository;
 
 
     public AcademicoResponseDto cadastrar(AcademicoDto academicoDto) throws EmailInvalidoException, OutroUsuarioComDadosJaExistentes {
@@ -96,6 +99,10 @@ public class AcademicoService {
             notificacaoUser.setIdAcademico(academicoCriado.getIdAcademico());
             notificacaoRepository.save(notificacaoUser);
 
+            UsuarioCanal usuarioCanal = new UsuarioCanal();
+            usuarioCanal.setUsuario(academicoCriado.getUsuario());
+            usuarioCanal.setCanal(canalRepository.findByTipoCanal(TipoCanal.COMUNIDADE));
+            usuarioCanalRepository.save(usuarioCanal);
 
             try {
                 String mensagem = "Bem vindo ao Sportfy! Acesse a sua conta com o username cadastrado e a sua senha: \n\n" + senha +
