@@ -2,14 +2,7 @@ package com.sportfy.sportfy.dtos;
 
 import com.sportfy.sportfy.enums.TipoPermissao;
 import com.sportfy.sportfy.models.Administrador;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
-
 import java.time.OffsetDateTime;
-import java.util.Collection;
-import java.util.stream.Collectors;
 
 public record AdministradorResponseDto (
         Long idAdministrador,

@@ -3,15 +3,14 @@ package com.sportfy.sportfy.controllers;
 import com.sportfy.sportfy.dtos.MetaDiariaDto;
 import com.sportfy.sportfy.exeptions.AcademicoNaoExisteException;
 import com.sportfy.sportfy.exeptions.MetaDiariaNaoExistenteException;
-import com.sportfy.sportfy.models.MetaDiaria;
 import com.sportfy.sportfy.services.MetaDiariaService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.Optional;
-
 
 @RestController
 @RequestMapping("/metaDiaria")
@@ -22,6 +21,8 @@ import java.util.Optional;
         allowCredentials = "true"
 )
 public class MetaDiariaController {
+
+    private static final Logger logger = LoggerFactory.getLogger(MetaDiariaController.class);
     @Autowired
     private MetaDiariaService metaDiariaService;
 
@@ -32,10 +33,10 @@ public class MetaDiariaController {
             MetaDiariaDto novaMeta = metaDiariaService.criarMeta(metaDiariaDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(novaMeta);
         } catch (AcademicoNaoExisteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -47,10 +48,10 @@ public class MetaDiariaController {
             MetaDiariaDto metaEditada = metaDiariaService.editarMeta(metaDiariaDto);
             return ResponseEntity.status(HttpStatus.OK).body(metaEditada);
         } catch (MetaDiariaNaoExistenteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -62,13 +63,13 @@ public class MetaDiariaController {
             List<MetaDiariaDto> metasDiarias = metaDiariaService.listarMetas(idAcademico);
             return ResponseEntity.status(HttpStatus.OK).body(metasDiarias);
         }catch (AcademicoNaoExisteException e){
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         } catch (MetaDiariaNaoExistenteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -80,13 +81,13 @@ public class MetaDiariaController {
             List<MetaDiariaDto> metasDiarias = metaDiariaService.buscarMeta(idAcademico, nome);
             return ResponseEntity.status(HttpStatus.OK).body(metasDiarias);
         } catch (AcademicoNaoExisteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         } catch (MetaDiariaNaoExistenteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -98,10 +99,10 @@ public class MetaDiariaController {
             MetaDiariaDto metaDiariaExcluida = metaDiariaService.excluirModalidade(id);
             return ResponseEntity.ok(metaDiariaExcluida);
         } catch (MetaDiariaNaoExistenteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

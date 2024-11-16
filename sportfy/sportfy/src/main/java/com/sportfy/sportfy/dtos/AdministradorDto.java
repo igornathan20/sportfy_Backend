@@ -1,13 +1,8 @@
 package com.sportfy.sportfy.dtos;
 
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.util.Collection;
-import java.util.stream.Collectors;
-
 import com.sportfy.sportfy.enums.TipoPermissao;
 import com.sportfy.sportfy.models.Administrador;
-
 import jakarta.validation.constraints.*;
 
 public record AdministradorDto(

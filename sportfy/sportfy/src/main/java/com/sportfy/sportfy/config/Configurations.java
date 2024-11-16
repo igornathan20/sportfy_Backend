@@ -4,9 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import javax.sql.DataSource;
-
 import org.springframework.web.client.RestTemplate;
 import org.flywaydb.core.Flyway;
 import org.springframework.boot.CommandLineRunner;
@@ -25,7 +23,6 @@ public class Configurations {
     @Bean
     public CommandLineRunner migrateDatabase(Flyway flyway, PasswordEncoder passwordEncoder, DataSource dataSource) {
         return args -> {
-            //flyway.clean();
             flyway.migrate();
 
             String selectQuery = "SELECT username, nome FROM usuario WHERE password = 'pass'";

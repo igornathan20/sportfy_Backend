@@ -1,27 +1,23 @@
 package com.sportfy.sportfy.models;
 
 import java.io.Serializable;
-
 import com.sportfy.sportfy.dtos.AdministradorDto;
-
 import jakarta.persistence.*;
-
 import lombok.*;
 
 @Entity
 @Table(name = "administrador")
 @NoArgsConstructor
 @AllArgsConstructor
+@Setter @Getter
 public class Administrador implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id_administrador")
-    @Setter @Getter
     private Long idAdministrador;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_usuario", nullable = false)
-    @Setter @Getter
     private Usuario usuario;
 
     public void cadastrar(AdministradorDto administradorDto) {

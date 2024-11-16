@@ -1,14 +1,10 @@
 package com.sportfy.sportfy.dtos;
 
 import java.util.*;
-
 import com.sportfy.sportfy.models.Comentario;
-
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
-
 import java.time.OffsetDateTime;
-import java.util.stream.Collectors;
 
 public record ComentarioDto(
     Long idComentario,
@@ -30,9 +26,9 @@ public record ComentarioDto(
     List<UsuarioDto> listaUsuarioCurtida
 ) {
     public static ComentarioDto fromComentarioBD(Comentario comentario) {
-        List<UsuarioDto> listaUsuarioCurtida = new ArrayList<UsuarioDto>();
+        List<UsuarioDto> listaUsuarioCurtida = new ArrayList<>();
         if (comentario.getListaCurtidaComentario() != null && !comentario.getListaCurtidaComentario().isEmpty()) {
-            listaUsuarioCurtida = comentario.getListaCurtidaComentario().stream().map(curtidaComentario -> UsuarioDto.fromUsuarioBD(curtidaComentario.getUsuario())).collect(Collectors.toList());
+            listaUsuarioCurtida = comentario.getListaCurtidaComentario().stream().map(curtidaComentario -> UsuarioDto.fromUsuarioBD(curtidaComentario.getUsuario())).toList();
         }
         return new ComentarioDto(
             comentario.getIdComentario(),

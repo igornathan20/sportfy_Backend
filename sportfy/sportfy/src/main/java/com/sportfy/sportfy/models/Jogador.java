@@ -2,7 +2,6 @@ package com.sportfy.sportfy.models;
 
 import java.io.Serializable;
 import java.util.List;
-
 import com.sportfy.sportfy.dtos.JogadorDto;
 import com.sportfy.sportfy.enums.TipoSituacaoJogador;
 import jakarta.persistence.*;
@@ -35,7 +34,7 @@ public class Jogador implements Serializable {
             joinColumns = @JoinColumn(name = "id_avaliacao"),
             inverseJoinColumns = @JoinColumn(name = "id_academico_avaliado")
     )
-    private List<AvaliacaoJogador> avaliacoes;
+    private transient List<AvaliacaoJogador> avaliacoes;
 
     @ManyToOne(fetch=FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name="id_time", updatable = false, nullable = false)

@@ -1,7 +1,6 @@
 package com.sportfy.sportfy.models;
 
 import java.io.Serializable;
-
 import com.sportfy.sportfy.dtos.EnderecoDto;
 import jakarta.persistence.*;
 import lombok.*;
@@ -54,9 +53,9 @@ public class Endereco implements Serializable {
         if (enderecoDto.rua() != null) {
             setRua(enderecoDto.rua());
         }
-        //if (enderecoDto.numero()!=null) {
-            setNumero(enderecoDto.numero());
-       // }
+
+        setNumero(enderecoDto.numero());
+
         if (enderecoDto.complemento() != null) {
            setComplemento(enderecoDto.complemento());
         }

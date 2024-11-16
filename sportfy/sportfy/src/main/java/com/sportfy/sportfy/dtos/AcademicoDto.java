@@ -2,14 +2,8 @@ package com.sportfy.sportfy.dtos;
 
 import com.sportfy.sportfy.enums.TipoPermissao;
 import com.sportfy.sportfy.models.Academico;
-
 import jakarta.validation.constraints.*;
-
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public record AcademicoDto(
         Long idAcademico,

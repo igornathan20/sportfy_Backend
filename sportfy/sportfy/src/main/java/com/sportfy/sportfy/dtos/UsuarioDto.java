@@ -2,11 +2,7 @@ package com.sportfy.sportfy.dtos;
 
 import com.sportfy.sportfy.enums.TipoPermissao;
 import com.sportfy.sportfy.models.Usuario;
-
 import jakarta.validation.constraints.*;
-
-import java.util.Collection;
-import java.util.stream.Collectors;
 
 public record UsuarioDto(
         @NotNull(message = "O campo idUsuario é obrigatório")

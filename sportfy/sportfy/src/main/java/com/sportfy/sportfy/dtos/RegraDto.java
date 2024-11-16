@@ -1,7 +1,6 @@
 package com.sportfy.sportfy.dtos;
 
 import com.sportfy.sportfy.models.Regra;
-
 import jakarta.validation.constraints.Size;
 
 public record RegraDto(

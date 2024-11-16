@@ -1,14 +1,10 @@
 package com.sportfy.sportfy.dtos;
 
 import java.util.*;
-
 import com.sportfy.sportfy.models.Publicacao;
-
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
-
 import java.time.OffsetDateTime;
-import java.util.stream.Collectors;
 
 public record PublicacaoDto(
     Long idPublicacao,
@@ -36,9 +32,9 @@ public record PublicacaoDto(
     List<UsuarioDto> listaUsuarioCurtida
 ) {
     public static PublicacaoDto fromPublicacaoBD(Publicacao publicacao) {
-        List<UsuarioDto> listaUsuarioCurtida = new ArrayList<UsuarioDto>();
+        List<UsuarioDto> listaUsuarioCurtida = new ArrayList<>();
         if (publicacao.getListaCurtidaPublicacao() != null && !publicacao.getListaCurtidaPublicacao().isEmpty()) {
-            listaUsuarioCurtida = publicacao.getListaCurtidaPublicacao().stream().map(curtidaPublicacao -> UsuarioDto.fromUsuarioBD(curtidaPublicacao.getUsuario())).collect(Collectors.toList());
+            listaUsuarioCurtida = publicacao.getListaCurtidaPublicacao().stream().map(curtidaPublicacao -> UsuarioDto.fromUsuarioBD(curtidaPublicacao.getUsuario())).toList();
         }
         return new PublicacaoDto(
             publicacao.getIdPublicacao(),

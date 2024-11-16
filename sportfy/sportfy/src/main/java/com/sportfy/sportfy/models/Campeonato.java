@@ -1,7 +1,6 @@
 package com.sportfy.sportfy.models;
 
 import java.io.Serializable;
-
 import com.sportfy.sportfy.dtos.CampeonatoDto;
 import com.sportfy.sportfy.dtos.CampeonatoResponseDto;
 import com.sportfy.sportfy.dtos.EnderecoDto;
@@ -10,11 +9,8 @@ import com.sportfy.sportfy.enums.TipoPrivacidadeCampeonato;
 import com.sportfy.sportfy.enums.TipoSituacao;
 import com.sportfy.sportfy.exeptions.TipoInvalidoException;
 import org.hibernate.annotations.CreationTimestamp;
-
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;

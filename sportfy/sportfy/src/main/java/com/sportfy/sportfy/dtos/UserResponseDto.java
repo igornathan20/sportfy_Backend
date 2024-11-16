@@ -5,5 +5,4 @@ public record UserResponseDto(
     String username, 
     String role
 ) {
-    
 }

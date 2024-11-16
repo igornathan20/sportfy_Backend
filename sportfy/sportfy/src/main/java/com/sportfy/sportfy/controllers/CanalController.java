@@ -1,5 +1,7 @@
 package com.sportfy.sportfy.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,7 @@ import java.util.List;
 )
 public class CanalController {
 
+    private static final Logger logger = LoggerFactory.getLogger(CanalController.class);
     @Autowired
     private CanalService canalService;
 
@@ -30,10 +33,10 @@ public class CanalController {
             List<CanalDto> listaCanal = canalService.listarCanais(idUsuario);
             return ResponseEntity.status(HttpStatus.OK).body(listaCanal);
         } catch (ListaCanalVazioException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

@@ -1,11 +1,9 @@
 package com.sportfy.sportfy.repositories;
 
 import com.sportfy.sportfy.models.MetaEsportiva;
-
 import com.sportfy.sportfy.models.ModalidadeEsportiva;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
 import java.util.*;
 
 @Repository

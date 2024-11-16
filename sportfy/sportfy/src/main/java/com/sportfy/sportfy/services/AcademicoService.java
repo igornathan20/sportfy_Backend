@@ -13,13 +13,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.nio.file.AccessDeniedException;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class AcademicoService {
@@ -52,7 +50,7 @@ public class AcademicoService {
     CampeonatoService campeonatoService;
 
 
-    public AcademicoResponseDto cadastrar(AcademicoDto academicoDto) throws EmailInvalidoException, OutroUsuarioComDadosJaExistentes, PermissaoNaoExisteException {
+    public AcademicoResponseDto cadastrar(AcademicoDto academicoDto) throws EmailInvalidoException, OutroUsuarioComDadosJaExistentes {
         if (!isEmailFromUfpr(academicoDto.email())) {
             throw new EmailInvalidoException("Email invalido!");
         }
@@ -80,9 +78,9 @@ public class AcademicoService {
             }
         }
 
-        if (existAcademicoBD.get().size() == 0) {
+        if (existAcademicoBD.get().isEmpty()) {
             Academico novoAcademico = new Academico();
-            String senha = "1234"; //GeraSenha.generatePassword();
+            String senha = "1234";
             novoAcademico.toEntity(academicoDto);
             novoAcademico.getUsuario().setPassword(passwordEncoder.encode(senha));
 
@@ -174,15 +172,11 @@ public class AcademicoService {
     }
 
     public AcademicoResponseDto consultar(Long idUsuario) throws AcademicoNaoExisteException {
-        return academicoRepository.findByIdAcademicoAndUsuarioAtivo(idUsuario, true).map(academicoBD -> {
-            return AcademicoResponseDto.fromAcademicoBD(academicoBD);
-        }).orElseThrow(() -> new AcademicoNaoExisteException("Academico não existe!"));
+        return academicoRepository.findByIdAcademicoAndUsuarioAtivo(idUsuario, true).map(AcademicoResponseDto::fromAcademicoBD).orElseThrow(() -> new AcademicoNaoExisteException("Academico não existe!"));
     }
 
     public AcademicoResponseDto buscarPorUsername(String userName) throws AcademicoNaoExisteException {
-        return academicoRepository.findByUsuarioUsername(userName).map(academicoBD -> {
-            return AcademicoResponseDto.fromAcademicoBD(academicoBD);
-        }).orElseThrow(() -> new AcademicoNaoExisteException("Academico não existe!"));
+        return academicoRepository.findByUsuarioUsername(userName).map(AcademicoResponseDto::fromAcademicoBD).orElseThrow(() -> new AcademicoNaoExisteException("Academico não existe!"));
     }
 
     public Page<AcademicoResponseDto> listar(Pageable pageable) throws ListaAcademicosVaziaException {

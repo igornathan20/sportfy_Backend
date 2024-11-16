@@ -1,11 +1,8 @@
 package com.sportfy.sportfy.models;
 
 import java.io.Serializable;
-
 import java.util.List;
-
 import com.sportfy.sportfy.enums.TipoCanal;
-
 import jakarta.persistence.*;
 import lombok.*;
 

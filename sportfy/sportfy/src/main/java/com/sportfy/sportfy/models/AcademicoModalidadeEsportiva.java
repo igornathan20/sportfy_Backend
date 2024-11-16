@@ -1,7 +1,6 @@
 package com.sportfy.sportfy.models;
 
 import java.io.Serializable;
-
 import jakarta.persistence.*;
 import lombok.*;
 

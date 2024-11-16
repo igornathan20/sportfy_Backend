@@ -2,11 +2,8 @@ package com.sportfy.sportfy.models;
 
 import java.io.Serializable;
 import java.util.List;
-
 import com.sportfy.sportfy.dtos.AcademicoDto;
-
 import jakarta.persistence.*;
-
 import lombok.*;
 
 @Entity

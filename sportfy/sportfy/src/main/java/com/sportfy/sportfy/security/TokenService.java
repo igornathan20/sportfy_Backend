@@ -7,12 +7,9 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.sportfy.sportfy.models.Usuario;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class TokenService {
@@ -23,19 +20,15 @@ public class TokenService {
     public String gerarToken(Usuario usuario) {
         try {
             Algorithm algoritmo = Algorithm.HMAC256(secret);
-
-
-            String token = JWT.create()
+            return JWT.create()
                     .withIssuer("sportfy")
                     .withSubject(usuario.getUsername())
                     .withClaim("roles", usuario.getPermissao().getTipoPermissao())
                     .withClaim("idUsuario", usuario.getIdUsuario())
                     .withExpiresAt(dataExpiracao())
                     .sign(algoritmo);
-
-            return token;
         } catch (JWTCreationException exception) {
-            throw new RuntimeException("Erro ao gerar token JWT", exception);
+            throw new IllegalArgumentException("Erro ao gerar token JWT", exception);
         }
     }
 
@@ -49,7 +42,7 @@ public class TokenService {
                     .verify(tokenJWT)
                     .getSubject();
         } catch (JWTVerificationException exception) {
-            throw new RuntimeException("Token JWT inválido ou expirado!");
+            throw new IllegalArgumentException("Token JWT inválido ou expirado!");
         }
     }
 

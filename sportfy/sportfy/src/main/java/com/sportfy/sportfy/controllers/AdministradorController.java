@@ -11,7 +11,8 @@ import com.sportfy.sportfy.exeptions.RoleNaoPermitidaException;
 import com.sportfy.sportfy.services.AdministradorService;
 import jakarta.validation.Valid;
 import lombok.*;
-import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +34,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 @RequiredArgsConstructor
 public class AdministradorController {
 
+    private static final Logger logger = LoggerFactory.getLogger(AdministradorController.class);
     @Autowired
     AdministradorService administradorService;
 
@@ -42,20 +44,17 @@ public class AdministradorController {
         try {
             AdministradorResponseDto administradorCriado = administradorService.cadastrar(administrador);
             return ResponseEntity.status(HttpStatus.CREATED).body(administradorCriado);
-        } catch (PasswordInvalidoException e) {
-            System.out.println("Erro " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
-        } catch (OutroUsuarioComDadosJaExistentes e) {
-            System.out.println("Erro " + e.getMessage());
+        } catch (PasswordInvalidoException | OutroUsuarioComDadosJaExistentes e) {
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         } catch (RoleNaoPermitidaException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         } catch (PermissaoNaoExisteException e){
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         } catch (Exception e){
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -69,19 +68,19 @@ public class AdministradorController {
             AdministradorResponseDto administradorAtualizado = administradorService.atualizar(idAdministrador, administrador, usuarioAutenticado);
             return ResponseEntity.status(HttpStatus.OK).body(administradorAtualizado);
         } catch (AdministradorNaoExisteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (OutroUsuarioComDadosJaExistentes e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         } catch (RoleNaoPermitidaException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         } catch (PermissaoNaoExisteException e){
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -93,10 +92,10 @@ public class AdministradorController {
             AdministradorResponseDto administradorInativado = administradorService.inativar(idAdministrador);
             return ResponseEntity.status(HttpStatus.OK).body(administradorInativado);
         } catch (AdministradorNaoExisteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -108,10 +107,10 @@ public class AdministradorController {
             AdministradorResponseDto administradorConsultado = administradorService.consultar(idUsuario);
             return ResponseEntity.status(HttpStatus.OK).body(administradorConsultado);
         } catch (AdministradorNaoExisteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -123,10 +122,10 @@ public class AdministradorController {
             Page<AdministradorResponseDto> listaAdministrador = administradorService.listar(pageable);
             return ResponseEntity.status(HttpStatus.OK).body(listaAdministrador);
         } catch (ListaAdministradoresVaziaException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

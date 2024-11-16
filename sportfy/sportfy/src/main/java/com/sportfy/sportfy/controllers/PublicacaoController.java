@@ -1,12 +1,13 @@
 package com.sportfy.sportfy.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import com.sportfy.sportfy.dtos.PublicacaoDto;
 import com.sportfy.sportfy.exeptions.PublicacaoNaoExisteException;
 import com.sportfy.sportfy.exeptions.UsuarioCurtidaPublicacaoJaExisteException;
@@ -25,6 +26,7 @@ import jakarta.validation.Valid;
 )
 public class PublicacaoController {
 
+    private static final Logger logger = LoggerFactory.getLogger(PublicacaoController.class);
     @Autowired
     private PublicacaoService publicacaoService;
 
@@ -35,7 +37,7 @@ public class PublicacaoController {
             Object publicacaoCriada = publicacaoService.cadastrarPublicacao(publicacao);
             return ResponseEntity.status(HttpStatus.CREATED).body(publicacaoCriada);
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -47,10 +49,10 @@ public class PublicacaoController {
             Object publicacaoAtualizada = publicacaoService.atualizarPublicacao(idPublicacao, publicacao);
             return ResponseEntity.status(HttpStatus.OK).body(publicacaoAtualizada);
         } catch (PublicacaoNaoExisteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -62,10 +64,10 @@ public class PublicacaoController {
             Object publicacaoRemovida = publicacaoService.removerPublicacao(idPublicacao);
             return ResponseEntity.status(HttpStatus.OK).body(publicacaoRemovida);
         } catch (PublicacaoNaoExisteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -77,13 +79,13 @@ public class PublicacaoController {
             Object publicacaoCurtida = publicacaoService.curtirPublicacao(idUsuario, idPublicacao);
             return ResponseEntity.status(HttpStatus.CREATED).body(publicacaoCurtida);
         } catch (UsuarioCurtidaPublicacaoJaExisteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }  catch (PublicacaoNaoExisteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -95,13 +97,13 @@ public class PublicacaoController {
             Object isCurtidaPublicacaoRemovida = publicacaoService.removerCurtidaPublicacao(idUsuario, idPublicacao);
             return ResponseEntity.status(HttpStatus.CREATED).body(isCurtidaPublicacaoRemovida);
         } catch (UsuarioCurtidaPublicacaoNaoExisteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }  catch (PublicacaoNaoExisteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

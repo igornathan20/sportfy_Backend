@@ -1,12 +1,7 @@
 package com.sportfy.sportfy.dtos;
 
 import com.sportfy.sportfy.models.ModalidadeEsportiva;
-
 import java.time.OffsetDateTime;
-
-import java.util.*;
-
-import java.util.stream.Collectors;
 
 public record ModalidadeEsportivaDto(
     Long idModalidadeEsportiva,

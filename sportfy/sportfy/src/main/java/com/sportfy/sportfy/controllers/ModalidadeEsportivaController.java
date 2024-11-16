@@ -4,11 +4,12 @@ import com.sportfy.sportfy.dtos.EstatisticasGeraisModalidadeDto;
 import com.sportfy.sportfy.dtos.MetaEsportivaDto;
 import com.sportfy.sportfy.dtos.ModalidadeEsportivaDto;
 import com.sportfy.sportfy.exeptions.*;
-import com.sportfy.sportfy.models.ModalidadeEsportiva;
 import com.sportfy.sportfy.exeptions.AcademicoNaoExisteException;
 import com.sportfy.sportfy.exeptions.ModalidadeJaExisteException;
 import com.sportfy.sportfy.exeptions.ModalidadeNaoExistenteException;
 import com.sportfy.sportfy.services.ModalidadeEsportivaService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import java.util.List;
         allowCredentials = "true"
 )
 public class ModalidadeEsportivaController {
+    private static final Logger logger = LoggerFactory.getLogger(ModalidadeEsportivaController.class);
     @Autowired
     ModalidadeEsportivaService modalidadeEsportivaService;
 
@@ -34,10 +36,10 @@ public class ModalidadeEsportivaController {
             ModalidadeEsportivaDto novaModalidade = modalidadeEsportivaService.criarModalidade(modalidade);
             return ResponseEntity.status(HttpStatus.CREATED).body(novaModalidade);
         } catch (ModalidadeJaExisteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -49,13 +51,13 @@ public class ModalidadeEsportivaController {
             ModalidadeEsportivaDto modalidadeEditada = modalidadeEsportivaService.editarModalidade(modalidade);
             return ResponseEntity.status(HttpStatus.OK).body(modalidadeEditada);
         } catch (ModalidadeNaoExistenteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (ModalidadeJaExisteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -67,10 +69,10 @@ public class ModalidadeEsportivaController {
             List<ModalidadeEsportivaDto> listaModalidade = modalidadeEsportivaService.listarModalidades();
             return ResponseEntity.status(HttpStatus.OK).body(listaModalidade);
         } catch (ModalidadeNaoExistenteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         }  catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -82,10 +84,10 @@ public class ModalidadeEsportivaController {
             List<ModalidadeEsportivaDto> modalidade = modalidadeEsportivaService.buscarModalidades(nome);
             return ResponseEntity.status(HttpStatus.OK).body(modalidade);
         } catch (ModalidadeNaoExistenteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -97,10 +99,10 @@ public class ModalidadeEsportivaController {
             Object modalidadeDesativada = modalidadeEsportivaService.desativarModalidade(id);
             return ResponseEntity.status(HttpStatus.OK).body(modalidadeDesativada);
         } catch (ModalidadeNaoExistenteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -112,10 +114,10 @@ public class ModalidadeEsportivaController {
             modalidadeEsportivaService.inscreverEmModalidade(idAcademico, idModalidade);
             return ResponseEntity.status(HttpStatus.OK).body(null);
         } catch (ModalidadeNaoExistenteException | AcademicoNaoExisteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }catch (Exception e){
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
     }
@@ -127,10 +129,10 @@ public class ModalidadeEsportivaController {
             List<ModalidadeEsportivaDto> modalidadeAcademico = modalidadeEsportivaService.listarModalidadesInscritas(idAcademico);
             return ResponseEntity.status(HttpStatus.OK).body(modalidadeAcademico);
         } catch (AcademicoNaoExisteException | RegistroNaoEncontradoException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -143,13 +145,13 @@ public class ModalidadeEsportivaController {
             List<ModalidadeEsportivaDto> modalidadeAcademico = modalidadeEsportivaService.listarModalidadesOutroUsuario(idAcademico);
             return ResponseEntity.status(HttpStatus.OK).body(modalidadeAcademico);
         } catch (AcademicoNaoExisteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }catch (ConteudoPrivadoException e){
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -161,10 +163,10 @@ public class ModalidadeEsportivaController {
             modalidadeEsportivaService.cancelarInscricaoModalidade(idAcademico, idModalidade);
             return ResponseEntity.status(HttpStatus.OK).body(null);
         } catch (ModalidadeNaoExistenteException | AcademicoNaoExisteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -176,13 +178,13 @@ public class ModalidadeEsportivaController {
             EstatisticasGeraisModalidadeDto estatisticas = modalidadeEsportivaService.estatisticasGeraisPorModalidade(idModalidade);
             return ResponseEntity.ok(estatisticas);
         } catch (ModalidadeNaoExistenteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (RegistroNaoEncontradoException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -194,10 +196,10 @@ public class ModalidadeEsportivaController {
             MetaEsportivaDto novaMeta = modalidadeEsportivaService.adicionarMetaEsportiva(metaEsportivaDto);
             return ResponseEntity.status(HttpStatus.OK).body(novaMeta);
         } catch (TipoInvalidoException | ModalidadeNaoExistenteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -209,10 +211,10 @@ public class ModalidadeEsportivaController {
             MetaEsportivaDto metaAtualizada = modalidadeEsportivaService.atualizarMetaEsportiva(metaEsportivaDto, id);
             return ResponseEntity.status(HttpStatus.OK).body(metaAtualizada);
         } catch (RegistroNaoEncontradoException | ModalidadeNaoExistenteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -224,10 +226,10 @@ public class ModalidadeEsportivaController {
             modalidadeEsportivaService.desativarMetaEsportiva(id);
             return ResponseEntity.noContent().build();
         } catch (RegistroNaoEncontradoException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -239,10 +241,10 @@ public class ModalidadeEsportivaController {
             List<MetaEsportivaDto> metas = modalidadeEsportivaService.listarMetaEsportivaPorModalidade(idModalidade);
             return ResponseEntity.status(HttpStatus.OK).body(metas);
         } catch (RegistroNaoEncontradoException | ModalidadeNaoExistenteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }

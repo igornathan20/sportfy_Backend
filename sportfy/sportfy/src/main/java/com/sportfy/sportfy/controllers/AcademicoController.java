@@ -10,6 +10,8 @@ import com.sportfy.sportfy.services.AcademicoService;
 import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/academico")
@@ -34,12 +35,11 @@ import java.util.stream.Collectors;
 )
 @RequiredArgsConstructor
 public class AcademicoController {
-
+    private static final Logger logger = LoggerFactory.getLogger(AcademicoController.class);
     @Autowired
     AcademicoService academicoService;
     @Autowired
     CursoRepository cursoRepository;
-
 
     @PostMapping("/cadastrar")
     @PermitAll
@@ -48,16 +48,13 @@ public class AcademicoController {
             AcademicoResponseDto academicoCriado = academicoService.cadastrar(academico);
             return ResponseEntity.status(HttpStatus.CREATED).body(academicoCriado);
         } catch(EmailInvalidoException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         } catch (OutroUsuarioComDadosJaExistentes e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
-        } catch (PermissaoNaoExisteException e) {
-            System.out.println("Erro " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -71,19 +68,19 @@ public class AcademicoController {
             AcademicoResponseDto academicoAtualizado = academicoService.atualizar(idAcademico, academico, usuarioAutenticado);
             return ResponseEntity.status(HttpStatus.OK).body(academicoAtualizado);
         } catch (EmailInvalidoException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }catch (AccessDeniedException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         } catch (AcademicoNaoExisteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (OutroUsuarioComDadosJaExistentes e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -95,10 +92,10 @@ public class AcademicoController {
             AcademicoResponseDto academicoInativado = academicoService.inativar(idAcademico);
             return ResponseEntity.status(HttpStatus.OK).body(academicoInativado);
         } catch (AcademicoNaoExisteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -110,10 +107,10 @@ public class AcademicoController {
             AcademicoResponseDto academicoConsultado = academicoService.consultar(idUsuario);
             return ResponseEntity.status(HttpStatus.OK).body(academicoConsultado);
         } catch (AcademicoNaoExisteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -125,10 +122,10 @@ public class AcademicoController {
             AcademicoResponseDto academicoConsultado = academicoService.buscarPorUsername(userName);
             return ResponseEntity.status(HttpStatus.OK).body(academicoConsultado);
         } catch (AcademicoNaoExisteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -140,10 +137,10 @@ public class AcademicoController {
             Page<AcademicoResponseDto> listaAcademico = academicoService.listar(pageable);
             return ResponseEntity.status(HttpStatus.OK).body(listaAcademico);
         } catch (ListaAcademicosVaziaException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -155,7 +152,7 @@ public class AcademicoController {
             boolean notificar = academicoService.retornaNotificacao(idAcademico, tipoNotificacao);
             return ResponseEntity.status(HttpStatus.OK).body(notificar);
         }catch (Exception e){
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -167,7 +164,7 @@ public class AcademicoController {
             NotificacaoDto notificacoes = academicoService.retornaTodasNotificacoes(idAcademico);
             return ResponseEntity.status(HttpStatus.OK).body(notificacoes);
         }catch (Exception e){
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -181,10 +178,10 @@ public class AcademicoController {
             Notificacao notificacao = academicoService.alteraNotificacao(userNotificacao, usuarioAutenticado);
             return ResponseEntity.status(HttpStatus.OK).body(NotificacaoDto.toEntity(notificacao));
         }catch (AccessDeniedException e){
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }catch (Exception e){
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -196,7 +193,7 @@ public class AcademicoController {
             boolean privacidade = academicoService.retornaPrivacidade(idAcademico, tipoPrivacidade);
             return ResponseEntity.status(HttpStatus.OK).body(privacidade);
         }catch (Exception e){
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -208,7 +205,7 @@ public class AcademicoController {
             PrivacidadeDto privacidade = academicoService.retornaTodasPrivacidade(idAcademico);
             return ResponseEntity.status(HttpStatus.OK).body(privacidade);
         }catch (Exception e){
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -222,10 +219,10 @@ public class AcademicoController {
             Privacidade privacidade = academicoService.alteraPrivacidade(userPrivacidade, usuarioAutenticado);
             return ResponseEntity.status(HttpStatus.OK).body(PrivacidadeDto.fromPrivacidade(privacidade));
         }catch (AccessDeniedException e){
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }catch (Exception e){
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -237,13 +234,13 @@ public class AcademicoController {
             EstatisticasPessoaisModalidadeDto estatisticas = academicoService.estatisticasPessoaisPorModalidade(idAcademico, idModalidade);
             return ResponseEntity.ok(estatisticas);
         } catch (AcademicoNaoExisteException | ModalidadeNaoExistenteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (RegistroNaoEncontradoException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -255,16 +252,16 @@ public class AcademicoController {
             EstatisticasPessoaisModalidadeDto estatisticas = academicoService.estatisticasOutroUsuarioPorModalidade(idAcademico, idModalidade);
             return ResponseEntity.ok(estatisticas);
         } catch (AcademicoNaoExisteException | ModalidadeNaoExistenteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (RegistroNaoEncontradoException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } catch (ConteudoPrivadoException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -276,10 +273,10 @@ public class AcademicoController {
             EstatisticasPessoaisDto estatisticasDeUso = academicoService.estatisticasDeUso(idAcademico);
             return ResponseEntity.ok(estatisticasDeUso);
         } catch (AcademicoNaoExisteException | ModalidadeNaoExistenteException | RegistroNaoEncontradoException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -289,6 +286,6 @@ public class AcademicoController {
     public List<String> listarCursosUfpr() {
         return cursoRepository.findAll().stream()
                 .map(Curso::getNome)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

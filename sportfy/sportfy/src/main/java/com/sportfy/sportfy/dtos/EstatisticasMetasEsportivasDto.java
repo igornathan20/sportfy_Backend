@@ -10,5 +10,4 @@ public record EstatisticasMetasEsportivasDto (
     Integer totalCampeonatosParticipados,
     List<EstatisticaPorModalidadeEsportivaDto> listaEstatisticaPorModalidadeEsportivaDto
 ) {
-
 }

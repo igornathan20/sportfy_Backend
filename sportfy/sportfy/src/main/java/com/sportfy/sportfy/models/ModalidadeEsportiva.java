@@ -2,13 +2,10 @@ package com.sportfy.sportfy.models;
 
 import java.io.Serializable;
 import java.time.OffsetDateTime;
-
 import com.sportfy.sportfy.dtos.ModalidadeEsportivaDto;
 import com.sportfy.sportfy.repositories.MetaEsportivaRepository;
 import com.sportfy.sportfy.repositories.RegraRepository;
-
 import org.hibernate.annotations.CreationTimestamp;
-
 import java.util.*;
 import jakarta.persistence.*;
 import lombok.*;

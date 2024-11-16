@@ -2,15 +2,8 @@ package com.sportfy.sportfy.dtos;
 
 import com.sportfy.sportfy.enums.TipoPermissao;
 import com.sportfy.sportfy.models.Academico;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
-
 import java.time.OffsetDateTime;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public record AcademicoResponseDto(
         Long idAcademico,
@@ -43,7 +36,7 @@ public record AcademicoResponseDto(
                         ? List.of()
                         : academico.getModalidadeEsportivas().stream()
                         .map(m -> new ModalidadeAcademicoDto(m.getIdModalidadeEsportiva(), m.getNome()))
-                        .collect(Collectors.toList()));
+                        .toList());
         }
 
     }

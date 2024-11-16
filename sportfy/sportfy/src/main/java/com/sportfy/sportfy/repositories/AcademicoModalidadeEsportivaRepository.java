@@ -6,7 +6,6 @@ import com.sportfy.sportfy.models.ModalidadeEsportiva;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
-import java.util.*;
 
 public interface AcademicoModalidadeEsportivaRepository extends JpaRepository<AcademicoModalidadeEsportiva, Long> {
     Optional<AcademicoModalidadeEsportiva> findByAcademicoIdAcademicoAndModalidadeEsportivaIdModalidadeEsportiva(Long academicoId, Long modalidadeEsportivaId);

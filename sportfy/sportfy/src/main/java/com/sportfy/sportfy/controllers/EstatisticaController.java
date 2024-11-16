@@ -1,10 +1,11 @@
 package com.sportfy.sportfy.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import com.sportfy.sportfy.dtos.EstatisticasMetasEsportivasDto;
 import com.sportfy.sportfy.dtos.MetricasSistemaDto;
 import com.sportfy.sportfy.services.EstatisticaService;
@@ -19,29 +20,30 @@ import com.sportfy.sportfy.services.EstatisticaService;
 )
 public class EstatisticaController {
 
+    private static final Logger logger = LoggerFactory.getLogger(EstatisticaController.class);
     @Autowired
     private EstatisticaService estatisticaService;
 
     @GetMapping("/visualizarMetricasSistema")
     //@PreAuthorize(hasRole('ROLE_ADMINISTRADOR'))
-    public ResponseEntity<?> metricasSistema() {
+    public ResponseEntity<MetricasSistemaDto> metricasSistema() {
         try {
             MetricasSistemaDto metricasSistema = estatisticaService.metricasSistema();
             return ResponseEntity.status(HttpStatus.OK).body(metricasSistema);
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @GetMapping("/visualizarEstatisticasMetasEsportivas/{idAcademico}")
     //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
-    public ResponseEntity<?> visualizarEstatisticasMetasEsportivas(@PathVariable Long idAcademico) {
+    public ResponseEntity<EstatisticasMetasEsportivasDto> visualizarEstatisticasMetasEsportivas(@PathVariable Long idAcademico) {
         try {
             EstatisticasMetasEsportivasDto estatisticasMetasEsportivas = estatisticaService.visualizarEstatisticasMetasEsportivas(idAcademico);
             return ResponseEntity.status(HttpStatus.OK).body(estatisticasMetasEsportivas);
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

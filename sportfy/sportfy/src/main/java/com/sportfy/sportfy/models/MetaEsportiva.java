@@ -1,9 +1,7 @@
 package com.sportfy.sportfy.models;
 
 import java.io.Serializable;
-
 import com.sportfy.sportfy.dtos.MetaEsportivaDto;
-
 import jakarta.persistence.*;
 import lombok.*;
 

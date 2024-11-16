@@ -1,5 +1,7 @@
 package com.sportfy.sportfy.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +27,7 @@ import jakarta.validation.Valid;
 )
 public class ComentarioController {
 
+    private static final Logger logger = LoggerFactory.getLogger(ComentarioController.class);
     @Autowired
     private ComentarioService comentarioService;
 
@@ -35,7 +38,7 @@ public class ComentarioController {
             Object comentarioCriada = comentarioService.cadastrarComentario(comentario);
             return ResponseEntity.status(HttpStatus.CREATED).body(comentarioCriada);
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -47,10 +50,10 @@ public class ComentarioController {
             Object comentarioAtualizado = comentarioService.atualizarComentario(idComentario, comentario);
             return ResponseEntity.status(HttpStatus.OK).body(comentarioAtualizado);
         } catch (ComentarioNaoExisteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -62,10 +65,10 @@ public class ComentarioController {
             Object comentarioRemovido = comentarioService.removerComentario(idComentario);
             return ResponseEntity.status(HttpStatus.OK).body(comentarioRemovido);
         } catch (ComentarioNaoExisteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -77,13 +80,13 @@ public class ComentarioController {
             Object comentarioCurtida = comentarioService.curtirComentario(idUsuario, idComentario);
             return ResponseEntity.status(HttpStatus.CREATED).body(comentarioCurtida);
         } catch (UsuarioCurtidaComentarioJaExisteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }  catch (ComentarioNaoExisteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -95,13 +98,13 @@ public class ComentarioController {
             Object isCurtidaComentarioRemovida = comentarioService.removerCurtidaComentario(idUsuario, idComentario);
             return ResponseEntity.status(HttpStatus.CREATED).body(isCurtidaComentarioRemovida);
         } catch (UsuarioCurtidaComentarioNaoExisteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }  catch (ComentarioNaoExisteException e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
-            System.out.println("Erro " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -113,8 +116,10 @@ public class ComentarioController {
             Page<ComentarioDto> comentarios = comentarioService.listarComentariosPorPublicacao(idPublicacao, pageable);
             return ResponseEntity.ok(comentarios);
         } catch (ComentarioNaoExisteException e) {
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

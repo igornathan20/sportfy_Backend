@@ -1,7 +1,6 @@
 package com.sportfy.sportfy.dtos;
 
 import java.time.OffsetDateTime;
-
 import com.sportfy.sportfy.models.Conquista;
 
 public record ConquistaDto (

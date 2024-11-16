@@ -1,13 +1,11 @@
 package com.sportfy.sportfy.models;
 
 import java.io.Serializable;
-
 import com.sportfy.sportfy.dtos.PartidaDto;
 import com.sportfy.sportfy.enums.TipoFasePartida;
 import com.sportfy.sportfy.enums.TipoSituacao;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.OffsetDateTime;
 
 @Entity

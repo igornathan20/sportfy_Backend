@@ -8,7 +8,6 @@ public record NotificacaoDto(
      boolean posts,
      boolean comentarios,
      boolean likes
-
 ) {
     public static NotificacaoDto toEntity(Notificacao notificacao){
         return new NotificacaoDto(

@@ -1,7 +1,6 @@
 package com.sportfy.sportfy.models;
 
 import java.io.Serializable;
-
 import com.sportfy.sportfy.dtos.MetaDiariaDto;
 import com.sportfy.sportfy.enums.TipoSituacaoMetaDiaria;
 import jakarta.persistence.*;
@@ -55,8 +54,10 @@ public class MetaDiaria implements Serializable {
         switch (dto.situacaoMetaDiaria()){
             case 1:
                 this.tipoSituacaoMetaDiaria = TipoSituacaoMetaDiaria.CONCLUIDA;
+                break;
             case 2:
                 this.tipoSituacaoMetaDiaria = TipoSituacaoMetaDiaria.EM_ANDAMENTO;
+                break;
             default:
                 this.tipoSituacaoMetaDiaria = TipoSituacaoMetaDiaria.EM_ANDAMENTO;
         }

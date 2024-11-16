@@ -1,14 +1,11 @@
 package com.sportfy.sportfy.models;
 
 import java.io.Serializable;
-
 import com.sportfy.sportfy.dtos.ApoioSaudeDto;
 import com.sportfy.sportfy.dtos.ApoioSaudeResponseDto;
 import org.hibernate.annotations.CreationTimestamp;
-
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.OffsetDateTime;
 
 @Entity

@@ -7,5 +7,4 @@ public record MetricasSistemaDto (
     Integer totalCampeonatosAbertos,
     Integer totalCampeonatosFinalizados
 ) {
-
 }

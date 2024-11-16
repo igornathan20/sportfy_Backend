@@ -1,16 +1,11 @@
 package com.sportfy.sportfy.models;
 
-import java.util.ArrayList;
+import java.io.Serial;
 import java.util.Collection;
 import jakarta.persistence.*;
-
 import lombok.*;
-
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,10 +15,10 @@ import com.sportfy.sportfy.enums.TipoPermissao;
 @Entity
 @Table(name="usuario")
 @Setter @Getter
-
 @NoArgsConstructor
 @AllArgsConstructor
 public class Usuario implements UserDetails {
+    @Serial
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)

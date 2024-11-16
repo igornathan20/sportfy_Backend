@@ -1,8 +1,6 @@
 package com.sportfy.sportfy.models;
 
 import java.io.Serializable;
-import java.util.List;
-
 import jakarta.persistence.*;
 import com.sportfy.sportfy.dtos.TimeDto;
 import lombok.*;

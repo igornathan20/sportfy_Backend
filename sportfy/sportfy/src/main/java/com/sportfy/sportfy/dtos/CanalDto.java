@@ -2,10 +2,7 @@ package com.sportfy.sportfy.dtos;
 
 import com.sportfy.sportfy.enums.TipoCanal;
 import com.sportfy.sportfy.models.Canal;
-
 import java.util.*;
-
-import java.util.stream.Collectors;
 
 public record CanalDto(
     Long idCanal,
@@ -13,9 +10,9 @@ public record CanalDto(
     List<UsuarioDto> listaUsuario
 ) {
     public static CanalDto fromCanalBD(Canal canal) {
-        List<UsuarioDto> listaUsuario = new ArrayList<UsuarioDto>();
+        List<UsuarioDto> listaUsuario = new ArrayList<>();
         if (canal.getListaUsuarioCanal() != null && !canal.getListaUsuarioCanal().isEmpty()) {
-            listaUsuario = canal.getListaUsuarioCanal().stream().map(usuarioCanal -> UsuarioDto.fromUsuarioBD(usuarioCanal.getUsuario())).collect(Collectors.toList());
+            listaUsuario = canal.getListaUsuarioCanal().stream().map(usuarioCanal -> UsuarioDto.fromUsuarioBD(usuarioCanal.getUsuario())).toList();
         }
         return new CanalDto(
             canal.getIdCanal(),
