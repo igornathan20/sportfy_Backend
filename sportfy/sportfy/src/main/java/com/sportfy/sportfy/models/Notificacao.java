@@ -21,23 +21,22 @@ public class Notificacao implements Serializable {
     private Long idNotificacao;
     @Column(name="idAcademico", nullable = false, unique = true)
     private Long idAcademico;
-
     @Column(name="campeonatos")
     private boolean notificarCampeonatos = true;
     @Column(name="publicacoes")
-    private boolean notificarPosts = true;
+    private boolean notificarPublicacoes = true;
     @Column(name="comentarios")
     private boolean notificarComentarios = true;
     @Column(name="curtidas")
-    private boolean notificarLikes = true;
+    private boolean notificarCurtidas = true;
 
     public NotificacaoDto toDto(Notificacao notificacao){
         return new NotificacaoDto(
-                notificacao.getIdAcademico(),
-                notificacao.isNotificarCampeonatos(),
-                notificacao.isNotificarPosts(),
-                notificacao.isNotificarComentarios(),
-                notificacao.isNotificarLikes()
+            notificacao.getIdAcademico(),
+            notificacao.isNotificarCampeonatos(),
+            notificacao.isNotificarPublicacoes(),
+            notificacao.isNotificarComentarios(),
+            notificacao.isNotificarCurtidas()
         );
     }
 }

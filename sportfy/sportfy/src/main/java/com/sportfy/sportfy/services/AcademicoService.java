@@ -206,12 +206,12 @@ public class AcademicoService {
         switch (tipo){
             case "notificarCampeonatos":
                 return notificacao.isNotificarCampeonatos();
-            case "notificarPosts":
-                return notificacao.isNotificarPosts();
+            case "notificarPublicacoes":
+                return notificacao.isNotificarPublicacoes();
             case "notificarComentarios":
                 return notificacao.isNotificarComentarios();
-            case "notificarLikes":
-                return notificacao.isNotificarLikes();
+            case "notificarCurtidas":
+                return notificacao.isNotificarCurtidas();
             default:
                 return true;
         }
@@ -229,9 +229,9 @@ public class AcademicoService {
             Notificacao notificacao = notificacaoRepository.findByIdAcademico(userNotificacao.idAcademico());
 
             notificacao.setNotificarCampeonatos(userNotificacao.campeonatos());
-            notificacao.setNotificarPosts(userNotificacao.posts());
+            notificacao.setNotificarPublicacoes(userNotificacao.publicacoes());
             notificacao.setNotificarComentarios(userNotificacao.comentarios());
-            notificacao.setNotificarLikes(userNotificacao.likes());
+            notificacao.setNotificarCurtidas(userNotificacao.curtidas());
 
             return notificacaoRepository.save(notificacao);
         } else {
@@ -403,12 +403,12 @@ public class AcademicoService {
                     .filter(metaDiaria -> TipoSituacaoMetaDiaria.EM_ANDAMENTO.equals(metaDiaria.getTipoSituacaoMetaDiaria()))
                     .count();
 
-            List<Publicacao> posts = publicacaoRepository.findByUsuario(academico.get().getUsuario());
+            List<Publicacao> publicacoes = publicacaoRepository.findByUsuario(academico.get().getUsuario());
 
             return new EstatisticasPessoaisDto(dataInscricao, participacoesCampeonatos.size(),
                                                 academicoModalidade.size(), metasDiariasRealizadas,
                                                 metasDiariasAberto,
-                                                posts.size()
+                                                publicacoes.size()
                     );
         }else {
             throw new AcademicoNaoExisteException("Academico nao encontrado!");

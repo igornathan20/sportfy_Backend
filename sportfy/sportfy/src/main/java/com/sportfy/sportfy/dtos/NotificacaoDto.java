@@ -5,17 +5,17 @@ import com.sportfy.sportfy.models.Notificacao;
 public record NotificacaoDto(
      Long idAcademico,
      boolean campeonatos,
-     boolean posts,
+     boolean publicacoes,
      boolean comentarios,
-     boolean likes
+     boolean curtidas
 ) {
     public static NotificacaoDto toEntity(Notificacao notificacao){
         return new NotificacaoDto(
                 notificacao.getIdAcademico(),
                 notificacao.isNotificarCampeonatos(),
-                notificacao.isNotificarPosts(),
+                notificacao.isNotificarPublicacoes(),
                 notificacao.isNotificarComentarios(),
-                notificacao.isNotificarLikes()
+                notificacao.isNotificarCurtidas()
         );
     }
 }

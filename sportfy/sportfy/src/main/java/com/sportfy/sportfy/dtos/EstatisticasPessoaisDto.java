@@ -9,6 +9,6 @@ public record EstatisticasPessoaisDto(
         int totalMetasDiariasRealizadas,
         int totalMetasDiariasEmAberto,
        // int totalMetasEsportivasRealizadas,
-        int postsRealizados
+        int publicacoesRealizados
 ) {
 }
