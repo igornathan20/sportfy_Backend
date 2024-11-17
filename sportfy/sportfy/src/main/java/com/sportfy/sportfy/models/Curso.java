@@ -11,6 +11,6 @@ import lombok.Setter;
 public class Curso {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idCurso;
     private String nome;
 }

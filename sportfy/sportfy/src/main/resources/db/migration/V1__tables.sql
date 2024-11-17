@@ -29,9 +29,9 @@ CREATE TABLE notificacao (
 	id_notificacao INT AUTO_INCREMENT PRIMARY KEY,
     id_academico INT NOT NULL,
     campeonatos BOOLEAN NOT NULL,
-    posts BOOLEAN NOT NULL,
+    publicacoes BOOLEAN NOT NULL,
     comentarios BOOLEAN NOT NULL,
-    likes BOOLEAN NOT NULL,
+    curtidas BOOLEAN NOT NULL,
     CONSTRAINT fk_academico_notificacao FOREIGN KEY (id_academico) REFERENCES academico(id_academico)
 );
 
@@ -121,6 +121,7 @@ CREATE TABLE usuario_canal (
 	id_usuario_canal INT AUTO_INCREMENT PRIMARY KEY,
 	id_canal INT NOT NULL,
 	id_usuario INT NOT NULL,
+	CONSTRAINT fk_usuario_canal_canal FOREIGN KEY (id_canal) REFERENCES canal(id_canal),
 	CONSTRAINT fk_usuario_canal_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
 );
 
@@ -263,6 +264,6 @@ CREATE TABLE avaliacao (
 );
 
 CREATE TABLE curso (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id_curso INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(255) NOT NULL
 );

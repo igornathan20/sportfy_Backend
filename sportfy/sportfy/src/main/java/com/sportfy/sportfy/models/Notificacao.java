@@ -24,11 +24,11 @@ public class Notificacao implements Serializable {
 
     @Column(name="campeonatos")
     private boolean notificarCampeonatos = true;
-    @Column(name="posts")
+    @Column(name="publicacoes")
     private boolean notificarPosts = true;
     @Column(name="comentarios")
     private boolean notificarComentarios = true;
-    @Column(name="likes")
+    @Column(name="curtidas")
     private boolean notificarLikes = true;
 
     public NotificacaoDto toDto(Notificacao notificacao){
