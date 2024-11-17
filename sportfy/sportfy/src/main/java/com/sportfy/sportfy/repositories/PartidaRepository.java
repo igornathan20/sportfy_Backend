@@ -11,6 +11,4 @@ public interface PartidaRepository extends JpaRepository<Partida, Long> {
     List<Partida> findByCampeonatoAndFasePartida(Campeonato campeonato, TipoFasePartida fasePartida);
     List<Partida> findByTime1OrTime2(Time time1, Time time2);
     List<Partida> findByCampeonato(Campeonato campeonato);
-
-
 }

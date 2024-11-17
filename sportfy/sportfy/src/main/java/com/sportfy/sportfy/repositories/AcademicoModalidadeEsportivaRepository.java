@@ -11,6 +11,5 @@ public interface AcademicoModalidadeEsportivaRepository extends JpaRepository<Ac
     Optional<AcademicoModalidadeEsportiva> findByAcademicoIdAcademicoAndModalidadeEsportivaIdModalidadeEsportiva(Long academicoId, Long modalidadeEsportivaId);
     List<AcademicoModalidadeEsportiva> findByAcademico(Academico academico);
     List<AcademicoModalidadeEsportiva> findByModalidadeEsportiva(ModalidadeEsportiva modalidadeEsportiva);
-
     List<AcademicoModalidadeEsportiva> findByAcademicoIdAcademicoAndModalidadeEsportivaAtivo(Long academicoId, boolean ativo);
 }
