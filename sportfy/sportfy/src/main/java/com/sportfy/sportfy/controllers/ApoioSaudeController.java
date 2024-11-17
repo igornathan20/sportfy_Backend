@@ -5,7 +5,6 @@ import com.sportfy.sportfy.dtos.ApoioSaudeResponseDto;
 import com.sportfy.sportfy.exeptions.AdministradorNaoExisteException;
 import com.sportfy.sportfy.exeptions.RegistroNaoEncontradoException;
 import com.sportfy.sportfy.services.ApoioSaudeService;
-import jakarta.annotation.security.PermitAll;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,9 +2,7 @@ package com.sportfy.sportfy.controllers;
 
 import com.sportfy.sportfy.dtos.*;
 import com.sportfy.sportfy.exeptions.*;
-import com.sportfy.sportfy.models.*;
 import com.sportfy.sportfy.services.CampeonatoService;
-import jakarta.annotation.security.PermitAll;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import java.nio.file.AccessDeniedException;
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/campeonatos")
