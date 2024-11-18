@@ -21,8 +21,6 @@ public class Privacidade implements Serializable {
     private Long idPrivacidade;
     @Column(name="idAcademico", nullable = false, unique = true)
     private Long idAcademico;
-    @Column(name="mostrarModalidadesEsportivas")
-    private boolean mostrarModalidadesEsportivas = true;
     @Column(name="mostrarHistoricoCampeonatos")
     private boolean mostrarHistoricoCampeonatos = true;
     @Column(name="mostrarEstatisticasModalidadesEsportivas")
@@ -33,7 +31,6 @@ public class Privacidade implements Serializable {
     public PrivacidadeDto toDto(Privacidade privacidade){
         return new PrivacidadeDto(
                 privacidade.getIdAcademico(),
-                privacidade.isMostrarModalidadesEsportivas(),
                 privacidade.isMostrarHistoricoCampeonatos(),
                 privacidade.isMostrarEstatisticasModalidadesEsportivas(),
                 privacidade.isMostrarConquistas()

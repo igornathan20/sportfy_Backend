@@ -243,8 +243,6 @@ public class AcademicoService {
         Privacidade privacidade = privacidadeRepository.findByIdAcademico(idAcademico);
 
         switch (tipo){
-            case "mostrarModalidadesEsportivas":
-                return privacidade.isMostrarModalidadesEsportivas();
             case "mostrarHistoricoCampeonatos":
                 return privacidade.isMostrarHistoricoCampeonatos();
             case "mostrarEstatisticasModalidadesEsportivas":
@@ -269,7 +267,6 @@ public class AcademicoService {
 
             privacidade.setMostrarConquistas(userPrivacidade.mostrarConquistas());
             privacidade.setMostrarHistoricoCampeonatos(userPrivacidade.mostrarHistoricoCampeonatos());
-            privacidade.setMostrarModalidadesEsportivas(userPrivacidade.mostrarModalidadesEsportivas());
             privacidade.setMostrarEstatisticasModalidadesEsportivas(userPrivacidade.mostrarEstatisticasModalidadesEsportivas());
 
             return privacidadeRepository.save(privacidade);

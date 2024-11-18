@@ -146,18 +146,11 @@ public class ModalidadeEsportivaService {
         }
     }
 
-    public List<ModalidadeEsportivaDto> listarModalidadesOutroUsuario(Long idAcademico) throws AcademicoNaoExisteException, ConteudoPrivadoException{
+    public List<ModalidadeEsportivaDto> listarModalidadesOutroUsuario(Long idAcademico) throws AcademicoNaoExisteException, ConteudoPrivadoException {
         Optional<Academico>academico = academicoRepository.findById(idAcademico);
-        Privacidade privacidade = privacidadeRepository.findByIdAcademico(idAcademico);
 
         if (academico.isPresent()) {
-            if (privacidade.isMostrarModalidadesEsportivas()){
-                return academico.get().getModalidadeEsportivas().stream().map(
-                        ModalidadeEsportivaDto::toDTO
-                ).toList();
-            }else {
-                throw new ConteudoPrivadoException("O usuario definiu como privado a visualizacao das modalidades!");
-            }
+            return academico.get().getModalidadeEsportivas().stream().map(ModalidadeEsportivaDto::toDTO).toList();
         } else {
             throw new AcademicoNaoExisteException("Usuario não encontrado!");
         }

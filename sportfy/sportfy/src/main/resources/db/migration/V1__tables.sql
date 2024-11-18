@@ -38,7 +38,6 @@ CREATE TABLE notificacao (
 CREATE TABLE privacidade (
     id_privacidade INT AUTO_INCREMENT PRIMARY KEY,
     id_academico INT NOT NULL,
-    mostrar_modalidades_esportivas BOOLEAN NOT NULL,
     mostrar_historico_campeonatos BOOLEAN NOT NULL,
     mostrar_estatisticas_modalidades_esportivas BOOLEAN NOT NULL,
     mostrar_conquistas BOOLEAN NOT NULL,
