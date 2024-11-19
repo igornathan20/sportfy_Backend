@@ -96,4 +96,14 @@ public class PublicacaoService {
         
         return publicacoesBD.map(PublicacaoDto::fromPublicacaoBD);
     }
+
+    public Page<PublicacaoDto> listarPublicacoesPorUsuario(Long idCanal, String username, Pageable pageable) throws PublicacaoNaoExisteException {
+        Page<Publicacao> publicacoesBD = publicacaoRepository.findByCanalIdCanalAndUsuarioUsername(idCanal, username, pageable);
+        
+        if (publicacoesBD.isEmpty()) {
+            throw new PublicacaoNaoExisteException("Nenhuma publicação encontrada para este usuario.");
+        }
+        
+        return publicacoesBD.map(PublicacaoDto::fromPublicacaoBD);
+    }
 }

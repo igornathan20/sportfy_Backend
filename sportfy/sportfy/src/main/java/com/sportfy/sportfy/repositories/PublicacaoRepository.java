@@ -14,6 +14,7 @@ import com.sportfy.sportfy.models.Publicacao;
 @Repository
 public interface PublicacaoRepository extends JpaRepository<Publicacao, Long> {
     Page<Publicacao> findByCanalIdCanal(Long idCanal, Pageable pageable);
+    Page<Publicacao> findByCanalIdCanalAndUsuarioUsername(Long idCanal, String username, Pageable pageable);
     @Query("SELECT p FROM Publicacao p WHERE p.dataPublicacao BETWEEN :dataInicio AND CURRENT_TIMESTAMP")
     List<Publicacao> findByDataPublicacaoInLast30Days(@Param("dataInicio") OffsetDateTime dataInicio);
     List<Publicacao> findByUsuario(Usuario usuario);

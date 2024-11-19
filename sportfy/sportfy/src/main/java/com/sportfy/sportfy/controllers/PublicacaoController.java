@@ -120,4 +120,17 @@ public class PublicacaoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    @GetMapping("/{idCanal}/buscar-publicacoes-username/{username}")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    public ResponseEntity<Page<PublicacaoDto>> listarPublicacoesPorUsuario(@PathVariable Long idCanal, @PathVariable String username, Pageable pageable) {
+        try {
+            Page<PublicacaoDto> publicacoes = publicacaoService.listarPublicacoesPorUsuario(idCanal, username, pageable);
+            return ResponseEntity.ok(publicacoes);
+        } catch (PublicacaoNaoExisteException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }
