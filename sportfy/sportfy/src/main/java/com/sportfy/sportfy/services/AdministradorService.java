@@ -2,7 +2,6 @@ package com.sportfy.sportfy.services;
 
 import com.sportfy.sportfy.dtos.AdministradorDto;
 import com.sportfy.sportfy.dtos.AdministradorResponseDto;
-import com.sportfy.sportfy.enums.TipoCanal;
 import com.sportfy.sportfy.enums.TipoPermissao;
 import com.sportfy.sportfy.exeptions.AdministradorNaoExisteException;
 import com.sportfy.sportfy.exeptions.ListaAdministradoresVaziaException;
@@ -11,17 +10,12 @@ import com.sportfy.sportfy.exeptions.PasswordInvalidoException;
 import com.sportfy.sportfy.exeptions.PermissaoNaoExisteException;
 import com.sportfy.sportfy.exeptions.RoleNaoPermitidaException;
 import com.sportfy.sportfy.models.Administrador;
-import com.sportfy.sportfy.models.UsuarioCanal;
 import com.sportfy.sportfy.repositories.AdministradorRepository;
-import com.sportfy.sportfy.repositories.CanalRepository;
-import com.sportfy.sportfy.repositories.UsuarioCanalRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.nio.file.AccessDeniedException;
 import java.util.Optional;
 
@@ -30,12 +24,9 @@ public class AdministradorService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     @Autowired
     private AdministradorRepository administradorRepository;
-    @Autowired
-    private UsuarioCanalRepository usuarioCanalRepository;
-    @Autowired
-    private CanalRepository canalRepository;
 
     public AdministradorResponseDto cadastrar(AdministradorDto administradorDto) throws PasswordInvalidoException, OutroUsuarioComDadosJaExistentes, RoleNaoPermitidaException, PermissaoNaoExisteException {
         if (isPasswordValid(administradorDto.password())) {
@@ -50,10 +41,6 @@ public class AdministradorService {
                     novoAdministrador.getUsuario().setPassword(passwordEncoder.encode(administradorDto.password()));
                     novoAdministrador.getUsuario().setPermissao(TipoPermissao.ADMINISTRADOR);
                     Administrador administradorCriado = administradorRepository.save(novoAdministrador);
-                    UsuarioCanal usuarioCanal = new UsuarioCanal();
-                    usuarioCanal.setUsuario(administradorCriado.getUsuario());
-                    usuarioCanal.setCanal(canalRepository.findByTipoCanal(TipoCanal.COMUNIDADE));
-                    usuarioCanalRepository.save(usuarioCanal);
                     return AdministradorResponseDto.fromEntity(administradorCriado);
                 } else {
                     Administrador administradorAtualizado = new Administrador();

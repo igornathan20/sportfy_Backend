@@ -1,7 +1,6 @@
 package com.sportfy.sportfy.services;
 
 import com.sportfy.sportfy.dtos.*;
-import com.sportfy.sportfy.enums.TipoCanal;
 import com.sportfy.sportfy.enums.TipoPermissao;
 import com.sportfy.sportfy.enums.TipoSituacaoMetaDiaria;
 import com.sportfy.sportfy.exeptions.*;
@@ -28,27 +27,23 @@ public class AcademicoService {
     @Autowired
     private EnviarEmail email;
     @Autowired
-    private AcademicoRepository academicoRepository;
+    AcademicoRepository academicoRepository;
     @Autowired
-    private ModalidadeEsportivaRepository modalidadeEsportivaRepository;
+    ModalidadeEsportivaRepository modalidadeEsportivaRepository;
     @Autowired
-    private PartidaRepository partidaRepository;
+    PartidaRepository partidaRepository;
     @Autowired
-    private JogadorRepository jogadorRepository;
+    JogadorRepository jogadorRepository;
     @Autowired
-    private AcademicoModalidadeEsportivaRepository academicoModalidadeEsportivaReposity;
+    AcademicoModalidadeEsportivaRepository academicoModalidadeEsportivaReposity;
     @Autowired
     private PrivacidadeRepository privacidadeRepository;
     @Autowired
-    private MetaDiariaRepository metaDiariaRepository;
+    MetaDiariaRepository metaDiariaRepository;
     @Autowired
-    private PublicacaoRepository publicacaoRepository;
+    PublicacaoRepository publicacaoRepository;
     @Autowired
-    private CampeonatoService campeonatoService;
-    @Autowired
-    private UsuarioCanalRepository usuarioCanalRepository;
-    @Autowired
-    private CanalRepository canalRepository;
+    CampeonatoService campeonatoService;
 
 
     public AcademicoResponseDto cadastrar(AcademicoDto academicoDto) throws EmailInvalidoException, OutroUsuarioComDadosJaExistentes {
@@ -92,11 +87,6 @@ public class AcademicoService {
             Privacidade privacidadeUser = new Privacidade();
             privacidadeUser.setIdAcademico(academicoCriado.getIdAcademico());
             privacidadeRepository.save(privacidadeUser);
-
-            UsuarioCanal usuarioCanal = new UsuarioCanal();
-            usuarioCanal.setUsuario(academicoCriado.getUsuario());
-            usuarioCanal.setCanal(canalRepository.findByTipoCanal(TipoCanal.COMUNIDADE));
-            usuarioCanalRepository.save(usuarioCanal);
 
             try {
                 String mensagem = "Bem vindo ao Sportfy! Acesse a sua conta com o username cadastrado e a sua senha: \n\n" + senha +
@@ -355,12 +345,12 @@ public class AcademicoService {
                     .filter(metaDiaria -> TipoSituacaoMetaDiaria.EM_ANDAMENTO.equals(metaDiaria.getTipoSituacaoMetaDiaria()))
                     .count();
 
-            List<Publicacao> publicacoes = publicacaoRepository.findByUsuario(academico.get().getUsuario());
+            List<Publicacao> posts = publicacaoRepository.findByUsuario(academico.get().getUsuario());
 
             return new EstatisticasPessoaisDto(dataInscricao, participacoesCampeonatos.size(),
                                                 academicoModalidade.size(), metasDiariasRealizadas,
                                                 metasDiariasAberto,
-                                                publicacoes.size()
+                                                posts.size()
                     );
         }else {
             throw new AcademicoNaoExisteException("Academico nao encontrado!");

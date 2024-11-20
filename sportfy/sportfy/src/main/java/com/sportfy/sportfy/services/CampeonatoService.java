@@ -757,7 +757,7 @@ public class CampeonatoService {
 
         if(avaliador.isPresent() && academicoAvaliado.isPresent()){
             if (modalidadeEsportiva.isPresent()){
-                AvaliacaoJogador avaliacao = new AvaliacaoJogador();
+                Avaliacao avaliacao = new Avaliacao();
                 avaliacao.setAcademicoAvaliado(academicoAvaliado.get());
                 avaliacao.setAvaliador(avaliador.get());
                 avaliacao.setModalidadeEsportiva(modalidadeEsportiva.get());
@@ -778,7 +778,7 @@ public class CampeonatoService {
 
         if (academico.isPresent()){
             if (modalidadeEsportiva.isPresent()){
-                List<AvaliacaoJogador> avaliacoes = avaliacaoJogadorRepository.findByAcademicoAvaliadoAndModalidadeEsportiva(academico.get(),modalidadeEsportiva.get());
+                List<Avaliacao> avaliacoes = avaliacaoJogadorRepository.findByAcademicoAvaliadoAndModalidadeEsportiva(academico.get(),modalidadeEsportiva.get());
                 float media = 0;
                 int contador = 0;
 
@@ -807,7 +807,7 @@ public class CampeonatoService {
         Optional<Academico> academico = academicoRepository.findById(idAcademico);
 
         if (academico.isPresent()){
-            List<AvaliacaoJogador> avaliacoes = avaliacaoJogadorRepository.findByAcademicoAvaliado(academico.get());
+            List<Avaliacao> avaliacoes = avaliacaoJogadorRepository.findByAcademicoAvaliado(academico.get());
             double media = 0;
             int contador = 0;
             Set<ModalidadeEsportiva> modalidadesSet = new HashSet<>();
