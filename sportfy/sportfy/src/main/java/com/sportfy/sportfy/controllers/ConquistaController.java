@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import com.sportfy.sportfy.dtos.ConquistaDto;
+import com.sportfy.sportfy.exeptions.AcademicoNaoExisteException;
 import com.sportfy.sportfy.exeptions.ConquistaNaoExistenteException;
+import com.sportfy.sportfy.exeptions.ConteudoPrivadoException;
 import com.sportfy.sportfy.exeptions.MetaEsportivaNaoExisteException;
 import com.sportfy.sportfy.services.ConquistaService;
 
@@ -34,10 +36,10 @@ public class ConquistaController {
     public ResponseEntity<Object> atualizarConquista(@RequestBody ConquistaDto conquistaDto) {
         try {
             Object conquistaAtualizada = conquistaService.atualizarConquista(conquistaDto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(conquistaAtualizada);
+            return ResponseEntity.status(HttpStatus.OK).body(conquistaAtualizada);
         } catch (ConquistaNaoExistenteException e) {
             logger.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -53,6 +55,27 @@ public class ConquistaController {
         } catch (MetaEsportivaNaoExisteException e) {
             logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/listarConquistasOutroAcademico/{idAcademico}")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    public ResponseEntity<List<ConquistaDto>> listarConquistasOutroAcademico(@PathVariable("idAcademico") Long idAcademico) {
+        try {
+            List<ConquistaDto> listaConquista = conquistaService.listarConquistasOutroAcademico(idAcademico);
+            return ResponseEntity.status(HttpStatus.OK).body(listaConquista);
+        } catch (AcademicoNaoExisteException e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (ConteudoPrivadoException e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        } catch (MetaEsportivaNaoExisteException e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

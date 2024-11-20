@@ -25,16 +25,6 @@ CREATE TABLE academico (
 	CONSTRAINT fk_academico_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
 );
 
-CREATE TABLE notificacao (
-	id_notificacao INT AUTO_INCREMENT PRIMARY KEY,
-    id_academico INT NOT NULL,
-    campeonatos BOOLEAN NOT NULL,
-    publicacoes BOOLEAN NOT NULL,
-    comentarios BOOLEAN NOT NULL,
-    curtidas BOOLEAN NOT NULL,
-    CONSTRAINT fk_academico_notificacao FOREIGN KEY (id_academico) REFERENCES academico(id_academico)
-);
-
 CREATE TABLE privacidade (
     id_privacidade INT AUTO_INCREMENT PRIMARY KEY,
     id_academico INT NOT NULL,

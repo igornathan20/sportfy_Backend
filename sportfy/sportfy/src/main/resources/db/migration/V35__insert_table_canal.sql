@@ -45,19 +45,6 @@ INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_es
 INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (10, TRUE, TRUE, FALSE);
 
 
--- DADOS TESTE NOTIFICACAO
-INSERT INTO notificacao (id_academico, campeonatos, publicacoes, comentarios, curtidas) VALUES (1, TRUE, TRUE, TRUE, TRUE);
-INSERT INTO notificacao (id_academico, campeonatos, publicacoes, comentarios, curtidas) VALUES (2, FALSE, TRUE, FALSE, TRUE);
-INSERT INTO notificacao (id_academico, campeonatos, publicacoes, comentarios, curtidas) VALUES (3, TRUE, FALSE, TRUE, TRUE);
-INSERT INTO notificacao (id_academico, campeonatos, publicacoes, comentarios, curtidas) VALUES (4, TRUE, FALSE, TRUE, TRUE);
-INSERT INTO notificacao (id_academico, campeonatos, publicacoes, comentarios, curtidas) VALUES (5, TRUE, TRUE, FALSE, TRUE);
-INSERT INTO notificacao (id_academico, campeonatos, publicacoes, comentarios, curtidas) VALUES (6, TRUE, TRUE, TRUE, FALSE);
-INSERT INTO notificacao (id_academico, campeonatos, publicacoes, comentarios, curtidas) VALUES (7, TRUE, TRUE, TRUE, FALSE);
-INSERT INTO notificacao (id_academico, campeonatos, publicacoes, comentarios, curtidas) VALUES (8, TRUE, TRUE, TRUE, TRUE);
-INSERT INTO notificacao (id_academico, campeonatos, publicacoes, comentarios, curtidas) VALUES (9, TRUE, TRUE, FALSE, TRUE);
-INSERT INTO notificacao (id_academico, campeonatos, publicacoes, comentarios, curtidas) VALUES (10, TRUE, TRUE, TRUE, TRUE);
-
-
 -- DADOS TESTE ADMINISTRADOR
 INSERT INTO administrador (id_usuario) VALUES (11);
 INSERT INTO administrador (id_usuario) VALUES (12);

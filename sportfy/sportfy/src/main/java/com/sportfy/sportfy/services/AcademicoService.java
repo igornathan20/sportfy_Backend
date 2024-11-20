@@ -40,8 +40,6 @@ public class AcademicoService {
     @Autowired
     private PrivacidadeRepository privacidadeRepository;
     @Autowired
-    private NotificacaoRepository notificacaoRepository;
-    @Autowired
     private MetaDiariaRepository metaDiariaRepository;
     @Autowired
     private PublicacaoRepository publicacaoRepository;
@@ -94,10 +92,6 @@ public class AcademicoService {
             Privacidade privacidadeUser = new Privacidade();
             privacidadeUser.setIdAcademico(academicoCriado.getIdAcademico());
             privacidadeRepository.save(privacidadeUser);
-
-            Notificacao notificacaoUser = new Notificacao();
-            notificacaoUser.setIdAcademico(academicoCriado.getIdAcademico());
-            notificacaoRepository.save(notificacaoUser);
 
             UsuarioCanal usuarioCanal = new UsuarioCanal();
             usuarioCanal.setUsuario(academicoCriado.getUsuario());
@@ -198,45 +192,6 @@ public class AcademicoService {
 
     public boolean isEmailFromUfpr(String email) {
         return email != null && email.endsWith("@ufpr.br");
-    }
-
-    public boolean retornaNotificacao(Long idAcademico, String tipo){
-        Notificacao notificacao = notificacaoRepository.findByIdAcademico(idAcademico);
-
-        switch (tipo){
-            case "notificarCampeonatos":
-                return notificacao.isNotificarCampeonatos();
-            case "notificarPublicacoes":
-                return notificacao.isNotificarPublicacoes();
-            case "notificarComentarios":
-                return notificacao.isNotificarComentarios();
-            case "notificarCurtidas":
-                return notificacao.isNotificarCurtidas();
-            default:
-                return true;
-        }
-    }
-
-    public NotificacaoDto retornaTodasNotificacoes(Long idAcademico){
-        Notificacao notificacoes = notificacaoRepository.findByIdAcademico(idAcademico);
-        return notificacoes.toDto(notificacoes);
-    }
-
-    public Notificacao alteraNotificacao(NotificacaoDto userNotificacao, String academicoAutenticado) throws AccessDeniedException{
-        Optional<Academico> academico = academicoRepository.findById(userNotificacao.idAcademico());
-
-        if (academico.get().getUsuario().getUsername().equals(academicoAutenticado)){
-            Notificacao notificacao = notificacaoRepository.findByIdAcademico(userNotificacao.idAcademico());
-
-            notificacao.setNotificarCampeonatos(userNotificacao.campeonatos());
-            notificacao.setNotificarPublicacoes(userNotificacao.publicacoes());
-            notificacao.setNotificarComentarios(userNotificacao.comentarios());
-            notificacao.setNotificarCurtidas(userNotificacao.curtidas());
-
-            return notificacaoRepository.save(notificacao);
-        } else {
-            throw new AccessDeniedException("Você não tem permissão para editar este recurso.");
-        }
     }
 
     public boolean retornaPrivacidade(Long idAcademico, String tipo){

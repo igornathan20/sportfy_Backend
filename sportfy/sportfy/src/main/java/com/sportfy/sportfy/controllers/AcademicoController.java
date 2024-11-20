@@ -3,7 +3,6 @@ package com.sportfy.sportfy.controllers;
 import com.sportfy.sportfy.dtos.*;
 import com.sportfy.sportfy.exeptions.*;
 import com.sportfy.sportfy.models.Curso;
-import com.sportfy.sportfy.models.Notificacao;
 import com.sportfy.sportfy.models.Privacidade;
 import com.sportfy.sportfy.repositories.CursoRepository;
 import com.sportfy.sportfy.services.AcademicoService;
@@ -141,47 +140,6 @@ public class AcademicoController {
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
-    @GetMapping("/notificacoes/{idAcademico}/{tipoNotificacao}")
-    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
-    public ResponseEntity<Boolean> retornaPreferenciaNotificacao(@PathVariable Long idAcademico, @PathVariable String tipoNotificacao){
-        try {
-            boolean notificar = academicoService.retornaNotificacao(idAcademico, tipoNotificacao);
-            return ResponseEntity.status(HttpStatus.OK).body(notificar);
-        }catch (Exception e){
-            logger.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
-
-    @GetMapping("/notificacoes/{idAcademico}")
-    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
-    public ResponseEntity<NotificacaoDto> retornaTodasPreferenciaNotificacao(@PathVariable Long idAcademico){
-        try {
-            NotificacaoDto notificacoes = academicoService.retornaTodasNotificacoes(idAcademico);
-            return ResponseEntity.status(HttpStatus.OK).body(notificacoes);
-        }catch (Exception e){
-            logger.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
-
-    @PutMapping ("/notificacoes")
-    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
-    public ResponseEntity<NotificacaoDto> alteraNotificacao(@RequestBody NotificacaoDto userNotificacao){
-        try {
-            var authentication = SecurityContextHolder.getContext().getAuthentication();
-            var usuarioAutenticado = ((UserDetails) authentication.getPrincipal()).getUsername();
-            Notificacao notificacao = academicoService.alteraNotificacao(userNotificacao, usuarioAutenticado);
-            return ResponseEntity.status(HttpStatus.OK).body(NotificacaoDto.toEntity(notificacao));
-        }catch (AccessDeniedException e){
-            logger.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-        }catch (Exception e){
-            logger.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 

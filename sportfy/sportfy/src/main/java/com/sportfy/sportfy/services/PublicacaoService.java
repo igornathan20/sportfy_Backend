@@ -11,10 +11,13 @@ import com.sportfy.sportfy.dtos.PublicacaoDto;
 import com.sportfy.sportfy.exeptions.PublicacaoNaoExisteException;
 import com.sportfy.sportfy.exeptions.UsuarioCurtidaPublicacaoJaExisteException;
 import com.sportfy.sportfy.exeptions.UsuarioCurtidaPublicacaoNaoExisteException;
+import com.sportfy.sportfy.exeptions.UsuarioNaoExisteException;
 import com.sportfy.sportfy.models.CurtidaPublicacao;
 import com.sportfy.sportfy.models.Publicacao;
+import com.sportfy.sportfy.models.Usuario;
 import com.sportfy.sportfy.repositories.CurtidaPublicacaoRepository;
 import com.sportfy.sportfy.repositories.PublicacaoRepository;
+import com.sportfy.sportfy.repositories.UsuarioRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -22,7 +25,10 @@ import jakarta.transaction.Transactional;
 public class PublicacaoService {
 
     @Autowired
-    PublicacaoRepository publicacaoRepository;
+    private PublicacaoRepository publicacaoRepository;
+
+    @Autowired
+    UsuarioRepository usuarioRepository;
 
     @Autowired
     private CurtidaPublicacaoRepository curtidaPublicacaoRepository;
@@ -97,9 +103,13 @@ public class PublicacaoService {
         return publicacoesBD.map(PublicacaoDto::fromPublicacaoBD);
     }
 
-    public Page<PublicacaoDto> listarPublicacoesPorUsuario(Long idCanal, String username, Pageable pageable) throws PublicacaoNaoExisteException {
+    public Page<PublicacaoDto> listarPublicacoesPorUsuario(Long idCanal, String username, Pageable pageable) throws UsuarioNaoExisteException, PublicacaoNaoExisteException {
+        Usuario usuarioBD = usuarioRepository.findByUsername(username);
+        if (usuarioBD == null) {
+            throw new UsuarioNaoExisteException("Usuário não encontrado.");
+        }
+
         Page<Publicacao> publicacoesBD = publicacaoRepository.findByCanalIdCanalAndUsuarioUsername(idCanal, username, pageable);
-        
         if (publicacoesBD.isEmpty()) {
             throw new PublicacaoNaoExisteException("Nenhuma publicação encontrada para este usuario.");
         }

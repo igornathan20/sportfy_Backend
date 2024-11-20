@@ -81,14 +81,6 @@ CREATE TABLE curtida_comentario (
 	CONSTRAINT fk_curtida_comentario_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
 );
 
-CREATE TABLE academico_notificacao (
-	id_academico_notificacao INT AUTO_INCREMENT PRIMARY KEY,
-	id_notificacao INT NOT NULL,
-	id_academico INT NOT NULL,
-	CONSTRAINT fk_academico_notificacao_notificacao FOREIGN KEY (id_notificacao) REFERENCES notificacao(id_notificacao),
-	CONSTRAINT fk_academico_notificacao_academico FOREIGN KEY (id_academico) REFERENCES academico(id_academico)
-);
-
 CREATE TABLE academico_privacidade (
 	id_academico_privacidade INT AUTO_INCREMENT PRIMARY KEY,
 	id_privacidade INT NOT NULL,

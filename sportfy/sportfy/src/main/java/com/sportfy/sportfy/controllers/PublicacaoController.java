@@ -12,6 +12,7 @@ import com.sportfy.sportfy.dtos.PublicacaoDto;
 import com.sportfy.sportfy.exeptions.PublicacaoNaoExisteException;
 import com.sportfy.sportfy.exeptions.UsuarioCurtidaPublicacaoJaExisteException;
 import com.sportfy.sportfy.exeptions.UsuarioCurtidaPublicacaoNaoExisteException;
+import com.sportfy.sportfy.exeptions.UsuarioNaoExisteException;
 import com.sportfy.sportfy.services.PublicacaoService;
 
 import jakarta.validation.Valid;
@@ -127,8 +128,10 @@ public class PublicacaoController {
         try {
             Page<PublicacaoDto> publicacoes = publicacaoService.listarPublicacoesPorUsuario(idCanal, username, pageable);
             return ResponseEntity.ok(publicacoes);
-        } catch (PublicacaoNaoExisteException e) {
+        } catch (UsuarioNaoExisteException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (PublicacaoNaoExisteException e) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
