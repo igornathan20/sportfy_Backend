@@ -254,6 +254,7 @@ CREATE TABLE campeonato_partida (
     CONSTRAINT fk_campeonato_partida_campeonato FOREIGN KEY (id_campeonato) REFERENCES campeonato(id_campeonato),
     CONSTRAINT fk_campeonato_partida_partida FOREIGN KEY (id_partida) REFERENCES partida(id_partida)
 );
+
 CREATE TABLE avaliacao (
     id_avaliacao INT AUTO_INCREMENT PRIMARY KEY,
     id_academico_avaliado INT NOT NULL,

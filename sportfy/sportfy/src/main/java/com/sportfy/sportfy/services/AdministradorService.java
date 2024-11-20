@@ -10,20 +10,14 @@ import com.sportfy.sportfy.exeptions.PasswordInvalidoException;
 import com.sportfy.sportfy.exeptions.PermissaoNaoExisteException;
 import com.sportfy.sportfy.exeptions.RoleNaoPermitidaException;
 import com.sportfy.sportfy.models.Administrador;
-import com.sportfy.sportfy.models.Permissao;
 import com.sportfy.sportfy.repositories.AdministradorRepository;
-import com.sportfy.sportfy.repositories.PermissaoRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.nio.file.AccessDeniedException;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class AdministradorService {
@@ -33,9 +27,6 @@ public class AdministradorService {
 
     @Autowired
     private AdministradorRepository administradorRepository;
-
-    @Autowired
-    private PermissaoRepository permissaoRepository;
 
     public AdministradorResponseDto cadastrar(AdministradorDto administradorDto) throws PasswordInvalidoException, OutroUsuarioComDadosJaExistentes, RoleNaoPermitidaException, PermissaoNaoExisteException {
         if (isPasswordValid(administradorDto.password())) {

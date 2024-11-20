@@ -28,14 +28,6 @@ public class Jogador implements Serializable {
     @Column(name="pontuacao")
     private int pontuacao;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    @JoinTable(
-            name = "avaliacao",
-            joinColumns = @JoinColumn(name = "id_avaliacao"),
-            inverseJoinColumns = @JoinColumn(name = "id_academico_avaliado")
-    )
-    private transient List<AvaliacaoJogador> avaliacoes;
-
     @ManyToOne(fetch=FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name="id_time", updatable = false, nullable = false)
     private Time time;

@@ -37,8 +37,6 @@ public class AcademicoService {
     @Autowired
     AcademicoModalidadeEsportivaRepository academicoModalidadeEsportivaReposity;
     @Autowired
-    private PermissaoRepository permissaoRepository;
-    @Autowired
     private PrivacidadeRepository privacidadeRepository;
     @Autowired
     private NotificacaoRepository notificacaoRepository;
