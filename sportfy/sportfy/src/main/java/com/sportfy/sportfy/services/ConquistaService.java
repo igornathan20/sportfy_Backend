@@ -49,16 +49,13 @@ public class ConquistaService {
             throw new MetaEsportivaNaoExisteException("Lista de metas esportivas e conquistas vazia!");
         }
 
-        listaConquistaBD.forEach(conquista -> {
-            listaConquista.add(ConquistaDto.fromConquistaBD(conquista));
-        });
+        listaConquistaBD.forEach(conquista -> {listaConquista.add(ConquistaDto.fromConquistaBD(conquista));});
         return listaConquista;
     }
 
     public List<ConquistaDto> listarConquistasOutroAcademico(Long idAcademico) throws AcademicoNaoExisteException, ConteudoPrivadoException, MetaEsportivaNaoExisteException {
         List<ConquistaDto> listaConquista = new ArrayList<>();
         Optional<Academico> academicoBD = academicoRepository.findById(idAcademico);
-
         if (academicoBD.isEmpty()) {
             throw new AcademicoNaoExisteException("Acadêmico não existe!");
         }

@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.sportfy.sportfy.dtos.EstatisticasMetasEsportivasDto;
 import com.sportfy.sportfy.dtos.MetricasSistemaDto;
+import com.sportfy.sportfy.exeptions.AcademicoNaoExisteException;
+import com.sportfy.sportfy.exeptions.ConteudoPrivadoException;
 import com.sportfy.sportfy.services.EstatisticaService;
 
 @RestController
@@ -42,6 +44,24 @@ public class EstatisticaController {
         try {
             EstatisticasMetasEsportivasDto estatisticasMetasEsportivas = estatisticaService.visualizarEstatisticasMetasEsportivas(idAcademico);
             return ResponseEntity.status(HttpStatus.OK).body(estatisticasMetasEsportivas);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/visualizarEstatisticasMetasEsportivasOutroAcademico/{idAcademico}")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    public ResponseEntity<EstatisticasMetasEsportivasDto> visualizarEstatisticasMetasEsportivasOutroAcademico(@PathVariable Long idAcademico) {
+        try {
+            EstatisticasMetasEsportivasDto estatisticasMetasEsportivas = estatisticaService.visualizarEstatisticasMetasEsportivasOutroAcademico(idAcademico);
+            return ResponseEntity.status(HttpStatus.OK).body(estatisticasMetasEsportivas);
+        } catch (AcademicoNaoExisteException e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (ConteudoPrivadoException e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
