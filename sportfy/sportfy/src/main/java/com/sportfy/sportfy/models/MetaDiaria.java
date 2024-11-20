@@ -23,9 +23,6 @@ public class MetaDiaria implements Serializable {
     @Column(name="objetivo", nullable = false)
     private String objetivo;
 
-    @Column(name="quantidade_concluido", insertable = false)
-    private int quantidadeConcluido;
-
     @Column(name="progresso_atual", insertable = false)
     private int progressoAtual;
 
@@ -46,7 +43,6 @@ public class MetaDiaria implements Serializable {
     public void updateFromDto(MetaDiariaDto dto) {
         this.titulo = dto.titulo();
         this.objetivo = dto.objetivo();
-        this.quantidadeConcluido = dto.quantidadeConcluido();
         this.progressoAtual = dto.progressoAtual();
         this.progressoMaximo = dto.progressoMaximo();
         this.progressoItem = dto.progressoItem();
@@ -68,7 +64,6 @@ public class MetaDiaria implements Serializable {
                 metaDiaria.getIdMetaDiaria(),
                 metaDiaria.getTitulo(),
                 metaDiaria.getObjetivo(),
-                metaDiaria.getQuantidadeConcluido(),
                 metaDiaria.getProgressoAtual(),
                 metaDiaria.getProgressoMaximo(),
                 metaDiaria.getProgressoItem(),
