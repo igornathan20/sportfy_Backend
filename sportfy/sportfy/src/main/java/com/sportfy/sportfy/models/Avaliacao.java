@@ -13,7 +13,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AvaliacaoJogador {
+public class Avaliacao {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -35,7 +35,7 @@ public class AvaliacaoJogador {
     @JoinColumn(name="id_academico_avaliador", updatable = false, nullable = false)
     private Academico avaliador;
 
-    public AvaliacaoJogadorDto toDto(AvaliacaoJogador avaliacao) {
+    public AvaliacaoJogadorDto toDto(Avaliacao avaliacao) {
         return new AvaliacaoJogadorDto(
                 avaliacao.getIdAvaliacao(),
                 avaliacao.getAcademicoAvaliado().getIdAcademico(),
