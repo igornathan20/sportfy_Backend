@@ -453,6 +453,29 @@ public class CampeonatoController {
 
     @GetMapping("/historico/{idAcademico}")
     //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    public ResponseEntity<Page<CampeonatoResponseDto>> buscarHistoricoCampeonato( @PathVariable Long idAcademico, Pageable pageable) {
+        try {
+            var authentication = SecurityContextHolder.getContext().getAuthentication();
+            var usuarioAutenticado = ((UserDetails) authentication.getPrincipal()).getUsername();
+            Page<CampeonatoResponseDto> campeonatos = campeonatoService.buscarHistoricoCampeonato(idAcademico, pageable, usuarioAutenticado);
+            return ResponseEntity.ok(campeonatos);
+        } catch (AcademicoNaoExisteException e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (RegistroNaoEncontradoException e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        } catch (AccessDeniedException e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/historico/academico/{idAcademico}")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Page<CampeonatoResponseDto>> buscarHistoricoCampeonatoOutrosUsuarios( @PathVariable Long idAcademico, Pageable pageable) {
         try {
             Page<CampeonatoResponseDto> campeonatos = campeonatoService.buscarHistoricoCampeonatoOutrosUsuarios(idAcademico, pageable);

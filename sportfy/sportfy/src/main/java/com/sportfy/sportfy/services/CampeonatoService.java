@@ -152,12 +152,12 @@ public class CampeonatoService {
 
         if (campeonatoDto.idAcademico() != null) {
             spec = spec.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.equal(root.get("idAcademico"), campeonatoDto.idAcademico()));
+                    criteriaBuilder.equal(root.get("academico").get("idAcademico"), campeonatoDto.idAcademico()));
         }
 
         if (campeonatoDto.idModalidadeEsportiva() != null) {
             spec = spec.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.equal(root.get("idModalidadeEsportiva"), campeonatoDto.idModalidadeEsportiva()));
+                    criteriaBuilder.equal(root.get("modalidadeEsportiva").get("idModalidadeEsportiva"), campeonatoDto.idModalidadeEsportiva()));
         }
 
         if (campeonatoDto.situacaoCampeonato() != "EM_ABERTO") {
@@ -831,6 +831,33 @@ public class CampeonatoService {
                 media = 5;
             }
             return new MediaAvaliacaoDto(media, contador, modalidadesSet.size());
+        }else {
+            throw new AcademicoNaoExisteException("Academico nao encontrado!");
+        }
+    }
+
+    public Page<CampeonatoResponseDto> buscarHistoricoCampeonato(Long idAcademico, Pageable pageable, String usuarioAutenticado) throws RegistroNaoEncontradoException, AcademicoNaoExisteException, AccessDeniedException{
+        Optional<Academico> academico = academicoRepository.findById(idAcademico);
+
+        if (academico.isPresent()){
+            if (academico.get().getUsuario().getUsername().equals(usuarioAutenticado)){
+                List<Jogador> participacoesCampeonatos = jogadorRepository.findByAcademico(academico.get());
+                List<CampeonatoResponseDto> campeonatos = new ArrayList<CampeonatoResponseDto>();
+                for (int i = 0; i < participacoesCampeonatos.size(); i++){
+                    campeonatos.add(participacoesCampeonatos.get(i).getTime().getCampeonato().toResponseDto(participacoesCampeonatos.get(i).getTime().getCampeonato()));
+                }
+                if (campeonatos.isEmpty()){
+                    throw new RegistroNaoEncontradoException("Nenhum campeonato encontrado!");
+                }
+
+                int start = (int) pageable.getOffset();
+                int end = Math.min(start + pageable.getPageSize(), campeonatos.size());
+                List<CampeonatoResponseDto> paginatedList = campeonatos.subList(start, end);
+
+                return new PageImpl<>(paginatedList, pageable, campeonatos.size());
+            }else {
+                throw new AccessDeniedException("Voce não tem permissão para alterar esse recurso!");
+            }
         }else {
             throw new AcademicoNaoExisteException("Academico nao encontrado!");
         }
