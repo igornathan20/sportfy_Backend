@@ -152,12 +152,12 @@ public class CampeonatoService {
 
         if (campeonatoDto.idAcademico() != null) {
             spec = spec.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.equal(root.get("idAcademico"), campeonatoDto.idAcademico()));
+                    criteriaBuilder.equal(root.get("academico").get("idAcademico"), campeonatoDto.idAcademico()));
         }
 
         if (campeonatoDto.idModalidadeEsportiva() != null) {
             spec = spec.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.equal(root.get("idModalidadeEsportiva"), campeonatoDto.idModalidadeEsportiva()));
+                    criteriaBuilder.equal(root.get("modalidadeEsportiva").get("idModalidadeEsportiva"), campeonatoDto.idModalidadeEsportiva()));
         }
 
         if (campeonatoDto.situacaoCampeonato() != "EM_ABERTO") {
