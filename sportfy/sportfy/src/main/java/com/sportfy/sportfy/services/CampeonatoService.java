@@ -348,6 +348,7 @@ public class CampeonatoService {
                 if (campeonato.get().getDataFim().isAfter(OffsetDateTime.now()) && campeonato.get().getSituacaoCampeonato() != TipoSituacao.FINALIZADO ) {
                     if (campeonato.get().getPrivacidadeCampeonato() == TipoPrivacidadeCampeonato.PUBLICO || passwordEncoder.matches(timeDto.senhaCampeonato(), campeonato.get().getSenha())){
                         Jogador novoJogador = new Jogador();
+                        novoJogador.setUsername(academico.get().getUsuario().getUsername());
                         novoJogador.setModalidadeEsportiva(campeonato.get().getModalidadeEsportiva());
                         novoJogador.setAcademico(academico.get());
                         novoJogador.setTime(timeEncontrado.get());
@@ -380,6 +381,7 @@ public class CampeonatoService {
                             timeCriado.setCampeonato(campeonato.get());
 
                             Jogador novoJogador = new Jogador();
+                            novoJogador.setUsername(academico.get().getUsuario().getUsername());
                             novoJogador.setModalidadeEsportiva(campeonato.get().getModalidadeEsportiva());
                             novoJogador.setAcademico(academico.get());
                             novoJogador.setTime(timeCriado);
