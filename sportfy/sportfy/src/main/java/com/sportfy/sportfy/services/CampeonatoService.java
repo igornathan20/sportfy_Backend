@@ -836,6 +836,33 @@ public class CampeonatoService {
         }
     }
 
+    public Page<CampeonatoResponseDto> buscarHistoricoCampeonato(Long idAcademico, Pageable pageable, String usuarioAutenticado) throws RegistroNaoEncontradoException, AcademicoNaoExisteException, AccessDeniedException{
+        Optional<Academico> academico = academicoRepository.findById(idAcademico);
+
+        if (academico.isPresent()){
+            if (academico.get().getUsuario().getUsername().equals(usuarioAutenticado)){
+                List<Jogador> participacoesCampeonatos = jogadorRepository.findByAcademico(academico.get());
+                List<CampeonatoResponseDto> campeonatos = new ArrayList<CampeonatoResponseDto>();
+                for (int i = 0; i < participacoesCampeonatos.size(); i++){
+                    campeonatos.add(participacoesCampeonatos.get(i).getTime().getCampeonato().toResponseDto(participacoesCampeonatos.get(i).getTime().getCampeonato()));
+                }
+                if (campeonatos.isEmpty()){
+                    throw new RegistroNaoEncontradoException("Nenhum campeonato encontrado!");
+                }
+
+                int start = (int) pageable.getOffset();
+                int end = Math.min(start + pageable.getPageSize(), campeonatos.size());
+                List<CampeonatoResponseDto> paginatedList = campeonatos.subList(start, end);
+
+                return new PageImpl<>(paginatedList, pageable, campeonatos.size());
+            }else {
+                throw new AccessDeniedException("Voce não tem permissão para alterar esse recurso!");
+            }
+        }else {
+            throw new AcademicoNaoExisteException("Academico nao encontrado!");
+        }
+    }
+
     public Page<CampeonatoResponseDto> buscarHistoricoCampeonatoOutrosUsuarios(Long idAcademico, Pageable pageable) throws RegistroNaoEncontradoException, AcademicoNaoExisteException, ConteudoPrivadoException{
         Optional<Academico> academico = academicoRepository.findById(idAcademico);
 
