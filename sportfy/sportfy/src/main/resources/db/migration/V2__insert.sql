@@ -458,3 +458,109 @@ INSERT INTO curso (nome) VALUES
 ('Turismo'),
 ('Zootecnia');
 
+INSERT INTO endereco (id_endereco, cep, uf, cidade, bairro, rua, numero, complemento)
+VALUES (6, '80010000', 'PR', 'Curitiba', 'Centro', 'Rua das Flores', '123', 'Apartamento 201');
+
+INSERT INTO endereco (id_endereco, cep, uf, cidade, bairro, rua, numero, complemento)
+VALUES (7, '80020000', 'PR', 'Curitiba', 'Batel', 'Avenida Batel', '456', 'Bloco B');
+
+INSERT INTO endereco (id_endereco, cep, uf, cidade, bairro, rua, numero, complemento)
+VALUES (3, '80030000', 'PR', 'Curitiba', 'Alto da Glória', 'Rua Mateus Leme', '789', NULL);
+
+INSERT INTO endereco (id_endereco, cep, uf, cidade, bairro, rua, numero, complemento)
+VALUES (4, '80040000', 'PR', 'Curitiba', 'Santa Felicidade', 'Rua Itália', '101', 'Casa');
+
+INSERT INTO endereco (id_endereco, cep, uf, cidade, bairro, rua, numero, complemento)
+VALUES (5, '80050000', 'PR', 'Curitiba', 'Juvevê', 'Rua Doutor Goulin', '202', 'Próximo ao mercado');
+
+
+INSERT INTO campeonato
+(codigo, senha, titulo, descricao, aposta, data_inicio, data_fim, limite_times, limite_participantes, ativo, id_endereco, privacidade_campeonato, id_academico, id_modalidade_esportiva, situacao_campeonato, fase_atual)
+VALUES
+('#XPCQY1', '1234', 'Campeonato de Futebol', 'Campeonato regional de futebol', 'R$1000', '2024-12-01 10:00:00', '2024-12-15 18:00:00', 16, 11, TRUE, 3, 'PUBLICO', 1, 1, 'EM_ABERTO', 'OITAVAS'),
+('#XPCQY2', '1234', 'Torneio de Basquete', 'Torneio estadual de basquete', 'R$500', '2024-11-20 14:00:00', '2024-11-30 16:00:00', 8, 1, TRUE, 3, 'PRIVADO', 2, 3, 'INICIADO', 'SEMI'),
+('#XPCQY3', '1234', 'Campeonato de Vôlei', 'Competição municipal de vôlei', NULL, '2024-12-05 09:00:00', '2024-12-20 20:00:00', 12, 15, TRUE, 3, 'PUBLICO', 3, 2, 'EM_ABERTO', NULL),
+('#XPCQY4', '1234', 'pingas de Rua', 'Melhor da cidade', 'Medalhas e troféus', '2024-11-25 07:00:00', '2024-11-25 12:00:00', 10, 1 , TRUE, 3, 'PUBLICO', 2, 5, 'FINALIZADO', 'FINAL'),
+('#XPCQY5', '1234', 'Campeonato ufpr', 'Competição estadual da ufpr', 'R$2000', '2024-11-18 08:00:00', '2024-11-28 18:00:00', 10, 3, TRUE, 3, 'PRIVADO', 2, 1, 'INICIADO', 'QUARTAS');
+
+INSERT INTO time (id_time, nome, id_campeonato)
+VALUES
+-- Times para o Campeonato 1
+(1, 'Equipe Falcões', 1),
+(2, 'Time Relâmpago', 1),
+(3, 'Campeões de Ouro', 1),
+(4, 'Gigantes da Arena', 1),
+
+-- Times para o Campeonato 2
+(5, 'Lobos do Norte', 2),
+(6, 'Dragões Negros', 2),
+(7, 'Vencedores do Sul', 2),
+(8, 'Feras da Montanha', 2),
+
+-- Times para o Campeonato 3
+(9, 'Tigres da Selva', 3),
+(10, 'Águias Reais', 3),
+(11, 'Leões Invencíveis', 3),
+(12, 'Cavaleiros da Vitória', 3),
+
+-- Times para o Campeonato 4
+(13, 'Espartanos Valentes', 4),
+(14, 'Raios de Prata', 4),
+(15, 'Gladiadores Modernos', 4),
+(16, 'Titãs do Oeste', 4),
+
+-- Times para o Campeonato 5
+(17, 'Fênix Vermelha', 5),
+(18, 'Mestres do Jogo', 5),
+(19, 'Tempestade Azul', 5),
+(20, 'Imbatíveis do Centro', 5);
+
+INSERT INTO jogador (id_jogador, username, id_modalidade_esportiva, situacao_jogador, pontuacao, id_time, id_academico)
+VALUES
+-- Jogadores para o Time 1
+(1, 'math_aa', 1, 1, 100, 1, 1),
+(2, 'maria_gn', 1, 1, 120, 1, 2),
+(3, 'murilo_scn', 1, 1, 110, 1, 3),
+(4, 'michele_as', 1, 1, 130, 1, 4),
+
+-- Jogadores para o Time 2
+(5, 'michael_ac', 2, 2, 90, 2, 5),
+(6, 'maira_sm', 2, 1, 95, 2, 6),
+(7, 'marcelo_ls', 2, 1, 85, 2, 7),
+(8, 'muriel_ln', 2, 1, 105, 2, 8),
+
+-- Jogadores para o Time 3
+(9, 'michaela_ac', 3, 1, 80, 3, 9),
+(10, 'mauro_vm', 3, 1, 100, 3, 10),
+(11, 'math_aa', 3, 2, 110, 3, 1),
+(12, 'maria_gn', 3, 1, 120, 3, 2),
+
+-- Jogadores para o Time 4
+(13, 'murilo_scn', 4, 1, 75, 4, 3),
+(14, 'michele_as', 4, 1, 70, 4, 4),
+(15, 'michael_ac', 4, 1, 95, 4, 5),
+(16, 'maira_sm', 4, 2, 85, 4, 6),
+
+-- Jogadores para o Time 5
+(17, 'marcelo_ls', 1, 1, 115, 5, 7),
+(18, 'muriel_ln', 1, 1, 110, 5, 8),
+(19, 'michaela_ac', 1, 1, 90, 5, 9),
+(20, 'mauro_vm', 1, 1, 95, 5, 10),
+
+-- Jogadores para o Time 6
+(21, 'math_aa', 2, 1, 85, 6, 1),
+(22, 'maria_gn', 2, 1, 90, 6, 2),
+(23, 'murilo_scn', 2, 1, 120, 6, 3),
+(24, 'michele_as', 2, 2, 100, 6, 4),
+
+-- Jogadores para o Time 7
+(25, 'michael_ac', 3, 1, 110, 7, 5),
+(26, 'maira_sm', 3, 1, 115, 7, 6),
+(27, 'marcelo_ls', 3, 1, 95, 7, 7),
+(28, 'muriel_ln', 3, 1, 100, 7, 8),
+
+-- Jogadores para o Time 8
+(29, 'michaela_ac', 4, 1, 85, 8, 9),
+(30, 'mauro_vm', 4, 1, 80, 8, 10),
+(31, 'math_aa', 4, 1, 75, 8, 1),
+(32, 'maria_gn', 4, 2, 90, 8, 2);

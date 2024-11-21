@@ -18,6 +18,9 @@ public class Jogador implements Serializable {
     @Column(name="id_jogador")
     private Long idJogador;
 
+    @Column(name="username")
+    private String username;
+
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="id_modalidade_esportiva", updatable = false, nullable = false)
     private ModalidadeEsportiva modalidadeEsportiva;
@@ -39,6 +42,7 @@ public class Jogador implements Serializable {
     public JogadorDto toDto(Jogador jogador) {
         return new JogadorDto(
                 jogador.getIdJogador(),
+                jogador.getUsername(),
                 jogador.getModalidadeEsportiva().getIdModalidadeEsportiva(),
                 jogador.getSituacaoJogador(),
                 jogador.getPontuacao(),
