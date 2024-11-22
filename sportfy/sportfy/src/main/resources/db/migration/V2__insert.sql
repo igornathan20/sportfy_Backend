@@ -32,26 +32,18 @@ INSERT INTO academico (email, curso, id_usuario) VALUES ('michaela@ufpr.br', 'An
 INSERT INTO academico (email, curso, id_usuario) VALUES ('mauro@ufpr.br', 'Engenharia Mecânica', 10);
 
 
-INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas)
-VALUES (1, FALSE, FALSE, FALSE);
-INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas)
-VALUES (2, TRUE, FALSE, TRUE);
-INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas)
-VALUES (3, FALSE, TRUE, FALSE);
-INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas)
-VALUES (4, FALSE, TRUE, FALSE);
-INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas)
-VALUES (5, FALSE, TRUE, FALSE);
-INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas)
-VALUES (6, FALSE, TRUE, TRUE);
-INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas)
-VALUES (7, FALSE, TRUE, TRUE);
-INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas)
-VALUES (8, TRUE, FALSE, FALSE);
-INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas)
-VALUES (9, TRUE, TRUE, TRUE);
-INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas)
-VALUES (10, TRUE, TRUE, FALSE);
+-- DADOS TESTE PRIVACIDADE
+INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (1, FALSE, FALSE, FALSE);
+INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (2, TRUE, FALSE, TRUE);
+INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (3, FALSE, TRUE, FALSE);
+INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (4, FALSE, TRUE, FALSE);
+INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (5, FALSE, TRUE, FALSE);
+INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (6, FALSE, TRUE, TRUE);
+INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (7, FALSE, TRUE, TRUE);
+INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (8, TRUE, FALSE, FALSE);
+INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (9, TRUE, TRUE, TRUE);
+INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (10, TRUE, TRUE, FALSE);
+
 
 -- DADOS TESTE ADMINISTRADOR
 INSERT INTO administrador (id_usuario) VALUES (11);
@@ -79,24 +71,188 @@ INSERT INTO usuario_canal (id_usuario, id_canal) VALUES (14, 1);
 INSERT INTO usuario_canal (id_usuario, id_canal) VALUES (15, 1);
 
 
+-- DADOS TESTE APOIO_SAUDE
+INSERT INTO apoio_saude (nome, email, telefone, descricao, id_administrador)
+VALUES ('Orientação Nutricional', 'nutriufprrr@ufpr.br', '41988334455', 'Orientação de necessidades nutricionais com corpo docente da UFPR.', 1);
+INSERT INTO apoio_saude (nome, email, telefone, descricao, id_administrador)
+VALUES ('Apoio Psicológico', 'psicologia@universidade.edu', '41999887766', 'Atendimento psicológico individual e em grupo para alunos em situação de estresse acadêmico.', 1);
+INSERT INTO apoio_saude (nome, email, telefone, descricao, id_administrador)
+VALUES ('Acompanhamento Pedagógico', 'pedagogia@universidade.edu', '41987654321', 'Suporte pedagógico para organização dos estudos e gestão de tempo.', 2);
+INSERT INTO apoio_saude (nome, email, telefone, descricao, id_administrador)
+VALUES ('Orientação Física', 'fisioterapia@universidade.edu', '41988776655', 'Orientação sobre práticas físicas para evitar dores relacionadas à postura no estudo.', 3);
+INSERT INTO apoio_saude (nome, email, telefone, descricao, id_administrador)
+VALUES ('Grupo de Estudos', 'grupodeestudos@universidade.edu', '41977665544', 'Formação de grupos de estudos monitorados para reforço em disciplinas complexas.', 4);
+INSERT INTO apoio_saude (nome, email, telefone, descricao, id_administrador)
+VALUES ('Atendimento Médico Básico', 'medicina@universidade.edu', '41955443322', 'Consultas básicas e encaminhamentos para especialistas.', 5);
+INSERT INTO apoio_saude (nome, email, telefone, descricao, id_administrador)
+VALUES ('Suporte de Inclusão', 'inclusao@universidade.edu', '41944332211', 'Apoio a alunos com necessidades especiais para integração acadêmica.', 1);
+INSERT INTO apoio_saude (nome, email, telefone, descricao, id_administrador)
+VALUES ('Oficina de Ansiedade', 'oficinas@universidade.edu', '41933221100', 'Workshops para lidar com ansiedade em períodos de avaliação.', 2);
+
+
+-- DADOS TESTE META_DIARIA
+INSERT INTO meta_diaria (titulo, objetivo, progresso_maximo, progresso_item, id_academico, tipo_situacao_meta_diaria)
+VALUES ('Exercício', 'Correr 5 km', 5, 'Km', 2, 'EM_ANDAMENTO');
+INSERT INTO meta_diaria (titulo, objetivo, progresso_maximo, progresso_item, id_academico, tipo_situacao_meta_diaria)
+VALUES ('Estudo', 'Estudar 3 horas de matemática', 3, 'Horas', 3, 'EM_ANDAMENTO');
+INSERT INTO meta_diaria (titulo, objetivo, progresso_maximo, progresso_item, id_academico, tipo_situacao_meta_diaria)
+VALUES ('Prática de violão', 'Tocar violão por 1 hora', 60, 'Minutos', 4, 'EM_ANDAMENTO');
+INSERT INTO meta_diaria (titulo, objetivo, progresso_maximo, progresso_item, id_academico, tipo_situacao_meta_diaria)
+VALUES ('Meditação', 'Meditar por 30 minutos', 30, 'Minutos', 5, 'EM_ANDAMENTO');
+INSERT INTO meta_diaria (titulo, objetivo, progresso_maximo, progresso_item, id_academico, tipo_situacao_meta_diaria)
+VALUES ('Cozinhar', 'Preparar uma refeição saudável', 1, 'Refeição', 1, 'EM_ANDAMENTO');
+INSERT INTO meta_diaria (titulo, objetivo, progresso_maximo, progresso_item, id_academico, tipo_situacao_meta_diaria)
+VALUES ('Limpeza', 'Arrumar o quarto', 1, 'Tarefa', 2, 'EM_ANDAMENTO');
+INSERT INTO meta_diaria (titulo, objetivo, progresso_maximo, progresso_item, id_academico, tipo_situacao_meta_diaria)
+VALUES ('Hobby', 'Pintar 2 quadros', 2, 'Quadros', 3, 'EM_ANDAMENTO');
+INSERT INTO meta_diaria (titulo, objetivo, progresso_maximo, progresso_item, id_academico, tipo_situacao_meta_diaria)
+VALUES ('Socialização', 'Conversar com 3 amigos', 3, 'Conversas', 4, 'EM_ANDAMENTO');
+INSERT INTO meta_diaria (titulo, objetivo, progresso_maximo, progresso_item, id_academico, tipo_situacao_meta_diaria)
+VALUES ('Saúde', 'Dormir 8 horas', 8, 'Horas', 5, 'EM_ANDAMENTO');
+INSERT INTO meta_diaria (titulo, objetivo, progresso_maximo, progresso_item, id_academico, tipo_situacao_meta_diaria)
+VALUES ('Organização', 'Planejar a semana', 1, 'Planejamento', 1, 'EM_ANDAMENTO');
+
+
+-- DADOS TESTE MODALIDADE_ESPORTIVA
+INSERT INTO modalidade_esportiva (nome, descricao) VALUES ('Futebol', 'Esporte jogado por dois times, onde o objetivo é marcar gols movendo a bola com os pés. Vence quem marcar mais gols em dois tempos de partida.');
+INSERT INTO modalidade_esportiva (nome, descricao) VALUES ('Vôlei', 'Dois times tentam fazer a bola tocar o chão do lado adversário, passando-a por cima de uma rede. Vence quem ganhar 3 sets.');
+INSERT INTO modalidade_esportiva (nome, descricao) VALUES ('Basquete', 'Dois times tentam marcar pontos arremessando a bola na cesta do adversário. Ganha quem fizer mais pontos em quatro períodos.');
+INSERT INTO modalidade_esportiva (nome, descricao) VALUES ('Tênis de Mesa', 'Jogadores usam raquetes para golpear uma bola em uma mesa com rede. O objetivo é fazer o adversário errar a devolução. Vence quem ganhar mais sets.');
+
+
+-- DADOS TESTE META_ESPORTIVA
+INSERT INTO meta_esportiva (titulo, descricao, progresso_maximo, progresso_item, id_modalidade_esportiva) VALUES ('O Bruxo!', 'Ao marcar 50 gols', 50, 'Gols', 1);
+INSERT INTO meta_esportiva (titulo, descricao, progresso_maximo, progresso_item, id_modalidade_esportiva) VALUES ('O Maestro dos Passes!', 'Ao fornecer 20 assistências decisivas', 20, 'Assistências', 1);
+INSERT INTO meta_esportiva (titulo, descricao, progresso_maximo, progresso_item, id_modalidade_esportiva) VALUES ('Paredão!', 'Ao realizar 20 defesas', 20, 'Defesas', 1);
+INSERT INTO meta_esportiva (titulo, descricao, progresso_maximo, progresso_item, id_modalidade_esportiva) VALUES ('Nem Neymar cobra assim!', 'Ao converter 5 pênaltis em gols', 5, 'Gols de pênalti', 1);
+INSERT INTO meta_esportiva (titulo, descricao, progresso_maximo, progresso_item, id_modalidade_esportiva) VALUES ('A Foice!', 'Ao executar 30 cortes', 30, 'Cortes', 2);
+INSERT INTO meta_esportiva (titulo, descricao, progresso_maximo, progresso_item, id_modalidade_esportiva) VALUES ('AdBlock?!', 'Ao realizar 20 bloqueios', 20, 'Bloqueios', 2);
+INSERT INTO meta_esportiva (titulo, descricao, progresso_maximo, progresso_item, id_modalidade_esportiva) VALUES ('Sacou?', 'Ao desferir 15 saques', 15, 'Saques', 2);
+INSERT INTO meta_esportiva (titulo, descricao, progresso_maximo, progresso_item, id_modalidade_esportiva) VALUES ('O Arquiteto!', 'Ao completar 45 levantamentos', 45, 'Levantamentos', 2);
+INSERT INTO meta_esportiva (titulo, descricao, progresso_maximo, progresso_item, id_modalidade_esportiva) VALUES ('Sextou!', 'Ao marcar 20 cestas de dois pontos e 20 de três pontos', 40, 'Cestas', 3);
+INSERT INTO meta_esportiva (titulo, descricao, progresso_maximo, progresso_item, id_modalidade_esportiva) VALUES ('Travou aqui, travou ai?!', 'Ao realizar 20 bloqueios', 20, 'Bloqueios', 3);
+INSERT INTO meta_esportiva (titulo, descricao, progresso_maximo, progresso_item, id_modalidade_esportiva) VALUES ('Presente professor!', 'Ao converter 10 pontos em faltas', 10, 'Faltas', 3);
+INSERT INTO meta_esportiva (titulo, descricao, progresso_maximo, progresso_item, id_modalidade_esportiva) VALUES ('O Ilusionista!', 'Ao driblar 50 vezes sem perder a bola', 50, 'Dribles', 3);
+INSERT INTO meta_esportiva (titulo, descricao, progresso_maximo, progresso_item, id_modalidade_esportiva) VALUES ('Atura ou sutura!', 'Ao marcar 20 pontos', 20, 'Pontos', 4);
+INSERT INTO meta_esportiva (titulo, descricao, progresso_maximo, progresso_item, id_modalidade_esportiva) VALUES ('Punto e basta!', 'Ao conseguir 9 pontos com saques', 9, 'Saques', 4);
+INSERT INTO meta_esportiva (titulo, descricao, progresso_maximo, progresso_item, id_modalidade_esportiva) VALUES ('Seis tá brincando!', 'Ao conquistar 30 pontos com o backhand', 30, 'Pontos', 4);
+INSERT INTO meta_esportiva (titulo, descricao, progresso_maximo, progresso_item, id_modalidade_esportiva) VALUES ('É o big five?', 'Ao vencer 5 jogos sem deixar o adversário marcar nenhum ponto', 5, 'Jogos', 4);
+
+
+-- DADOS TESTE ACADEMICO_MODALIDADE_ESPORTIVA
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (1, 1);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (1, 2);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (1, 3);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (1, 4);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (2, 2);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (2, 4);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (3, 1);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (3, 3);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (5, 4);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (6, 2);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (6, 3);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (6, 4);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (7, 1);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (7, 2);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (8, 4);
+INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (10, 1);
+
+
+-- DADOS TESTE CONQUISTA
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (1, 1);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (1, 2);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (1, 3);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (1, 4);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (1, 5);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (1, 6);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (1, 7);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (1, 8);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (1, 9);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (1, 10);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (1, 11);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (1, 12);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (1, 13);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (1, 14);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (1, 15);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (1, 16);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (2, 5);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (2, 6);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (2, 7);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (2, 8);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (2, 13);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (2, 14);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (2, 15);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (2, 16);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (3, 1);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (3, 2);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (3, 3);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (3, 4);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (3, 9);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (3, 10);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (3, 11);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (3, 12);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (5, 13);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (5, 14);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (5, 15);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (5, 16);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (6, 5);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (6, 6);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (6, 7);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (6, 8);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (6, 9);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (6, 10);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (6, 11);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (6, 12);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (6, 13);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (6, 14);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (6, 15);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (6, 16);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (7, 1);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (7, 2);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (7, 3);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (7, 4);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (7, 5);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (7, 6);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (7, 7);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (7, 8);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (8, 13);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (8, 14);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (8, 15);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (8, 16);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (10, 1);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (10, 2);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (10, 3);
+INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (10, 4);
+UPDATE conquista SET progresso_atual = 50, data_conquista = '2024-11-16 14:30:00', conquistado = TRUE WHERE id_conquista = 1;
+UPDATE conquista SET progresso_atual = 5 WHERE id_conquista = 2;
+UPDATE conquista SET progresso_atual = 3 WHERE id_conquista = 3;
+UPDATE conquista SET progresso_atual = 5, data_conquista = '2024-11-16 17:00:00', conquistado = TRUE WHERE id_conquista = 4;
+UPDATE conquista SET progresso_atual = 3 WHERE id_conquista = 5;
+UPDATE conquista SET progresso_atual = 15 WHERE id_conquista = 6;
+UPDATE conquista SET progresso_atual = 15, data_conquista = '2024-11-16 18:00:00', conquistado = TRUE WHERE id_conquista = 7;
+UPDATE conquista SET progresso_atual = 2 WHERE id_conquista = 8;
+UPDATE conquista SET progresso_atual = 7 WHERE id_conquista = 9;
+UPDATE conquista SET progresso_atual = 13 WHERE id_conquista = 10;
+
+
 -- DADOS TESTE PUBLICACAO
-INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Pign-pong amanhã', 'alguém afim de jogar um pingas amanhã? Se quiserem, eu vou criar um campeonato pra nós depois.', 1, 1);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario, id_modalidade_esportiva) VALUES ('Pign-pong amanhã', 'alguém afim de jogar um pingas amanhã? Se quiserem, eu vou criar um campeonato pra nós depois.', 1, 1, 4);
 INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Meta diária criativa', 'Boa tarde, alguém pode me dar uma sugestão de meta diária criativa para fazer?', 1, 2);
-INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('meta de futebol', 'muito feliz que consegui completar minha meta de futebol!', 1, 3);
-INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('fut domingo', 'Tava afim de participar de algum campeonato de futebol no próximo domingo, alguém topa?', 1, 4);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario, id_modalidade_esportiva) VALUES ('meta de futebol', 'muito feliz que consegui completar minha meta de futebol!', 1, 3, 1);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario, id_modalidade_esportiva) VALUES ('fut domingo', 'Tava afim de participar de algum campeonato de futebol no próximo domingo, alguém topa?', 1, 4, 1);
 INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Modalidade para cinuca', 'Galera queria saber o que vocês acham de ter uma modalidade acadêmica para cinuca? Tava pensando em criar...', 1, 12);
 INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('novidade', 'Pessoal olha o que eu descobri: prática esportiva oferece inúmeros benefícios para a saúde física e mental. Fisicamente, melhora a capacidade cardiovascular, fortalece os músculos e ossos, além de ajudar na manutenção de um peso saudável. Mentalmente, o esporte promove a liberação de endorfinas, reduzindo o estresse, a ansiedade e o risco de depressão. Também desenvolve habilidades sociais, como trabalho em equipe, e melhora a disciplina e a autoconfiança. Esses fatores contribuem para uma melhor qualidade de vida e bem-estar geral. Bora praticar mais.', 1, 8);
 INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Corrida noturna', 'Alguém animado para uma corrida à noite? Podemos fazer um grupo pra isso.', 1, 5);
 INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Yoga ao ar livre', 'Pessoal, pensei em fazer uma sessão de yoga ao ar livre. Alguém se interessa?', 1, 6);
 INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Desafio semanal', 'Que tal uma meta de passos por dia? Quem chega a 10 mil todos os dias essa semana?', 1, 7);
 INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Treino funcional', 'Vou fazer um treino funcional no parque. Quem topa?', 1, 8);
-INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Futebol no sábado', 'Bora marcar um futebol para o próximo sábado? Precisamos de mais dois jogadores.', 1, 9);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario, id_modalidade_esportiva) VALUES ('Futebol no sábado', 'Bora marcar um futebol para o próximo sábado? Precisamos de mais dois jogadores.', 1, 9, 1);
 INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Trilha no fim de semana', 'Quem tá afim de fazer uma trilha no domingo? Previsão de tempo tá ótima!', 1, 10);
 INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Dicas para alongamento', 'Alguém tem dicas de alongamentos para fazer antes da corrida?', 1, 11);
-INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Campeonato de vôlei', 'Estou organizando um campeonato de vôlei, quem quiser participar manda mensagem!', 1, 12);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario,id_modalidade_esportiva) VALUES ('Campeonato de vôlei', 'Estou organizando um campeonato de vôlei, quem quiser participar manda mensagem!', 1, 12, 1);
 INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Desafio de flexões', 'Quem consegue fazer 50 flexões por dia essa semana?', 1, 13);
 INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Passeio ciclístico', 'Vamos organizar um passeio ciclístico para o próximo mês. Quem anima?', 1, 14);
-INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Novas regras para futsal', 'Estava pensando em novas regras para nosso jogo de futsal, que tal discutirmos?', 1, 1);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario, id_modalidade_esportiva) VALUES ('Novas metas para futebol', 'Estava pensando em novas metas para nosso jogo de futebol, que tal discutirmos?', 1, 1, 1);
 INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Treino de natação', 'Quem quiser participar do treino de natação, confirme aqui!', 1, 2);
 INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Maratona de filmes esportivos', 'Pessoal, maratona de filmes de esportes hoje à noite. Qualquer um pode vir!', 1, 3);
 INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Aula de skate', 'Alguém com experiência no skate que possa ensinar o básico?', 1, 4);
@@ -105,7 +261,7 @@ INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Exerc�
 INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Boliche na sexta', 'Que tal uma partida de boliche na sexta-feira? Só para descontrair.', 1, 7);
 INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Polo aquático', 'Alguém sabe jogar polo aquático? Podíamos montar um time.', 1, 8);
 INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Treino HIIT', 'Proponho um treino HIIT amanhã de manhã. Quem topa?', 1, 9);
-INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Racha de basquete', 'Quem anima para um racha de basquete amanhã à tarde?', 1, 10);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario, id_modalidade_esportiva) VALUES ('Racha de basquete', 'Quem anima para um racha de basquete amanhã à tarde?', 1, 10, 3);
 INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Arremesso de peso', 'Alguém tem dicas para melhorar no arremesso de peso?', 1, 11);
 INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Treino de MMA', 'Galera, treino de MMA aberto para iniciantes e avançados!', 1, 12);
 INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Caminhada para iniciantes', 'Caminhada para quem quer começar a se exercitar, vamos juntos!', 1, 13);
@@ -236,86 +392,6 @@ INSERT INTO curtida_comentario (id_usuario, id_comentario) VALUES (9, 21);
 INSERT INTO curtida_comentario (id_usuario, id_comentario) VALUES (10, 21);
 
 
--- DADOS TESTE MODALIDADE_ESPORTIVA
-INSERT INTO modalidade_esportiva (nome, descricao) VALUES ('Futebol', 'Esporte jogado por dois times, onde o objetivo é marcar gols movendo a bola com os pés. Vence quem marcar mais gols em dois tempos de partida.');
-INSERT INTO modalidade_esportiva (nome, descricao) VALUES ('Vôlei', 'Dois times tentam fazer a bola tocar o chão do lado adversário, passando-a por cima de uma rede. Vence quem ganhar 3 sets.');
-INSERT INTO modalidade_esportiva (nome, descricao) VALUES ('Basquete', 'Dois times tentam marcar pontos arremessando a bola na cesta do adversário. Ganha quem fizer mais pontos em quatro períodos.');
-INSERT INTO modalidade_esportiva (nome, descricao) VALUES ('Handebol', 'Jogado por dois times, o objetivo é marcar gols arremessando a bola com as mãos no gol adversário. Vence quem fizer mais gols em dois tempos de partida.');
-INSERT INTO modalidade_esportiva (nome, descricao) VALUES ('Tênis de Mesa', 'Jogadores usam raquetes para golpear uma bola em uma mesa com rede. O objetivo é fazer o adversário errar a devolução. Vence quem ganhar mais sets.');
-
-
--- DADOS TESTE META_ESPORTIVA COM progresso_maximo ADICIONADO
-INSERT INTO meta_esportiva (titulo, descricao, progresso_maximo, progresso_item, id_modalidade_esportiva)
-VALUES ('Gols de Bicicleta', 'Fazer 10 gols de bicicleta.', 10, 'gols', 1);
-
-INSERT INTO meta_esportiva (titulo, descricao, progresso_maximo, progresso_item, id_modalidade_esportiva)
-VALUES ('Gols de Pênalti', 'Fazer 30 gols de pênalti.', 30, 'gols', 1);
-
-INSERT INTO meta_esportiva (titulo, descricao, progresso_maximo, progresso_item, id_modalidade_esportiva)
-VALUES ('Saque Maestria', 'Fazer 10 pontos de saque.', 10, 'pontos', 2);
-
-INSERT INTO meta_esportiva (titulo, descricao, progresso_maximo, progresso_item, id_modalidade_esportiva)
-VALUES ('Bloqueio Eficaz', 'Fazer 50 bloqueios de sucesso.', 50, 'bloqueios', 2);
-
-INSERT INTO meta_esportiva (titulo, descricao, progresso_maximo, progresso_item, id_modalidade_esportiva)
-VALUES ('Anjo da Guarda', 'Fazer 50 manchetes de defesa com êxito.', 50, 'manchetes', 2);
-
-INSERT INTO meta_esportiva (titulo, descricao, progresso_maximo, progresso_item, id_modalidade_esportiva)
-VALUES ('Mestre da Enterrada', 'Fazer 50 enterradas com êxito.', 50, 'enterradas', 3);
-
-INSERT INTO meta_esportiva (titulo, descricao, progresso_maximo, progresso_item, id_modalidade_esportiva)
-VALUES ('Melhor amigo', 'Fazer 40 assistências em gols para a equipe.', 40, 'assistências', 4);
-
-INSERT INTO meta_esportiva (titulo, descricao, progresso_maximo, progresso_item, id_modalidade_esportiva)
-VALUES ('Perspicaz', 'Interceptar ou recuperar 50 vezes a posse de bola.', 50, 'interceptações', 4);
-
-INSERT INTO meta_esportiva (titulo, descricao, progresso_maximo, progresso_item, id_modalidade_esportiva)
-VALUES ('Muralha', 'Executar 20 defesas com êxito como goleiro em uma única partida.', 20, 'defesas', 4);
-
-INSERT INTO meta_esportiva (titulo, descricao, progresso_maximo, progresso_item, id_modalidade_esportiva)
-VALUES ('Fatiador', 'Realizar 100 cortes com êxito.', 100, 'cortes', 5);
-
--- DADOS TESTE ACADEMICO_MODALIDADE_ESPORTIVA
-INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (1, 1);
-INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (1, 2);
-INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (1, 3);
-INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (1, 4);
-INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (1, 5);
-INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (2, 2);
-INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (2, 4);
-INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (3, 1);
-INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (3, 3);
-INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (3, 5);
-INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (4, 5);
-INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (5, 4);
-INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (6, 2);
-INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (6, 3);
-INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (6, 4);
-INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (6, 5);
-INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (7, 1);
-INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (7, 2);
-INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (8, 4);
-INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (8, 5);
-INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (10, 1);
-INSERT INTO academico_modalidade_esportiva (id_academico, id_modalidade_esportiva) VALUES (10, 5);
-
-
--- DADOS TESTE CONQUISTA
-INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (1, 1);
-INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (1, 3);
-INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (2, 2);
-INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (2, 4);
-INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (3, 3);
-INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (3, 5);
-INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (4, 5);
-INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (5, 4);
-INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (6, 3);
-INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (6, 5);
-INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (7, 1);
-INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (8, 4);
-INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (8, 5);
-INSERT INTO conquista (id_academico, id_meta_esportiva) VALUES (10, 5);
-
 INSERT INTO curso (nome) VALUES
 ('Administração'),
 ('Agronomia'),
@@ -404,7 +480,7 @@ VALUES
 ('#XPCQY1', '1234', 'Campeonato de Futebol', 'Campeonato regional de futebol', 'R$1000', '2024-12-01 10:00:00', '2024-12-15 18:00:00', 16, 11, TRUE, 3, 'PUBLICO', 1, 1, 'EM_ABERTO', 'OITAVAS'),
 ('#XPCQY2', '1234', 'Torneio de Basquete', 'Torneio estadual de basquete', 'R$500', '2024-11-20 14:00:00', '2024-11-30 16:00:00', 8, 1, TRUE, 3, 'PRIVADO', 2, 3, 'INICIADO', 'SEMI'),
 ('#XPCQY3', '1234', 'Campeonato de Vôlei', 'Competição municipal de vôlei', NULL, '2024-12-05 09:00:00', '2024-12-20 20:00:00', 12, 15, TRUE, 3, 'PUBLICO', 3, 2, 'EM_ABERTO', NULL),
-('#XPCQY4', '1234', 'pingas de Rua', 'Melhor da cidade', 'Medalhas e troféus', '2024-11-25 07:00:00', '2024-11-25 12:00:00', 10, 1 , TRUE, 3, 'PUBLICO', 2, 5, 'FINALIZADO', 'FINAL'),
+('#XPCQY4', '1234', 'pingas de Rua', 'Melhor da cidade', 'Medalhas e troféus', '2024-11-25 07:00:00', '2024-11-25 12:00:00', 10, 1 , TRUE, 3, 'PUBLICO', 2, 4, 'FINALIZADO', 'FINAL'),
 ('#XPCQY5', '1234', 'Campeonato ufpr', 'Competição estadual da ufpr', 'R$2000', '2024-11-18 08:00:00', '2024-11-28 18:00:00', 10, 3, TRUE, 3, 'PRIVADO', 2, 1, 'INICIADO', 'QUARTAS');
 
 INSERT INTO time (id_time, nome, id_campeonato)
@@ -438,6 +514,7 @@ VALUES
 (18, 'Mestres do Jogo', 5),
 (19, 'Tempestade Azul', 5),
 (20, 'Imbatíveis do Centro', 5);
+
 
 INSERT INTO jogador (id_jogador, username, id_modalidade_esportiva, situacao_jogador, pontuacao, id_time, id_academico)
 VALUES
