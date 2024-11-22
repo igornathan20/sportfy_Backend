@@ -17,6 +17,7 @@ public record CampeonatoResponseDto(
         EnderecoDto endereco,
         String privacidadeCampeonato,
         Long idAcademico,
+        String usernameCriador,
         Long idModalidadeEsportiva,
         String situacaoCampeonato
 ) {

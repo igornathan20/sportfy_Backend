@@ -173,6 +173,7 @@ public class Campeonato implements Serializable {
                 EnderecoDto.fromEntity(campeonato.getEndereco()),
                 campeonato.getPrivacidadeCampeonato().name(),
                 campeonato.academico.getIdAcademico(),
+                campeonato.academico.getUsuario().getUsername(),
                 campeonato.getModalidadeEsportiva().getIdModalidadeEsportiva(),
                 campeonato.getSituacaoCampeonato().name()
         );
