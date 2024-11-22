@@ -342,30 +342,38 @@ public class CampeonatoService {
         }
     }
 
-    public JogadorDto adicionarJogadorTime(TimeDto timeDto, Long idAcademico) throws CampeonatoInvalidoException, TimeInvalidoException, PasswordInvalidoException{
+    public JogadorDto adicionarJogadorTime(TimeDto timeDto, Long idAcademico) throws CampeonatoInvalidoException, OutroUsuarioComDadosJaExistentes, TimeInvalidoException, PasswordInvalidoException{
         Optional<Campeonato> campeonato = campeonatoRepository.findById(timeDto.campeonato());
         Optional<Time> timeEncontrado = timeRepository.findByNomeAndCampeonato(timeDto.nome(), campeonato.get());
         Optional<Academico> academico = academicoRepository.findById(idAcademico);
 
+        List<Jogador> jogadoresCampeonato = jogadorRepository.findByTimeCampeonato(campeonato.get());
+        boolean existeJogadorComMesmoAcademico = jogadoresCampeonato.stream()
+                .anyMatch(jogador -> jogador.getAcademico().equals(academico.get()));
+
         if (timeEncontrado.isPresent()) {
-            List<Jogador> jogadores = jogadorRepository.findByTime(timeEncontrado.get());
-            if (jogadores.size() <= campeonato.get().getLimiteParticipantes()){
-                if (campeonato.get().getDataFim().isAfter(OffsetDateTime.now()) && campeonato.get().getSituacaoCampeonato() != TipoSituacao.FINALIZADO ) {
-                    if (campeonato.get().getPrivacidadeCampeonato() == TipoPrivacidadeCampeonato.PUBLICO || passwordEncoder.matches(timeDto.senhaCampeonato(), campeonato.get().getSenha())){
-                        Jogador novoJogador = new Jogador();
-                        novoJogador.setUsername(academico.get().getUsuario().getUsername());
-                        novoJogador.setModalidadeEsportiva(campeonato.get().getModalidadeEsportiva());
-                        novoJogador.setAcademico(academico.get());
-                        novoJogador.setTime(timeEncontrado.get());
-                        return novoJogador.toDto(jogadorRepository.save(novoJogador));
-                    }else {
-                        throw new PasswordInvalidoException("Senha do campeonato invalida!");
+            if (!existeJogadorComMesmoAcademico){
+                List<Jogador> jogadores = jogadorRepository.findByTime(timeEncontrado.get());
+                if (jogadores.size() <= campeonato.get().getLimiteParticipantes()){
+                    if (campeonato.get().getDataFim().isAfter(OffsetDateTime.now()) && campeonato.get().getSituacaoCampeonato() != TipoSituacao.FINALIZADO ) {
+                        if (campeonato.get().getPrivacidadeCampeonato() == TipoPrivacidadeCampeonato.PUBLICO || passwordEncoder.matches(timeDto.senhaCampeonato(), campeonato.get().getSenha())){
+                            Jogador novoJogador = new Jogador();
+                            novoJogador.setUsername(academico.get().getUsuario().getUsername());
+                            novoJogador.setModalidadeEsportiva(campeonato.get().getModalidadeEsportiva());
+                            novoJogador.setAcademico(academico.get());
+                            novoJogador.setTime(timeEncontrado.get());
+                            return novoJogador.toDto(jogadorRepository.save(novoJogador));
+                        }else {
+                            throw new PasswordInvalidoException("Senha do campeonato invalida!");
+                        }
+                    } else {
+                        throw new CampeonatoInvalidoException("O campeonato ja esta finalizado!");
                     }
-                } else {
-                    throw new CampeonatoInvalidoException("O campeonato ja esta finalizado!");
+                }else {
+                    throw new TimeInvalidoException("Limite de jogadores no time excedido!");
                 }
             }else {
-                throw new TimeInvalidoException("Limite de jogadores no time excedido!");
+                throw new OutroUsuarioComDadosJaExistentes("Usuario ja inscrito em um time!");
             }
         } else{
             throw new TimeInvalidoException("Time invalido!");
