@@ -303,9 +303,14 @@ public class CampeonatoService {
     public TimeDto criarTime(TimeDto novoTime) throws CampeonatoInvalidoException, TimeInvalidoException, PasswordInvalidoException {
         Optional<Campeonato> campeonato = campeonatoRepository.findById(novoTime.campeonato());
         Optional<Time> timeEncontrado = timeRepository.findByNomeAndCampeonato(novoTime.nome(), campeonato.get());
+        List<Time> times = new ArrayList<>();
 
-        if (timeEncontrado.isEmpty()) {
-            if (campeonato.get().getDataFim().isAfter(OffsetDateTime.now()) && campeonato.get().getSituacaoCampeonato() == TipoSituacao.EM_ABERTO && campeonato.get().getLimiteParticipantes() > 1) {
+        if (campeonato.isPresent()){
+            times = timeRepository.findByCampeonato(campeonato.get());
+        }
+
+        if (timeEncontrado.isEmpty() && campeonato.get().getLimiteTimes() >= times.size()) {
+            if (campeonato.get().getSituacaoCampeonato() == TipoSituacao.EM_ABERTO && campeonato.get().getLimiteParticipantes() > 1) {
                 if (campeonato.get().getPrivacidadeCampeonato() == TipoPrivacidadeCampeonato.PUBLICO || passwordEncoder.matches(novoTime.senhaCampeonato(), campeonato.get().getSenha())){
                     Time timeCriado = new Time();
                     timeCriado.setNome(novoTime.nome());
@@ -315,7 +320,7 @@ public class CampeonatoService {
                     throw new PasswordInvalidoException("Senha do campeonato invalida!");
                 }
             } else {
-                throw new CampeonatoInvalidoException("O campeonato ja esta finalizado!");
+                throw new CampeonatoInvalidoException("O campeonato invalido!");
             }
         } else{
             throw new TimeInvalidoException("Um time com esse nome ja esta cadastrado!");
@@ -372,7 +377,9 @@ public class CampeonatoService {
         Optional<Academico> academico = academicoRepository.findById(idAcademico);
         if (campeonato.isPresent() && academico.isPresent()){
             Optional<Time> timeEncontrado = timeRepository.findByNomeAndCampeonato(academico.get().getUsuario().getUsername(), campeonato.get());
-            if (timeEncontrado.isEmpty()) {
+            List<Time> times = timeRepository.findByCampeonato(campeonato.get());
+
+            if (timeEncontrado.isEmpty() && campeonato.get().getLimiteTimes() >= times.size() ) {
                 if (campeonato.get().getDataFim().isAfter(OffsetDateTime.now()) && campeonato.get().getSituacaoCampeonato() != TipoSituacao.FINALIZADO ) {
                     if (campeonato.get().getLimiteParticipantes() == 1){
                         if (campeonato.get().getPrivacidadeCampeonato() == TipoPrivacidadeCampeonato.PUBLICO || passwordEncoder.matches(senhaCampeonato, campeonato.get().getSenha())){
@@ -397,7 +404,7 @@ public class CampeonatoService {
                     throw new CampeonatoInvalidoException("O campeonato ja esta finalizado!");
                 }
             } else{
-                throw new TimeInvalidoException("Jogador ja cadastrado no campeonato!");
+                throw new TimeInvalidoException("Jogador ja cadastrado no campeonato ou limite de jogadores atingido!");
             }
         }else {
             throw new RegistroNaoEncontradoException("Campeonato ou academico invalido!");
@@ -493,93 +500,96 @@ public class CampeonatoService {
         }
     }
 
-    public List<PartidaDto> definirPrimeiraFase(Long idCampeonato, String usuarioAutenticado) throws RegistroNaoEncontradoException, AccessDeniedException{
+    public List<PartidaDto> definirPrimeiraFase(Long idCampeonato, String usuarioAutenticado) throws RegistroNaoEncontradoException, CampeonatoInvalidoException, AccessDeniedException{
         Optional<Campeonato> campeonato = campeonatoRepository.findById(idCampeonato);
         if (campeonato.isPresent()){
-            if (campeonato.get().getAcademico().getUsuario().getUsername().equals(usuarioAutenticado)){
-                List<Time> times = timeRepository.findByCampeonato(campeonato.get());
+            if (campeonato.get().getSituacaoCampeonato() == TipoSituacao.EM_ABERTO){
+                if (campeonato.get().getAcademico().getUsuario().getUsername().equals(usuarioAutenticado)){
+                    List<Time> times = timeRepository.findByCampeonato(campeonato.get());
 
-                for (int i = 0; i < times.size();i ++){
-                    List<Jogador> jogador = jogadorRepository.findByTime(times.get(i));
-                    if (campeonato.get().getLimiteParticipantes() == 1) {
-                        if (jogador.getFirst().getSituacaoJogador() == TipoSituacaoJogador.BLOQUEADO) {
-                            jogadorRepository.delete(jogador.getFirst());
-                            timeRepository.delete(times.get(i));
-                            times.remove(times.get(i));
-                        }
-                    }
-                    if (campeonato.get().getLimiteParticipantes() > 1){
-                        for (Jogador j : jogador) {
-                            if (j.getSituacaoJogador() == TipoSituacaoJogador.BLOQUEADO) {
-                                jogadorRepository.delete(j);
+                    for (int i = 0; i < times.size();i ++){
+                        List<Jogador> jogador = jogadorRepository.findByTime(times.get(i));
+                        if (campeonato.get().getLimiteParticipantes() == 1) {
+                            if (jogador.getFirst().getSituacaoJogador() == TipoSituacaoJogador.BLOQUEADO) {
+                                jogadorRepository.delete(jogador.getFirst());
+                                timeRepository.delete(times.get(i));
+                                times.remove(times.get(i));
                             }
                         }
-                        if (jogador.isEmpty()){
-                            timeRepository.delete(times.get(i));
-                            times.remove(times.get(i));
+                        if (campeonato.get().getLimiteParticipantes() > 1){
+                            for (Jogador j : jogador) {
+                                if (j.getSituacaoJogador() == TipoSituacaoJogador.BLOQUEADO) {
+                                    jogadorRepository.delete(j);
+                                }
+                            }
+                            if (jogador.isEmpty()){
+                                timeRepository.delete(times.get(i));
+                                times.remove(times.get(i));
+                            }
                         }
                     }
+
+
+                    int numeroDeTimes = times.size();
+                    int numeroMaximoTimes = calcularProximaPotenciaDeDois(numeroDeTimes);
+                    switch (numeroMaximoTimes){
+                        case 2:
+                            campeonato.get().setFaseAtual(TipoFasePartida.FINAL);
+                            break;
+                        case 4:
+                            campeonato.get().setFaseAtual(TipoFasePartida.SEMI);
+                            break;
+                        case 8:
+                            campeonato.get().setFaseAtual(TipoFasePartida.QUARTAS);
+                            break;
+                        case 16:
+                            campeonato.get().setFaseAtual(TipoFasePartida.OITAVAS);
+                            break;
+                        default:
+                            //numero maximo de times excedido
+                    }
+
+                    while (times.size() < numeroMaximoTimes) {
+                        times.add(null);
+                    }
+
+                    embaralharTimes(times);
+                    List<Partida> partidas = new ArrayList<>();
+
+                    for (int i = 0; i < times.size(); i += 2) {
+                        Time time1 = times.get(i);
+                        Time time2 = times.get(i + 1);
+
+                        Partida partida = new Partida();
+                        Resultado resultado = new Resultado();
+                        partida.setCampeonato(campeonato.get());
+                        partida.setTime1(time1);
+                        partida.setTime2(time2);
+                        partida.setFasePartida(campeonato.get().getFaseAtual());
+                        partida.setResultado(resultado);
+                        partidas.add(partida);
+                    }
+
+                    List<Jogador> jogadores = jogadorRepository.findByTimeCampeonato(campeonato.get());
+                    for (int i = 0; i < jogadores.size(); i++){
+                        jogadores.get(i).setSituacaoJogador(TipoSituacaoJogador.ATIVO);
+                        jogadorRepository.save(jogadores.get(i));
+                    }
+
+                    //campeonato.setPartidas(partidas);
+                    partidaRepository.saveAll(partidas);
+                    campeonato.get().setSituacaoCampeonato(TipoSituacao.INICIADO);
+                    campeonatoRepository.save(campeonato.get());
+                    return partidas.stream().map(p -> p.toDto(p)).collect(Collectors.toList());
+                }else {
+                    throw new AccessDeniedException("Voce não tem permissão para alterar esse recurso!");
                 }
-
-
-                int numeroDeTimes = times.size();
-                int numeroMaximoTimes = calcularProximaPotenciaDeDois(numeroDeTimes);
-                switch (numeroMaximoTimes){
-                    case 2:
-                        campeonato.get().setFaseAtual(TipoFasePartida.FINAL);
-                        break;
-                    case 4:
-                        campeonato.get().setFaseAtual(TipoFasePartida.SEMI);
-                        break;
-                    case 8:
-                        campeonato.get().setFaseAtual(TipoFasePartida.QUARTAS);
-                        break;
-                    case 16:
-                        campeonato.get().setFaseAtual(TipoFasePartida.OITAVAS);
-                        break;
-                    default:
-                        //numero maximo de times excedido
-                }
-
-                while (times.size() < numeroMaximoTimes) {
-                    times.add(null);
-                }
-
-                embaralharTimes(times);
-                List<Partida> partidas = new ArrayList<>();
-
-                for (int i = 0; i < times.size(); i += 2) {
-                    Time time1 = times.get(i);
-                    Time time2 = times.get(i + 1);
-
-                    Partida partida = new Partida();
-                    Resultado resultado = new Resultado();
-                    partida.setCampeonato(campeonato.get());
-                    partida.setTime1(time1);
-                    partida.setTime2(time2);
-                    partida.setFasePartida(campeonato.get().getFaseAtual());
-                    partida.setResultado(resultado);
-                    partidas.add(partida);
-                }
-
-                List<Jogador> jogadores = jogadorRepository.findByTimeCampeonato(campeonato.get());
-                for (int i = 0; i < jogadores.size(); i++){
-                    jogadores.get(i).setSituacaoJogador(TipoSituacaoJogador.ATIVO);
-                    jogadorRepository.save(jogadores.get(i));
-                }
-
-                //campeonato.setPartidas(partidas);
-                partidaRepository.saveAll(partidas);
-                campeonato.get().setSituacaoCampeonato(TipoSituacao.INICIADO);
-                campeonatoRepository.save(campeonato.get());
-                return partidas.stream().map(p -> p.toDto(p)).collect(Collectors.toList());
             }else {
-                throw new AccessDeniedException("Voce não tem permissão para alterar esse recurso!");
+                throw new CampeonatoInvalidoException("O campeonato ja esta iniciado!");
             }
         }else {
             throw new RegistroNaoEncontradoException("Campeonato nao encontrado!");
         }
-
     }
 
     private int calcularProximaPotenciaDeDois(int numero) {
