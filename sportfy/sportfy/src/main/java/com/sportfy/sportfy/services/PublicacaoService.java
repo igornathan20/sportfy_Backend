@@ -1,5 +1,6 @@
 package com.sportfy.sportfy.services;
 
+import java.nio.file.AccessDeniedException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,24 +41,35 @@ public class PublicacaoService {
         return PublicacaoDto.fromPublicacaoBD(publicacaoCriada);
     }
 
-    public PublicacaoDto atualizarPublicacao(Long idPublicacao, PublicacaoDto publicacaoDto) throws PublicacaoNaoExisteException {
+    public PublicacaoDto atualizarPublicacao(Long idPublicacao, PublicacaoDto publicacaoDto, String usuarioAutenticado) throws PublicacaoNaoExisteException, AccessDeniedException {
         Publicacao publicacaoExistente = publicacaoRepository.findById(idPublicacao).orElse(null);
         if (publicacaoExistente != null) {
-            Publicacao publicacaoAtualizada = publicacaoExistente;
-            publicacaoAtualizada.setTitulo(publicacaoDto.titulo());
-            publicacaoAtualizada.setDescricao(publicacaoDto.descricao());
-            Publicacao publicacaoSalva = publicacaoRepository.save(publicacaoAtualizada);
-            return PublicacaoDto.fromPublicacaoBD(publicacaoSalva);
+            if (publicacaoExistente.getUsuario().getUsername().equals(usuarioAutenticado)) {
+                Publicacao publicacaoAtualizada = publicacaoExistente;
+                publicacaoAtualizada.setTitulo(publicacaoDto.titulo());
+                publicacaoAtualizada.setDescricao(publicacaoDto.descricao());
+                Publicacao publicacaoSalva = publicacaoRepository.save(publicacaoAtualizada);
+                return PublicacaoDto.fromPublicacaoBD(publicacaoSalva);
+            } else {
+                throw new AccessDeniedException("Usuário não tem permissão para atualizar a publicação!");
+            }
         } else {
             throw new PublicacaoNaoExisteException("Publicacão não existe!");
         }
     }
 
-    public PublicacaoDto removerPublicacao(Long idPublicacao) throws PublicacaoNaoExisteException {
-        return publicacaoRepository.findById(idPublicacao).map(publicacaoBD -> {
-            publicacaoRepository.delete(publicacaoBD);
-            return PublicacaoDto.fromPublicacaoBD(publicacaoBD);
-        }).orElseThrow(() -> new PublicacaoNaoExisteException("Publicacão não existe!"));
+    public PublicacaoDto removerPublicacao(Long idPublicacao, String usuarioAutenticado) throws PublicacaoNaoExisteException, AccessDeniedException {
+        Publicacao publicacaoExistente = publicacaoRepository.findById(idPublicacao).orElse(null);
+        if (publicacaoExistente != null) {
+            if (publicacaoExistente.getUsuario().getUsername().equals(usuarioAutenticado)) {
+                publicacaoRepository.delete(publicacaoExistente);
+                return PublicacaoDto.fromPublicacaoBD(publicacaoExistente);
+            } else {
+                throw new AccessDeniedException("Usuário não tem permissão para remover a publicação!");
+            }
+        } else {
+            throw new PublicacaoNaoExisteException("Publicacão não existe!");
+        }
     }
 
     public boolean curtirPublicacao(Long idUsuario, Long idPublicacao) throws UsuarioCurtidaPublicacaoJaExisteException, PublicacaoNaoExisteException{

@@ -1,5 +1,7 @@
 package com.sportfy.sportfy.controllers;
 
+import java.nio.file.AccessDeniedException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import com.sportfy.sportfy.dtos.PublicacaoDto;
 import com.sportfy.sportfy.exeptions.PublicacaoNaoExisteException;
@@ -47,11 +51,16 @@ public class PublicacaoController {
     //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Object> atualizarPublicacao(@PathVariable("idPublicacao") Long idPublicacao, @RequestBody @Valid PublicacaoDto publicacao) {
         try {
-            Object publicacaoAtualizada = publicacaoService.atualizarPublicacao(idPublicacao, publicacao);
+            var authentication = SecurityContextHolder.getContext().getAuthentication();
+            var usuarioAutenticado = ((UserDetails) authentication.getPrincipal()).getUsername();
+            Object publicacaoAtualizada = publicacaoService.atualizarPublicacao(idPublicacao, publicacao, usuarioAutenticado);
             return ResponseEntity.status(HttpStatus.OK).body(publicacaoAtualizada);
         } catch (PublicacaoNaoExisteException e) {
             logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (AccessDeniedException e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -62,11 +71,16 @@ public class PublicacaoController {
     //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Object> removerPublicacao(@PathVariable("idPublicacao") Long idPublicacao) {
         try {
-            Object publicacaoRemovida = publicacaoService.removerPublicacao(idPublicacao);
+            var authentication = SecurityContextHolder.getContext().getAuthentication();
+            var usuarioAutenticado = ((UserDetails) authentication.getPrincipal()).getUsername();
+            Object publicacaoRemovida = publicacaoService.removerPublicacao(idPublicacao, usuarioAutenticado);
             return ResponseEntity.status(HttpStatus.OK).body(publicacaoRemovida);
         } catch (PublicacaoNaoExisteException e) {
             logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (AccessDeniedException e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

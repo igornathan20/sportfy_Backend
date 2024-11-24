@@ -1,5 +1,7 @@
 package com.sportfy.sportfy.controllers;
 
+import java.nio.file.AccessDeniedException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import com.sportfy.sportfy.dtos.ComentarioDto;
@@ -47,11 +51,16 @@ public class ComentarioController {
     //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Object> atualizarComentario(@PathVariable("idComentario") Long idComentario, @RequestBody @Valid ComentarioDto comentario) {
         try {
-            Object comentarioAtualizado = comentarioService.atualizarComentario(idComentario, comentario);
+            var authentication = SecurityContextHolder.getContext().getAuthentication();
+            var usuarioAutenticado = ((UserDetails) authentication.getPrincipal()).getUsername();
+            Object comentarioAtualizado = comentarioService.atualizarComentario(idComentario, comentario, usuarioAutenticado);
             return ResponseEntity.status(HttpStatus.OK).body(comentarioAtualizado);
         } catch (ComentarioNaoExisteException e) {
             logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (AccessDeniedException e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -62,8 +71,13 @@ public class ComentarioController {
     //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Object> removerComentario(@PathVariable("idComentario") Long idComentario) {
         try {
-            Object comentarioRemovido = comentarioService.removerComentario(idComentario);
+            var authentication = SecurityContextHolder.getContext().getAuthentication();
+            var usuarioAutenticado = ((UserDetails) authentication.getPrincipal()).getUsername();
+            Object comentarioRemovido = comentarioService.removerComentario(idComentario, usuarioAutenticado);
             return ResponseEntity.status(HttpStatus.OK).body(comentarioRemovido);
+        } catch (AccessDeniedException e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         } catch (ComentarioNaoExisteException e) {
             logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

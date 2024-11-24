@@ -1,5 +1,6 @@
 package com.sportfy.sportfy.services;
 
+import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,31 +37,39 @@ public class ComentarioService {
         return ComentarioDto.fromComentarioBD(comentarioCriado);
     }
 
-    public ComentarioDto atualizarComentario(Long idComentario, ComentarioDto comentarioDto) throws ComentarioNaoExisteException {
+    public ComentarioDto atualizarComentario(Long idComentario, ComentarioDto comentarioDto, String usuarioAutenticado) throws ComentarioNaoExisteException, AccessDeniedException {
         Comentario comentarioExistente = comentarioRepository.findById(idComentario).orElse(null);
         if (comentarioExistente != null) {
-            Comentario comentarioAtualizado = comentarioExistente;
-            comentarioAtualizado.setDescricao(comentarioDto.descricao());
-            Comentario comentarioSalvo = comentarioRepository.save(comentarioAtualizado);
-            return ComentarioDto.fromComentarioBD(comentarioSalvo);
+            if (comentarioExistente.getUsuario().getUsername().equals(usuarioAutenticado)) {
+                Comentario comentarioAtualizado = comentarioExistente;
+                comentarioAtualizado.setDescricao(comentarioDto.descricao());
+                Comentario comentarioSalvo = comentarioRepository.save(comentarioAtualizado);
+                return ComentarioDto.fromComentarioBD(comentarioSalvo);
+            } else {
+                throw new AccessDeniedException("Usuário não tem permissão para atualizar o comentário!");
+            }
         } else {
             throw new ComentarioNaoExisteException("Comentario não existe!");
         }
     }
     
     @Transactional
-    public ComentarioDto removerComentario(Long idComentario) throws ComentarioNaoExisteException {
+    public ComentarioDto removerComentario(Long idComentario, String usuarioAutenticado) throws ComentarioNaoExisteException, AccessDeniedException {
         Comentario comentarioExistente = comentarioRepository.findById(idComentario).orElse(null);
         if (comentarioExistente != null) {
-            if (comentarioExistente.getListaCurtidaComentario() != null && !comentarioExistente.getListaCurtidaComentario().isEmpty()) {
-                List<Long> listaIdCurtidaComentario = new ArrayList<Long>();
-                for (CurtidaComentario curtidaComentario : comentarioExistente.getListaCurtidaComentario()) {
-                    listaIdCurtidaComentario.add(curtidaComentario.getIdCurtidaComentario());
+            if (comentarioExistente.getUsuario().getUsername().equals(usuarioAutenticado)) {
+                if (comentarioExistente.getListaCurtidaComentario() != null && !comentarioExistente.getListaCurtidaComentario().isEmpty()) {
+                    List<Long> listaIdCurtidaComentario = new ArrayList<Long>();
+                    for (CurtidaComentario curtidaComentario : comentarioExistente.getListaCurtidaComentario()) {
+                        listaIdCurtidaComentario.add(curtidaComentario.getIdCurtidaComentario());
+                    }
+                    curtidaComentarioRepository.deleteAllById(listaIdCurtidaComentario);
                 }
-                curtidaComentarioRepository.deleteAllById(listaIdCurtidaComentario);
+                comentarioRepository.deleteComentarioById(comentarioExistente.getIdComentario());
+                return ComentarioDto.fromComentarioBD(comentarioExistente);
+            } else {
+                throw new AccessDeniedException("Usuário não tem permissão para remover o comentário!");
             }
-            comentarioRepository.deleteComentarioById(comentarioExistente.getIdComentario());
-            return ComentarioDto.fromComentarioBD(comentarioExistente);
         } else {
             throw new ComentarioNaoExisteException("Comentario não existe!");
         }
