@@ -1,14 +1,10 @@
 package com.sportfy.sportfy.services;
 
+import com.sportfy.sportfy.dtos.AcademicoResponseDto;
 import com.sportfy.sportfy.dtos.AdministradorDto;
 import com.sportfy.sportfy.dtos.AdministradorResponseDto;
 import com.sportfy.sportfy.enums.TipoPermissao;
-import com.sportfy.sportfy.exeptions.AdministradorNaoExisteException;
-import com.sportfy.sportfy.exeptions.ListaAdministradoresVaziaException;
-import com.sportfy.sportfy.exeptions.OutroUsuarioComDadosJaExistentes;
-import com.sportfy.sportfy.exeptions.PasswordInvalidoException;
-import com.sportfy.sportfy.exeptions.PermissaoNaoExisteException;
-import com.sportfy.sportfy.exeptions.RoleNaoPermitidaException;
+import com.sportfy.sportfy.exeptions.*;
 import com.sportfy.sportfy.models.Administrador;
 import com.sportfy.sportfy.repositories.AdministradorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,6 +94,10 @@ public class AdministradorService {
         return administradorRepository.findByIdAdministradorAndUsuarioAtivo(idUsuario, true).map(administradorBD -> {
             return AdministradorResponseDto.fromEntity(administradorBD);
         }).orElseThrow(() -> new AdministradorNaoExisteException("Administrador não existe!"));
+    }
+
+    public AdministradorResponseDto buscarPorUsername(String userName) throws AdministradorNaoExisteException {
+        return administradorRepository.findByUsuarioUsername(userName).map(AdministradorResponseDto::fromEntity).orElseThrow(() -> new AdministradorNaoExisteException("Administrador não existe!"));
     }
 
     public Page<AdministradorResponseDto> listar(Pageable pageable) throws ListaAdministradoresVaziaException {

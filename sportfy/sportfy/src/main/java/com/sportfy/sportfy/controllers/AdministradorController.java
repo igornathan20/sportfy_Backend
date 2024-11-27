@@ -1,13 +1,9 @@
 package com.sportfy.sportfy.controllers;
 
+import com.sportfy.sportfy.dtos.AcademicoResponseDto;
 import com.sportfy.sportfy.dtos.AdministradorDto;
 import com.sportfy.sportfy.dtos.AdministradorResponseDto;
-import com.sportfy.sportfy.exeptions.AdministradorNaoExisteException;
-import com.sportfy.sportfy.exeptions.ListaAdministradoresVaziaException;
-import com.sportfy.sportfy.exeptions.OutroUsuarioComDadosJaExistentes;
-import com.sportfy.sportfy.exeptions.PasswordInvalidoException;
-import com.sportfy.sportfy.exeptions.PermissaoNaoExisteException;
-import com.sportfy.sportfy.exeptions.RoleNaoPermitidaException;
+import com.sportfy.sportfy.exeptions.*;
 import com.sportfy.sportfy.services.AdministradorService;
 import jakarta.validation.Valid;
 import lombok.*;
@@ -105,6 +101,21 @@ public class AdministradorController {
     public ResponseEntity<AdministradorResponseDto> consultar(@PathVariable("idUsuario") Long idUsuario) {
         try {
             AdministradorResponseDto administradorConsultado = administradorService.consultar(idUsuario);
+            return ResponseEntity.status(HttpStatus.OK).body(administradorConsultado);
+        } catch (AdministradorNaoExisteException e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/buscar/{userName}")
+    //@PreAuthorize("hasAnyRole('ROLE_ADMINISTRADOR')")
+    public ResponseEntity<AdministradorResponseDto> buscarPorUsername(@PathVariable String userName) {
+        try {
+            AdministradorResponseDto administradorConsultado = administradorService.buscarPorUsername(userName);
             return ResponseEntity.status(HttpStatus.OK).body(administradorConsultado);
         } catch (AdministradorNaoExisteException e) {
             logger.error(e.getMessage());
