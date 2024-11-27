@@ -419,6 +419,29 @@ public class CampeonatoService {
         }
     }
 
+    public void removerJogadorTime(Long idCampeonato, Long idAcademico) throws CampeonatoInvalidoException, AcademicoNaoExisteException, RegistroNaoEncontradoException {
+        Optional<Campeonato> campeonato = campeonatoRepository.findById(idCampeonato);
+        Optional<Academico> academico = academicoRepository.findById(idAcademico);
+        if (campeonato.isPresent() && campeonato.get().getSituacaoCampeonato() == TipoSituacao.EM_ABERTO){
+            if (academico.isPresent()) {
+                Optional<Jogador> jogador = jogadorRepository.findByAcademicoAndTimeCampeonato(academico.get(), campeonato.get());
+                if (jogador.isPresent()) {
+                    jogadorRepository.delete(jogador.get());
+                    if (campeonato.get().getLimiteParticipantes() == 1){
+                        Optional<Time> timeEncontrado = timeRepository.findByNomeAndCampeonato(academico.get().getUsuario().getUsername(), campeonato.get());
+                        timeRepository.delete(timeEncontrado.get());
+                    }
+                } else {
+                    throw new RegistroNaoEncontradoException("Jogador não encontrado nesse campeonato!");
+                }
+            }else {
+                throw new AcademicoNaoExisteException("Academico invalido!");
+                }
+        }else {
+            throw new CampeonatoInvalidoException("Campeonato invalido, ou ja iniciado!");
+        }
+    }
+
     public Page<JogadorDto> listarJogadoresCampeonato(Long idCampeonato, Pageable pageable) throws RegistroNaoEncontradoException {
         Optional<Campeonato> campeonato = campeonatoRepository.findById(idCampeonato);
 

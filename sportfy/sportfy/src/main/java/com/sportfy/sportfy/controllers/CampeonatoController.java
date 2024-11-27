@@ -280,6 +280,24 @@ public class CampeonatoController {
         }
     }
 
+    @DeleteMapping("{idCampeonato}/times/{idAcademico}")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    public ResponseEntity<Void> removerJogadorTime(@PathVariable Long idCampeonato, @PathVariable Long idAcademico) {
+        try {
+            campeonatoService.removerJogadorTime(idCampeonato, idAcademico);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (CampeonatoInvalidoException  e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }catch (RegistroNaoEncontradoException e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
     @GetMapping("/{idCampeonato}/jogadores")
     //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Page<JogadorDto>> listarJogadoresPorCampeonato(@PathVariable Long idCampeonato, Pageable pageable) {
