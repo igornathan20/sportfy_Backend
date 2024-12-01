@@ -5,12 +5,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.sportfy.sportfy.dtos.EstatisticasMetasEsportivasDto;
 import com.sportfy.sportfy.dtos.MetricasSistemaDto;
 import com.sportfy.sportfy.exeptions.AcademicoNaoExisteException;
 import com.sportfy.sportfy.exeptions.ConteudoPrivadoException;
 import com.sportfy.sportfy.services.EstatisticaService;
+
+import static org.springframework.security.authorization.AuthorityReactiveAuthorizationManager.hasRole;
 
 @RestController
 @RequestMapping("/estatistica")
@@ -27,7 +30,7 @@ public class EstatisticaController {
     private EstatisticaService estatisticaService;
 
     @GetMapping("/visualizarMetricasSistema")
-    //@PreAuthorize(hasRole('ROLE_ADMINISTRADOR'))
+    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<MetricasSistemaDto> metricasSistema() {
         try {
             MetricasSistemaDto metricasSistema = estatisticaService.metricasSistema();
@@ -39,7 +42,7 @@ public class EstatisticaController {
     }
 
     @GetMapping("/visualizarEstatisticasMetasEsportivas/{idAcademico}")
-    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<EstatisticasMetasEsportivasDto> visualizarEstatisticasMetasEsportivas(@PathVariable Long idAcademico) {
         try {
             EstatisticasMetasEsportivasDto estatisticasMetasEsportivas = estatisticaService.visualizarEstatisticasMetasEsportivas(idAcademico);
@@ -51,7 +54,7 @@ public class EstatisticaController {
     }
 
     @GetMapping("/visualizarEstatisticasMetasEsportivasOutroAcademico/{idAcademico}")
-    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<EstatisticasMetasEsportivasDto> visualizarEstatisticasMetasEsportivasOutroAcademico(@PathVariable Long idAcademico) {
         try {
             EstatisticasMetasEsportivasDto estatisticasMetasEsportivas = estatisticaService.visualizarEstatisticasMetasEsportivasOutroAcademico(idAcademico);
