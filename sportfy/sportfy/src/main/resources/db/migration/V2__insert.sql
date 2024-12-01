@@ -1,7 +1,7 @@
 INSERT INTO canal (tipo_canal) VALUES ('COMUNIDADE');
 
 
--- DADOS TESTE USUARIO (Apenas Acadêmicos - permissao = 0)
+-- DADOS TESTE USUARIO
 INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('math_aa', 'pass', 'Matheus Antônio Augusto', '41987213343', 'Masculino', '2002-03-03', 0);
 INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('maria_gn', 'pass', 'Maria Gabriela Naste', '41988762901', 'Feminino', '1999-07-16', 0);
 INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('murilo_scn', 'pass', 'Murilo Souza Costa Neto', '41987690103', 'Masculino', '2000-01-26', 0);
@@ -12,18 +12,23 @@ INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento
 INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('muriel_ln', 'pass', 'Muriel Leon Nogueira', '41987990809', 'Masculino', '1991-06-28', 0);
 INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('michaela_ac', 'pass', 'Michaela Antonela Churatto', '41987676759', 'Feminino', '2004-11-04', 0);
 INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('mauro_vm', 'pass', 'Mauro Vieira Marçal', '41988908780', 'Masculino', '2003-12-13', 0);
-
--- DADOS TESTE USUARIO (Apenas Administradores - permissao = 1)
 INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('joao_nm', 'pass', 'Joao Nunes Moura', '41988876161', 'Masculino', '1990-02-05', 1);
 INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('jose_rm', 'pass', 'José Ricardo Moraes', '41989716532', 'Masculino', '2005-10-14', 1);
 INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('junior_bd', 'pass', 'Junior Bento Diniz', '41988915757', 'Masculino', '2004-07-04', 1);
 INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('jessica_cr', 'pass', 'Jessica Cristina Rocha', '41988980179', 'Feminino', '2000-03-19', 1);
 INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('jeronimo_cn', 'pass', 'Jerônimo Claudino Neves', '41987615454', 'Masculino', '2002-04-21', 1);
+-- DADOS TESTE USUARIO
 INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('aline_mr', 'pass', 'Aline Moura Reis', '41988765432', 'Feminino', '1998-03-15', 0);
 INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('paulo_gm', 'pass', 'Paulo Gomes Martins', '41987654321', 'Masculino', '1997-08-22', 0);
 INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('bruna_ls', 'pass', 'Bruna Lemos Silva', '41988234567', 'Feminino', '2001-02-12', 0);
 INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('carlos_ap', 'pass', 'Carlos Alberto Pires', '41988765432', 'Masculino', '1996-09-03', 0);
 INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('leticia_cp', 'pass', 'Letícia Cardoso Pereira', '41988976543', 'Feminino', '2000-06-11', 0);
+INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('rafael_vb', 'pass', 'Rafael Vieira Barros', '41988765498', 'Masculino', '1995-01-18', 0);
+INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('carla_dm', 'pass', 'Carla Diniz Moreira', '41988987654', 'Outro', '1999-12-25', 0);
+INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('danilo_fr', 'pass', 'Danilo Figueira Rocha', '41988654321', 'Masculino', '2002-10-30', 1);
+INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('gabriela_rs', 'pass', 'Gabriela Rocha Santos', '41988567890', 'Feminino', '2003-07-14', 1);
+INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('lucas_bm', 'pass', 'Lucas Braga Matos', '41988678901', 'Masculino', '1992-04-04', 1);
+
 
 -- DADOS TESTE ACADEMICO
 INSERT INTO academico (email, curso, id_usuario) VALUES ('matheus@ufpr.br', 'Análise e Desenvolvimento de Sistemas', 1);
@@ -36,26 +41,20 @@ INSERT INTO academico (email, curso, id_usuario) VALUES ('marcelo@ufpr.br', 'Bio
 INSERT INTO academico (email, curso, id_usuario) VALUES ('muriel@ufpr.br', 'Análise e Desenvolvimento de Sistemas', 8);
 INSERT INTO academico (email, curso, id_usuario) VALUES ('michaela@ufpr.br', 'Análise e Desenvolvimento de Sistemas', 9);
 INSERT INTO academico (email, curso, id_usuario) VALUES ('mauro@ufpr.br', 'Engenharia Mecânica', 10);
-
--- Acadêmicos para os novos usuários
-INSERT INTO academico (email, curso, id_usuario)
-VALUES
-('aline.moura@ufpr.br', 'Educação Física', (SELECT id_usuario FROM usuario WHERE username = 'aline_mr')),
-('paulo.gomes@ufpr.br', 'Engenharia Civil', (SELECT id_usuario FROM usuario WHERE username = 'paulo_gm')),
-('bruna.lemos@ufpr.br', 'Direito', (SELECT id_usuario FROM usuario WHERE username = 'bruna_ls')),
-('carlos.alberto@ufpr.br', 'Administração', (SELECT id_usuario FROM usuario WHERE username = 'carlos_ap')),
-('leticia.cardoso@ufpr.br', 'Psicologia', (SELECT id_usuario FROM usuario WHERE username = 'leticia_cp'));
-
-
--- DADOS TESTE ADMINISTRADOR
-INSERT INTO administrador (id_usuario) VALUES (11);
-INSERT INTO administrador (id_usuario) VALUES (12);
-INSERT INTO administrador (id_usuario) VALUES (13);
-INSERT INTO administrador (id_usuario) VALUES (14);
-INSERT INTO administrador (id_usuario) VALUES (15);
+-- DADOS TESTE ACADEMICO
+INSERT INTO academico (email, curso, id_usuario) VALUES ('aline@ufpr.br', 'Direito', 11);
+INSERT INTO academico (email, curso, id_usuario) VALUES ('paulo@ufpr.br', 'Administração', 12);
+INSERT INTO academico (email, curso, id_usuario) VALUES ('bruna@ufpr.br', 'Design Gráfico', 13);
+INSERT INTO academico (email, curso, id_usuario) VALUES ('carlos@ufpr.br', 'Engenharia Civil', 14);
+INSERT INTO academico (email, curso, id_usuario) VALUES ('leticia@ufpr.br', 'Arquitetura', 15);
+INSERT INTO academico (email, curso, id_usuario) VALUES ('rafael@ufpr.br', 'Geografia', 16);
+INSERT INTO academico (email, curso, id_usuario) VALUES ('carla@ufpr.br', 'História', 17);
+INSERT INTO academico (email, curso, id_usuario) VALUES ('danilo@ufpr.br', 'Engenharia de Produção', 18);
+INSERT INTO academico (email, curso, id_usuario) VALUES ('gabriela@ufpr.br', 'Letras', 19);
+INSERT INTO academico (email, curso, id_usuario) VALUES ('lucas@ufpr.br', 'Física', 20);
 
 
--- DADOS TESTE PRIVACIDADE (Apenas para IDs de acadêmicos válidos)
+-- DADOS TESTE PRIVACIDADE
 INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (1, FALSE, FALSE, FALSE);
 INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (2, TRUE, FALSE, TRUE);
 INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (3, FALSE, TRUE, FALSE);
@@ -66,10 +65,24 @@ INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_es
 INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (8, TRUE, FALSE, FALSE);
 INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (9, TRUE, TRUE, TRUE);
 INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (10, TRUE, TRUE, FALSE);
+-- DADOS TESTE PRIVACIDADE
+INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (11, TRUE, TRUE, FALSE);
+INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (12, FALSE, FALSE, TRUE);
+INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (13, TRUE, FALSE, TRUE);
+INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (14, FALSE, TRUE, FALSE);
+INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (15, TRUE, TRUE, TRUE);
+INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (16, FALSE, FALSE, FALSE);
+INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (17, TRUE, FALSE, FALSE);
+INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (18, TRUE, TRUE, FALSE);
+INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (19, TRUE, TRUE, TRUE);
+INSERT INTO privacidade (id_academico, mostrar_historico_campeonatos, mostrar_estatisticas_modalidades_esportivas, mostrar_conquistas) VALUES (20, FALSE, TRUE, TRUE);
 
--- REMOÇÃO DE ENTRADAS INVÁLIDAS
--- IDs 11 a 15 não correspondem a acadêmicos na tabela 'academico' e foram removidos.
-
+-- DADOS TESTE ADMINISTRADOR
+INSERT INTO administrador (id_usuario) VALUES (11);
+INSERT INTO administrador (id_usuario) VALUES (12);
+INSERT INTO administrador (id_usuario) VALUES (13);
+INSERT INTO administrador (id_usuario) VALUES (14);
+INSERT INTO administrador (id_usuario) VALUES (15);
 
 
 -- DADOS TESTE USUARIO_CANAL
@@ -522,24 +535,39 @@ VALUES
 ('Tempestade Azul', 5),
 ('Imbatíveis do Centro', 5);
 
+
 -- Jogadores para os Times do Campeonato 1
 INSERT INTO jogador (id_jogador, username, id_modalidade_esportiva, situacao_jogador, pontuacao, id_time, id_academico)
 VALUES
-(6, 'aline_mr', 1, 1, 92, 3, 6),
-(7, 'paulo_gm', 1, 1, 84, 4, 7),
-(8, 'bruna_ls', 1, 1, 93, 4, 8);
+(1, 'aline_mr', 1, 1, 85, 1, 11),
+(2, 'paulo_gm', 1, 1, 90, 1, 12),
+(3, 'bruna_ls', 1, 1, 88, 2, 13),
+(4, 'carlos_ap', 1, 1, 87, 2, 14),
+(5, 'leticia_cp', 1, 1, 89, 3, 15),
+(6, 'rafael_vb', 1, 1, 92, 3, 16),
+(7, 'carla_dm', 1, 1, 84, 4, 17),
+(8, 'danilo_fr', 1, 1, 93, 4, 18);
 
 -- Jogadores para os Times do Campeonato 3
 INSERT INTO jogador (id_jogador, username, id_modalidade_esportiva, situacao_jogador, pontuacao, id_time, id_academico)
 VALUES
-(9, 'carlos_ap', 2, 1, 91, 5, 9),
-(10, 'leticia_cp', 2, 1, 87, 5, 10),
-(11, 'aline_mr', 2, 1, 88, 8, 6);
+(9, 'gabriela_rs', 2, 1, 91, 5, 19),
+(10, 'lucas_bm', 2, 1, 87, 5, 20),
+(11, 'aline_mr', 2, 1, 89, 5, 11),
+(12, 'paulo_gm', 2, 1, 85, 6, 12),
+(13, 'bruna_ls', 2, 1, 86, 6, 13),
+(14, 'carlos_ap', 2, 1, 90, 7, 14),
+(15, 'leticia_cp', 2, 1, 94, 7, 15),
+(16, 'rafael_vb', 2, 1, 88, 8, 16);
 
 -- Jogadores para os Times do Campeonato 5
 INSERT INTO jogador (id_jogador, username, id_modalidade_esportiva, situacao_jogador, pontuacao, id_time, id_academico)
 VALUES
-(12, 'aline_mr', 1, 1, 90, 9, 6),
-(13, 'paulo_gm', 1, 1, 93, 9, 7),
-(14, 'bruna_ls', 1, 1, 89, 10, 8),
-(15, 'carlos_ap', 1, 1, 92, 11, 9);
+(17, 'carla_dm', 1, 1, 90, 9, 17),
+(18, 'danilo_fr', 1, 1, 93, 9, 18),
+(19, 'gabriela_rs', 1, 1, 89, 10, 19),
+(20, 'lucas_bm', 1, 1, 92, 11, 20),
+(21, 'aline_mr', 1, 1, 88, 11, 11),
+(22, 'paulo_gm', 1, 1, 86, 12, 12),
+(23, 'bruna_ls', 1, 1, 91, 11, 13),
+(24, 'carlos_ap', 1, 1, 85, 12, 14);

@@ -12,10 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.nio.file.AccessDeniedException;
 import java.time.OffsetDateTime;
 import java.util.*;
@@ -185,19 +187,38 @@ public class CampeonatoService {
 
             if (modalidadesEsportivas.isEmpty()) {
                 throw new RegistroNaoEncontradoException("Usuário não cadastrado em nenhuma modalidade!");
-            } else {
-                for (ModalidadeEsportiva modalidade : modalidadesEsportivas) {
-                    List<Campeonato> campeonatosEncontrados = campeonatoRepository.findByModalidadeEsportiva(modalidade);
+            }
 
-                    // Adiciona cada campeonato encontrado à lista de campeonatos do acadêmico
-                    campeonatosEncontrados.stream()
-                            .map(campeonato -> campeonato.toResponseDto(campeonato))
-                            .forEach(campeonatosAcademico::add);
-                }
+            for (ModalidadeEsportiva modalidade : modalidadesEsportivas) {
+                List<Campeonato> campeonatosEncontrados = campeonatoRepository.findByModalidadeEsportiva(modalidade);
+
+                // Adiciona cada campeonato encontrado à lista de campeonatos do acadêmico
+                campeonatosEncontrados.stream()
+                        .map(campeonato -> campeonato.toResponseDto(campeonato))
+                        .forEach(campeonatosAcademico::add);
             }
 
             if (campeonatosAcademico.isEmpty()) {
                 throw new RegistroNaoEncontradoException("Nenhum campeonato encontrado!");
+            }
+
+            // Ordena a lista com base no Sort presente no Pageable
+            Sort sort = pageable.getSort();
+            if (sort.isSorted()) {
+                Comparator<CampeonatoResponseDto> comparator = sort.get().map(order -> {
+                    Comparator<CampeonatoResponseDto> orderComparator = Comparator.comparing(campeonato -> {
+                        try {
+                            Field field = CampeonatoResponseDto.class.getDeclaredField(order.getProperty());
+                            field.setAccessible(true);
+                            return (Comparable<Object>) field.get(campeonato); // Cast explícito para Comparable
+                        } catch (NoSuchFieldException | IllegalAccessException e) {
+                            throw new IllegalArgumentException("Campo de ordenação inválido: " + order.getProperty(), e);
+                        }
+                    });
+                    return order.isDescending() ? orderComparator.reversed() : orderComparator;
+                }).reduce(Comparator::thenComparing).orElseThrow(() -> new IllegalArgumentException("Erro ao construir Comparator"));
+
+                campeonatosAcademico.sort(comparator);
             }
 
             // Aplicar paginação manualmente na lista final de campeonatos
@@ -210,6 +231,8 @@ public class CampeonatoService {
             throw new AcademicoNaoExisteException("Acadêmico não encontrado!");
         }
     }
+
+
 
 
     public Page<CampeonatoResponseDto> listarCampeonatosInscritos(Long idAcademico, Pageable pageable) throws RegistroNaoEncontradoException, AcademicoNaoExisteException {
@@ -252,12 +275,16 @@ public class CampeonatoService {
     }
 
 
-    public Optional<Campeonato> excluirCampeonato(Long id) throws RegistroNaoEncontradoException {
+    public Optional<Campeonato> excluirCampeonato(Long id,  String usuarioAutenticado) throws RegistroNaoEncontradoException, AccessDeniedException {
         Optional<Campeonato> campeonato = campeonatoRepository.findById(id);
 
         if (campeonato.isPresent()) {
-            campeonatoRepository.deleteById(id);
-            return campeonato;
+            if (campeonato.get().getAcademico().getUsuario().getUsername().equals(usuarioAutenticado)){
+                campeonatoRepository.deleteById(id);
+                return campeonato;
+            }else {
+                throw new AccessDeniedException("Voce não tem permissão para alterar esse recurso!");
+            }
         } else {
             throw new RegistroNaoEncontradoException("Registro de apoio a saude nao encontrado!");
         }

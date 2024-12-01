@@ -177,11 +177,16 @@ public class CampeonatoController {
     //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Void> excluirCampeonato(@PathVariable Long id) {
         try {
-            campeonatoService.excluirCampeonato(id);
+            var authentication = SecurityContextHolder.getContext().getAuthentication();
+            var usuarioAutenticado = ((UserDetails) authentication.getPrincipal()).getUsername();
+            campeonatoService.excluirCampeonato(id, usuarioAutenticado);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } catch (RegistroNaoEncontradoException e) {
             logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (AccessDeniedException e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

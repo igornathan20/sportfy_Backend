@@ -76,10 +76,10 @@ public class AcademicoService {
 
         if (existAcademicoBD.get().isEmpty()) {
             Academico novoAcademico = new Academico();
-            String senha = "1234";
+            //String senha = "1234";
+            String senha = GeraSenha.generatePassword();
             novoAcademico.toEntity(academicoDto);
             novoAcademico.getUsuario().setPassword(passwordEncoder.encode(senha));
-
 
             novoAcademico.getUsuario().setPermissao(TipoPermissao.ACADEMICO);
             Academico academicoCriado = academicoRepository.save(novoAcademico);
