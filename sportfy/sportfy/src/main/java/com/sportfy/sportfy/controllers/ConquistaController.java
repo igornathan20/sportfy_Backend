@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +19,7 @@ import com.sportfy.sportfy.services.ConquistaService;
 @RestController
 @RequestMapping("/conquista")
 @CrossOrigin(
-        origins = {"http://*", "http://localhost:8100", "http://localhost:3000"},
+        origins = {"http://localhost:8100", "http://localhost:3000"},
         methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.PATCH, RequestMethod.OPTIONS},
         allowedHeaders = "*",
         allowCredentials = "true"
@@ -33,7 +32,7 @@ public class ConquistaController {
     private ConquistaService conquistaService;
 
     @PutMapping("/atualizarConquista")
-    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Object> atualizarConquista(@RequestBody ConquistaDto conquistaDto) {
         try {
             Object conquistaAtualizada = conquistaService.atualizarConquista(conquistaDto);
@@ -48,7 +47,7 @@ public class ConquistaController {
     }
 
     @GetMapping("/listarConquistas/{idAcademico}")
-    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<List<ConquistaDto>> listarConquistas(@PathVariable("idAcademico") Long idAcademico) {
         try {
             List<ConquistaDto> listaConquista = conquistaService.listarConquistas(idAcademico);
@@ -63,7 +62,7 @@ public class ConquistaController {
     }
 
     @GetMapping("/listarConquistasOutroAcademico/{idAcademico}")
-    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<List<ConquistaDto>> listarConquistasOutroAcademico(@PathVariable("idAcademico") Long idAcademico) {
         try {
             List<ConquistaDto> listaConquista = conquistaService.listarConquistasOutroAcademico(idAcademico);

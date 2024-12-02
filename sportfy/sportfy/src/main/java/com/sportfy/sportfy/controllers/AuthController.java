@@ -16,7 +16,7 @@ import com.sportfy.sportfy.services.AuthService;
 @RestController
 @RequestMapping(value = "/login")
 @CrossOrigin(
-        origins = {"http://*", "http://localhost:8100", "http://localhost:3000"},
+        origins = {"http://localhost:8100", "http://localhost:3000"},
         methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.PATCH, RequestMethod.OPTIONS},
         allowedHeaders = "*",
         allowCredentials = "true"

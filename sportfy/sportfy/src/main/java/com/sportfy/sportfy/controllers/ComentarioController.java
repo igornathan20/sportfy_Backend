@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +24,7 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/comentario")
 @CrossOrigin(
-        origins = {"http://*", "http://localhost:8100", "http://localhost:3000"},
+        origins = {"http://localhost:8100", "http://localhost:3000"},
         methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.PATCH, RequestMethod.OPTIONS},
         allowedHeaders = "*",
         allowCredentials = "true"
@@ -37,7 +36,7 @@ public class ComentarioController {
     private ComentarioService comentarioService;
 
     @PostMapping("/cadastrarComentario")
-    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Object> cadastrarComentario(@RequestBody @Valid ComentarioDto comentario) {
         try {
             Object comentarioCriada = comentarioService.cadastrarComentario(comentario);
@@ -49,7 +48,7 @@ public class ComentarioController {
     }
 
     @PutMapping("/atualizarComentario/{idComentario}")
-    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Object> atualizarComentario(@PathVariable("idComentario") Long idComentario, @RequestBody @Valid ComentarioDto comentario) {
         try {
             var authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -69,7 +68,7 @@ public class ComentarioController {
     }
 
     @DeleteMapping("/removerComentario/{idComentario}")
-    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Object> removerComentario(@PathVariable("idComentario") Long idComentario) {
         try {
             var authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -89,7 +88,7 @@ public class ComentarioController {
     }
 
     @PostMapping("/curtirComentario/{idUsuario}/{idComentario}")
-    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Object> curtirComentario(@PathVariable("idUsuario") Long idUsuario, @PathVariable("idComentario") Long idComentario) {
         try {
             Object comentarioCurtida = comentarioService.curtirComentario(idUsuario, idComentario);
@@ -107,7 +106,7 @@ public class ComentarioController {
     }
 
     @DeleteMapping("/removerCurtidaComentario/{idUsuario}/{idComentario}")
-    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Object> removerCurtidaComentario(@PathVariable("idUsuario") Long idUsuario, @PathVariable("idComentario") Long idComentario) {
         try {
             Object isCurtidaComentarioRemovida = comentarioService.removerCurtidaComentario(idUsuario, idComentario);
@@ -125,7 +124,7 @@ public class ComentarioController {
     }
 
     @GetMapping("/{idPublicacao}/comentarios")
-    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Page<ComentarioDto>> listarComentariosPorPublicacao(@PathVariable Long idPublicacao, Pageable pageable) {
         try {
             Page<ComentarioDto> comentarios = comentarioService.listarComentariosPorPublicacao(idPublicacao, pageable);

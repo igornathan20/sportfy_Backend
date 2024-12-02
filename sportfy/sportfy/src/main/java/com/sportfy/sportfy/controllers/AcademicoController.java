@@ -16,7 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +26,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/academico")
 @CrossOrigin(
-        origins = {"http://*", "http://localhost:8100", "http://localhost:3000"},
+        origins = {"http://localhost:8100", "http://localhost:3000"},
         methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.PATCH, RequestMethod.OPTIONS},
         allowedHeaders = "*",
         allowCredentials = "true"
@@ -59,7 +58,7 @@ public class AcademicoController {
     }
 
     @PutMapping("/atualizar/{idAcademico}")
-    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<AcademicoResponseDto> atualizar(@PathVariable("idAcademico") Long idAcademico, @RequestBody AcademicoDto academico) {
         try {
             var authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -85,7 +84,7 @@ public class AcademicoController {
     }
 
     @PutMapping("/inativar/{idAcademico}")
-    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<AcademicoResponseDto> inativar(@PathVariable("idAcademico") Long idAcademico) {
         try {
             AcademicoResponseDto academicoInativado = academicoService.inativar(idAcademico);
@@ -100,7 +99,7 @@ public class AcademicoController {
     }
 
     @GetMapping("/consultar/{idUsuario}")
-    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<AcademicoResponseDto> consultar(@PathVariable("idUsuario") Long idUsuario) {
         try {
             AcademicoResponseDto academicoConsultado = academicoService.consultar(idUsuario);
@@ -115,7 +114,7 @@ public class AcademicoController {
     }
 
     @GetMapping("/buscar/{userName}")
-    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<AcademicoResponseDto> buscarPorUsername(@PathVariable String userName) {
         try {
             AcademicoResponseDto academicoConsultado = academicoService.buscarPorUsername(userName);
@@ -130,7 +129,7 @@ public class AcademicoController {
     }
 
     @GetMapping("/listar")
-    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Page<AcademicoResponseDto>> listar(Pageable pageable) {
         try {
             Page<AcademicoResponseDto> listaAcademico = academicoService.listar(pageable);
@@ -145,7 +144,7 @@ public class AcademicoController {
     }
 
     @GetMapping("/privacidade/{idAcademico}/{tipoPrivacidade}")
-    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Boolean> retornaPrivacidade(@PathVariable Long idAcademico, @PathVariable String tipoPrivacidade){
         try {
             boolean privacidade = academicoService.retornaPrivacidade(idAcademico, tipoPrivacidade);
@@ -157,7 +156,7 @@ public class AcademicoController {
     }
 
     @GetMapping("/privacidade/{idAcademico}")
-    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<PrivacidadeDto> retornaTodasPrivacidade(@PathVariable Long idAcademico){
         try {
             PrivacidadeDto privacidade = academicoService.retornaTodasPrivacidade(idAcademico);
@@ -169,7 +168,7 @@ public class AcademicoController {
     }
 
     @PutMapping ("/privacidade")
-    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<PrivacidadeDto> alteraPrivacidade(@RequestBody PrivacidadeDto userPrivacidade){
         try {
             var authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -186,7 +185,7 @@ public class AcademicoController {
     }
 
     @GetMapping("/estatisticas/{idAcademico}/modalidade/{idModalidade}")
-    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<EstatisticasPessoaisModalidadeDto> obterEstatisticasPessoaisPorModalidade(@PathVariable Long idAcademico, @PathVariable Long idModalidade) {
         try {
             EstatisticasPessoaisModalidadeDto estatisticas = academicoService.estatisticasPessoaisPorModalidade(idAcademico, idModalidade);
@@ -204,7 +203,7 @@ public class AcademicoController {
     }
 
     @GetMapping("/buscar/estatisticas/{idAcademico}/modalidade/{idModalidade}")
-    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<EstatisticasPessoaisModalidadeDto> obterEstatisticasOutroUsuarioPorModalidade(@PathVariable Long idAcademico, @PathVariable Long idModalidade) {
         try {
             EstatisticasPessoaisModalidadeDto estatisticas = academicoService.estatisticasOutroUsuarioPorModalidade(idAcademico, idModalidade);
@@ -225,7 +224,7 @@ public class AcademicoController {
     }
 
     @GetMapping("/uso/{idAcademico}")
-    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<EstatisticasPessoaisDto> getEstatisticasDeUso(@PathVariable Long idAcademico) {
         try {
             EstatisticasPessoaisDto estatisticasDeUso = academicoService.estatisticasDeUso(idAcademico);

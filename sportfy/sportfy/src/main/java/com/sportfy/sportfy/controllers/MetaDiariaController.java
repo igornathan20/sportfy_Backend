@@ -9,14 +9,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
 @RequestMapping("/metaDiaria")
 @CrossOrigin(
-        origins = {"http://*", "http://localhost:8100", "http://localhost:3000"},
+        origins = {"http://localhost:8100", "http://localhost:3000"},
         methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.PATCH, RequestMethod.OPTIONS},
         allowedHeaders = "*",
         allowCredentials = "true"
@@ -28,7 +27,7 @@ public class MetaDiariaController {
     private MetaDiariaService metaDiariaService;
 
     @PostMapping()
-    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<MetaDiariaDto> criarMeta(@RequestBody MetaDiariaDto metaDiariaDto) {
         try {
             MetaDiariaDto novaMeta = metaDiariaService.criarMeta(metaDiariaDto);
@@ -43,7 +42,7 @@ public class MetaDiariaController {
     }
 
     @PutMapping()
-    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<MetaDiariaDto> editarMeta(@RequestBody MetaDiariaDto metaDiariaDto) {
         try {
             MetaDiariaDto metaEditada = metaDiariaService.editarMeta(metaDiariaDto);
@@ -58,7 +57,7 @@ public class MetaDiariaController {
     }
 
     @GetMapping("/listar/{idAcademico}")
-    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<List<MetaDiariaDto>> listarMetas(@PathVariable Long idAcademico) {
         try {
             List<MetaDiariaDto> metasDiarias = metaDiariaService.listarMetas(idAcademico);
@@ -76,7 +75,7 @@ public class MetaDiariaController {
     }
 
     @GetMapping("/{idAcademico}/buscar/{nome}")
-    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<List<MetaDiariaDto>> buscarMeta(@PathVariable Long idAcademico,@PathVariable String nome) {
         try {
             List<MetaDiariaDto> metasDiarias = metaDiariaService.buscarMeta(idAcademico, nome);
@@ -94,7 +93,7 @@ public class MetaDiariaController {
     }
 
     @DeleteMapping("/excluir/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<MetaDiariaDto> excluirMeta(@PathVariable Long id) {
         try {
             MetaDiariaDto metaDiariaExcluida = metaDiariaService.excluirMeta(id);

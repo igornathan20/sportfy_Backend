@@ -18,7 +18,7 @@ import static org.springframework.security.authorization.AuthorityReactiveAuthor
 @RestController
 @RequestMapping("/estatistica")
 @CrossOrigin(
-        origins = {"http://*", "http://localhost:8100", "http://localhost:3000"},
+        origins = {"http://localhost:8100", "http://localhost:3000"},
         methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.PATCH, RequestMethod.OPTIONS},
         allowedHeaders = "*",
         allowCredentials = "true"
@@ -30,7 +30,7 @@ public class EstatisticaController {
     private EstatisticaService estatisticaService;
 
     @GetMapping("/visualizarMetricasSistema")
-    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<MetricasSistemaDto> metricasSistema() {
         try {
             MetricasSistemaDto metricasSistema = estatisticaService.metricasSistema();
@@ -42,7 +42,7 @@ public class EstatisticaController {
     }
 
     @GetMapping("/visualizarEstatisticasMetasEsportivas/{idAcademico}")
-    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<EstatisticasMetasEsportivasDto> visualizarEstatisticasMetasEsportivas(@PathVariable Long idAcademico) {
         try {
             EstatisticasMetasEsportivasDto estatisticasMetasEsportivas = estatisticaService.visualizarEstatisticasMetasEsportivas(idAcademico);
@@ -54,7 +54,7 @@ public class EstatisticaController {
     }
 
     @GetMapping("/visualizarEstatisticasMetasEsportivasOutroAcademico/{idAcademico}")
-    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<EstatisticasMetasEsportivasDto> visualizarEstatisticasMetasEsportivasOutroAcademico(@PathVariable Long idAcademico) {
         try {
             EstatisticasMetasEsportivasDto estatisticasMetasEsportivas = estatisticaService.visualizarEstatisticasMetasEsportivasOutroAcademico(idAcademico);
