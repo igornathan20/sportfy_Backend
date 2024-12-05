@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class ApoioSaudeController {
     private ApoioSaudeService apoioSaudeService;
 
     @PostMapping
-    //@PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     public ResponseEntity<ApoioSaudeResponseDto> criarApoioSaude(@RequestBody ApoioSaudeDto apoioSaudeDto) {
         try {
             ApoioSaudeResponseDto novoApoioSaude = apoioSaudeService.criarApoioSaude(apoioSaudeDto);
@@ -43,7 +44,7 @@ public class ApoioSaudeController {
     }
 
     @PutMapping("/{idApoioSaude}")
-    //@PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     public ResponseEntity<ApoioSaudeResponseDto> editarApoioSaude(@PathVariable Long idApoioSaude , @RequestBody ApoioSaudeDto apoioSaudeDto) {
         try {
             ApoioSaudeResponseDto apoioSaudeEditado = apoioSaudeService.editarApoioSaude(idApoioSaude, apoioSaudeDto);
@@ -58,7 +59,7 @@ public class ApoioSaudeController {
     }
 
     @GetMapping
-    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<List<ApoioSaudeResponseDto>> listarApoioSaude() {
         try {
             List<ApoioSaudeResponseDto> listaApoioSaude = apoioSaudeService.listar();
@@ -73,7 +74,7 @@ public class ApoioSaudeController {
     }
 
     @GetMapping("/buscar/{nome}")
-    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<List<ApoioSaudeResponseDto>> buscarApoioSaude(@PathVariable String nome) {
         try {
             List<ApoioSaudeResponseDto> registrosEncontrados = apoioSaudeService.buscarApoioSaude(nome);
@@ -88,7 +89,7 @@ public class ApoioSaudeController {
     }
 
     @DeleteMapping("/{id}")
-    //@PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     public ResponseEntity<ApoioSaudeResponseDto> excluirApoioSaude(@PathVariable Long id) {
         try {
             ApoioSaudeResponseDto apoioSaudeExcluido = apoioSaudeService.excluirApoioSaude(id);
@@ -103,7 +104,7 @@ public class ApoioSaudeController {
     }
 
     @PatchMapping("/desativar/{id}")
-    //@PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     public ResponseEntity<ApoioSaudeResponseDto> desativarApoioSaude(@PathVariable Long id) {
         try {
             ApoioSaudeResponseDto apoioSaude = apoioSaudeService.desativarApoioSaude(id);

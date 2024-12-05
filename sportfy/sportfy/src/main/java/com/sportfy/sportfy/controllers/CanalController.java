@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.sportfy.sportfy.dtos.CanalDto;
 import com.sportfy.sportfy.exeptions.ListaCanalVazioException;
@@ -27,7 +28,7 @@ public class CanalController {
     private CanalService canalService;
 
     @GetMapping("/listarCanaisUsuario/{idUsuario}")
-    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<?> listarCanais(@PathVariable("idUsuario") Long idUsuario) {
         try {
             List<CanalDto> listaCanal = canalService.listarCanais(idUsuario);

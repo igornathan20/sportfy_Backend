@@ -34,7 +34,7 @@ public class AdministradorController {
     AdministradorService administradorService;
 
     @PostMapping("/cadastrar")
-    //@PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     public ResponseEntity<AdministradorResponseDto> cadastrar(@RequestBody @Valid AdministradorDto administrador) {
         try {
             AdministradorResponseDto administradorCriado = administradorService.cadastrar(administrador);
@@ -81,7 +81,7 @@ public class AdministradorController {
     }
 
     @DeleteMapping("/inativar/{idAdministrador}")
-    //@PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     public ResponseEntity<AdministradorResponseDto> inativar(@PathVariable("idAdministrador") Long idAdministrador) {
         try {
             AdministradorResponseDto administradorInativado = administradorService.inativar(idAdministrador);
@@ -96,7 +96,7 @@ public class AdministradorController {
     }
 
     @GetMapping("/consultar/{idUsuario}")
-    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<AdministradorResponseDto> consultar(@PathVariable("idUsuario") Long idUsuario) {
         try {
             AdministradorResponseDto administradorConsultado = administradorService.consultar(idUsuario);
@@ -111,7 +111,7 @@ public class AdministradorController {
     }
 
     @GetMapping("/buscar/{userName}")
-    //@PreAuthorize("hasAnyRole('ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRADOR')")
     public ResponseEntity<AdministradorResponseDto> buscarPorUsername(@PathVariable String userName) {
         try {
             AdministradorResponseDto administradorConsultado = administradorService.buscarPorUsername(userName);
@@ -126,7 +126,7 @@ public class AdministradorController {
     }
 
     @GetMapping("/listar")
-    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Page<AdministradorResponseDto>> listar(Pageable pageable) {
         try {
             Page<AdministradorResponseDto> listaAdministrador = administradorService.listar(pageable);

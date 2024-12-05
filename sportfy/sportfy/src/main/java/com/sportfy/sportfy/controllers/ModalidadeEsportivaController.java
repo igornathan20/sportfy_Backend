@@ -28,7 +28,7 @@ public class ModalidadeEsportivaController {
     ModalidadeEsportivaService modalidadeEsportivaService;
 
     @PostMapping()
-    //@PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     public ResponseEntity<ModalidadeEsportivaDto> criarModalidade(@RequestBody ModalidadeEsportivaDto modalidade) {
         try {
             ModalidadeEsportivaDto novaModalidade = modalidadeEsportivaService.criarModalidade(modalidade);
@@ -61,7 +61,7 @@ public class ModalidadeEsportivaController {
     }
 
     @GetMapping("/listar")
-    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<List<ModalidadeEsportivaDto>> listarModalidades() {
         try {
             List<ModalidadeEsportivaDto> listaModalidade = modalidadeEsportivaService.listarModalidades();
@@ -76,7 +76,7 @@ public class ModalidadeEsportivaController {
     }
 
     @GetMapping("/buscar")
-    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<List<ModalidadeEsportivaDto>> buscarModalidade(@RequestParam String nome) {
         try {
             List<ModalidadeEsportivaDto> modalidade = modalidadeEsportivaService.buscarModalidades(nome);
@@ -91,7 +91,7 @@ public class ModalidadeEsportivaController {
     }
 
     @PatchMapping("/desativar/{id}")
-    //@PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     public ResponseEntity<Object> desativarModalidade(@PathVariable Long id) {
         try {
             Object modalidadeDesativada = modalidadeEsportivaService.desativarModalidade(id);
@@ -106,7 +106,7 @@ public class ModalidadeEsportivaController {
     }
 
     @PostMapping("/inscrever/{idAcademico}/{idModalidade}")
-    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Object> inscreverEmModalidade(@PathVariable Long idAcademico, @PathVariable Long idModalidade) {
         try {
             modalidadeEsportivaService.inscreverEmModalidade(idAcademico, idModalidade);
@@ -121,7 +121,7 @@ public class ModalidadeEsportivaController {
     }
 
     @GetMapping("/listar/{idAcademico}")
-    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<List<ModalidadeEsportivaDto>> listarModalidadesAcademico(@PathVariable Long idAcademico) {
         try {
             List<ModalidadeEsportivaDto> modalidadeAcademico = modalidadeEsportivaService.listarModalidadesInscritas(idAcademico);
@@ -137,7 +137,7 @@ public class ModalidadeEsportivaController {
 
 
     @GetMapping("/buscar/{idAcademico}/modalidade")
-    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<List<ModalidadeEsportivaDto>> listarModalidadesOutroUsuario(@PathVariable Long idAcademico) {
         try {
             List<ModalidadeEsportivaDto> modalidadeAcademico = modalidadeEsportivaService.listarModalidadesOutroUsuario(idAcademico);
@@ -155,7 +155,7 @@ public class ModalidadeEsportivaController {
     }
 
     @DeleteMapping("/remover/{idAcademico}/{idModalidade}")
-    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<Void> cancelarInscricaoModalidade(@PathVariable Long idAcademico, @PathVariable Long idModalidade) {
         try {
             modalidadeEsportivaService.cancelarInscricaoModalidade(idAcademico, idModalidade);
@@ -170,7 +170,7 @@ public class ModalidadeEsportivaController {
     }
 
     @GetMapping("/{idModalidade}/estatisticas")
-    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<EstatisticasGeraisModalidadeDto> obterEstatisticasGeraisPorModalidade(@PathVariable Long idModalidade) {
         try {
             EstatisticasGeraisModalidadeDto estatisticas = modalidadeEsportivaService.estatisticasGeraisPorModalidade(idModalidade);
@@ -188,7 +188,7 @@ public class ModalidadeEsportivaController {
     }
 
     @PostMapping("/metaEsportiva")
-    //@PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     public ResponseEntity<MetaEsportivaDto> adicionarMetaEsportiva(@RequestBody MetaEsportivaDto metaEsportivaDto) {
         try {
             MetaEsportivaDto novaMeta = modalidadeEsportivaService.adicionarMetaEsportiva(metaEsportivaDto);
@@ -203,7 +203,7 @@ public class ModalidadeEsportivaController {
     }
 
     @PutMapping("/metaEsportiva/{id}")
-    //@PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     public ResponseEntity<MetaEsportivaDto> atualizarMetaEsportiva(@PathVariable Long id, @RequestBody MetaEsportivaDto metaEsportivaDto) {
         try {
             MetaEsportivaDto metaAtualizada = modalidadeEsportivaService.atualizarMetaEsportiva(metaEsportivaDto, id);
@@ -218,7 +218,7 @@ public class ModalidadeEsportivaController {
     }
 
     @PatchMapping("metaEsportiva/{id}")
-    //@PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     public ResponseEntity<Void> desativarMetaEsportiva(@PathVariable Long id) {
         try {
             modalidadeEsportivaService.desativarMetaEsportiva(id);
@@ -233,7 +233,7 @@ public class ModalidadeEsportivaController {
     }
 
     @GetMapping("/metaEsportiva/listar/{idModalidade}")
-    //@PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('ROLE_ACADEMICO', 'ROLE_ADMINISTRADOR')")
     public ResponseEntity<List<MetaEsportivaDto>> listarMetaEsportivaPorModalidade(@PathVariable Long idModalidade) {
         try {
             List<MetaEsportivaDto> metas = modalidadeEsportivaService.listarMetaEsportivaPorModalidade(idModalidade);
