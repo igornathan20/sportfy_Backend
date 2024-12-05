@@ -65,7 +65,7 @@ public class ModalidadeEsportivaService {
     }
 
     public List<ModalidadeEsportivaDto> listarModalidades() throws ModalidadeNaoExistenteException {
-        List<ModalidadeEsportiva> modalidades = modalidadeEsportivaRepository.findByAtivoTrueWithActiveMetas();
+        List<ModalidadeEsportiva> modalidades = modalidadeEsportivaRepository.findByAtivo(true);
 
         if (!modalidades.isEmpty()){
             return modalidades.stream().map(ModalidadeEsportivaDto::toDTO).toList();
