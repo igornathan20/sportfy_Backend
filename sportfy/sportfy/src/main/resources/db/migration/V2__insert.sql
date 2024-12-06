@@ -4,7 +4,7 @@ INSERT INTO canal (tipo_canal) VALUES ('COMUNIDADE');
 -- DADOS TESTE USUARIO
 INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('math_aa', 'pass', 'Matheus Antônio Augusto', '41987213343', 'Masculino', '2002-03-03', 0);
 INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('maria_gn', 'pass', 'Maria Gabriela Naste', '41988762901', 'Feminino', '1999-07-16', 0);
-INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('murilo_scn', 'pass', 'Murilo Souza Costa Neto', '41987690103', 'Masculino', '2000-01-26', 0);
+INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, foto, permissao) VALUES ('murilo_scn', 'pass', 'Murilo Souza Costa Neto', '41987690103', 'Masculino', '2000-01-26','https://img.freepik.com/fotos-gratis/homem-de-vista-frontal-na-natureza_23-2149486906.jpg', 0);
 INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('michele_as', 'pass', 'Michele Antoneli Silva', '41988906580', 'Feminino', '1999-10-30', 0);
 INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('michael_ac', 'pass', 'Michael Andrew Curry', '41987665901', 'Masculino', '1990-05-25', 0);
 INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('maira_sm', 'pass', 'Maíra Silverado Mendes', '41987665391', 'Outro', '2004-11-04', 0);
@@ -25,9 +25,9 @@ INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento
 INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('leticia_cp', 'pass', 'Letícia Cardoso Pereira', '41988976543', 'Feminino', '2000-06-11', 0);
 INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('rafael_vb', 'pass', 'Rafael Vieira Barros', '41988765498', 'Masculino', '1995-01-18', 0);
 INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('carla_dm', 'pass', 'Carla Diniz Moreira', '41988987654', 'Outro', '1999-12-25', 0);
-INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('danilo_fr', 'pass', 'Danilo Figueira Rocha', '41988654321', 'Masculino', '2002-10-30', 1);
-INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('gabriela_rs', 'pass', 'Gabriela Rocha Santos', '41988567890', 'Feminino', '2003-07-14', 1);
-INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('lucas_bm', 'pass', 'Lucas Braga Matos', '41988678901', 'Masculino', '1992-04-04', 1);
+INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('danilo_fr', 'pass', 'Danilo Figueira Rocha', '41988654321', 'Masculino', '2002-10-30', 0);
+INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('gabriela_rs', 'pass', 'Gabriela Rocha Santos', '41988567890', 'Feminino', '2003-07-14', 0);
+INSERT INTO usuario (username, password, nome, telefone, genero, data_nascimento, permissao) VALUES ('lucas_bm', 'pass', 'Lucas Braga Matos', '41988678901', 'Masculino', '1992-04-04', 0);
 
 
 -- DADOS TESTE ACADEMICO
@@ -42,16 +42,16 @@ INSERT INTO academico (email, curso, id_usuario) VALUES ('muriel@ufpr.br', 'Aná
 INSERT INTO academico (email, curso, id_usuario) VALUES ('michaela@ufpr.br', 'Análise e Desenvolvimento de Sistemas', 9);
 INSERT INTO academico (email, curso, id_usuario) VALUES ('mauro@ufpr.br', 'Engenharia Mecânica', 10);
 -- DADOS TESTE ACADEMICO
-INSERT INTO academico (email, curso, id_usuario) VALUES ('aline@ufpr.br', 'Direito', 11);
-INSERT INTO academico (email, curso, id_usuario) VALUES ('paulo@ufpr.br', 'Administração', 12);
-INSERT INTO academico (email, curso, id_usuario) VALUES ('bruna@ufpr.br', 'Design Gráfico', 13);
-INSERT INTO academico (email, curso, id_usuario) VALUES ('carlos@ufpr.br', 'Engenharia Civil', 14);
-INSERT INTO academico (email, curso, id_usuario) VALUES ('leticia@ufpr.br', 'Arquitetura', 15);
-INSERT INTO academico (email, curso, id_usuario) VALUES ('rafael@ufpr.br', 'Geografia', 16);
-INSERT INTO academico (email, curso, id_usuario) VALUES ('carla@ufpr.br', 'História', 17);
-INSERT INTO academico (email, curso, id_usuario) VALUES ('danilo@ufpr.br', 'Engenharia de Produção', 18);
-INSERT INTO academico (email, curso, id_usuario) VALUES ('gabriela@ufpr.br', 'Letras', 19);
-INSERT INTO academico (email, curso, id_usuario) VALUES ('lucas@ufpr.br', 'Física', 20);
+INSERT INTO academico (email, curso, id_usuario) VALUES ('aline@ufpr.br', 'Direito', 16);
+INSERT INTO academico (email, curso, id_usuario) VALUES ('paulo@ufpr.br', 'Administração', 17);
+INSERT INTO academico (email, curso, id_usuario) VALUES ('bruna@ufpr.br', 'Design Gráfico', 18);
+INSERT INTO academico (email, curso, id_usuario) VALUES ('carlos@ufpr.br', 'Engenharia Civil', 19);
+INSERT INTO academico (email, curso, id_usuario) VALUES ('leticia@ufpr.br', 'Arquitetura', 20);
+INSERT INTO academico (email, curso, id_usuario) VALUES ('rafael@ufpr.br', 'Geografia', 21);
+INSERT INTO academico (email, curso, id_usuario) VALUES ('carla@ufpr.br', 'História', 22);
+INSERT INTO academico (email, curso, id_usuario) VALUES ('danilo@ufpr.br', 'Engenharia de Produção', 23);
+INSERT INTO academico (email, curso, id_usuario) VALUES ('gabriela@ufpr.br', 'Letras', 24);
+INSERT INTO academico (email, curso, id_usuario) VALUES ('lucas@ufpr.br', 'Física', 25);
 
 
 -- DADOS TESTE PRIVACIDADE
