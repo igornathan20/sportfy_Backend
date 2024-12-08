@@ -4,6 +4,7 @@ import com.sportfy.sportfy.enums.TipoPermissao;
 import com.sportfy.sportfy.models.Academico;
 import jakarta.validation.constraints.*;
 import java.time.OffsetDateTime;
+import java.util.Date;
 
 public record AcademicoDto(
     Long idAcademico,
@@ -33,7 +34,7 @@ public record AcademicoDto(
     String telefone,
 
     @Past(message = "A data de nascimento deve estar no passado")
-    OffsetDateTime dataNascimento,
+    Date dataNascimento,
 
     @Size(min = 0, max = 255, message = "Caminho da foto deve ter no máximo 255 caracteres")
     String foto,

@@ -2,6 +2,8 @@ package com.sportfy.sportfy.models;
 
 import java.io.Serial;
 import java.util.Collection;
+import java.util.Date;
+
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.OffsetDateTime;
@@ -41,7 +43,7 @@ public class Usuario implements UserDetails {
     private String telefone;
 
     @Column(name="data_nascimento", nullable = false)
-    private OffsetDateTime dataNascimento;
+    private Date dataNascimento;
 
     @Column(name="foto")
     private String foto;

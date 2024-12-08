@@ -1,6 +1,8 @@
 package com.sportfy.sportfy.dtos;
 
 import java.time.OffsetDateTime;
+import java.util.Date;
+
 import com.sportfy.sportfy.enums.TipoPermissao;
 import com.sportfy.sportfy.models.Administrador;
 import jakarta.validation.constraints.*;
@@ -24,7 +26,7 @@ public record AdministradorDto(
     String telefone,
 
         @Past(message = "A data de nascimento deve estar no passado")
-    OffsetDateTime dataNascimento,
+    Date dataNascimento,
 
         @Size(min = 0, max = 255, message = "Caminho da foto deve ter no máximo 255 caracteres")
     String foto,

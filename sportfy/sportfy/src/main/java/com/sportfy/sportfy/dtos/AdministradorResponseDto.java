@@ -3,13 +3,14 @@ package com.sportfy.sportfy.dtos;
 import com.sportfy.sportfy.enums.TipoPermissao;
 import com.sportfy.sportfy.models.Administrador;
 import java.time.OffsetDateTime;
+import java.util.Date;
 
 public record AdministradorResponseDto (
         Long idAdministrador,
         String username,
         String nome,
         String telefone,
-        OffsetDateTime dataNascimento,
+        Date dataNascimento,
         String foto,
         OffsetDateTime dataCriacao,
         boolean ativo,

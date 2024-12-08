@@ -3,6 +3,7 @@ package com.sportfy.sportfy.dtos;
 import com.sportfy.sportfy.enums.TipoPermissao;
 import com.sportfy.sportfy.models.Academico;
 import java.time.OffsetDateTime;
+import java.util.Date;
 import java.util.List;
 
 public record AcademicoResponseDto(
@@ -14,7 +15,7 @@ public record AcademicoResponseDto(
         String genero,
         String telefone,
         String foto,
-        OffsetDateTime dataNascimento,
+        Date dataNascimento,
         OffsetDateTime dataCriacao,
         boolean ativo,
         TipoPermissao permissao,

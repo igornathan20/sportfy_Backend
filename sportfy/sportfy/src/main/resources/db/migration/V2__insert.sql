@@ -268,7 +268,7 @@ UPDATE conquista SET progresso_atual = 13 WHERE id_conquista = 10;
 
 
 -- DADOS TESTE PUBLICACAO
-INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario, id_modalidade_esportiva) VALUES ('Pign-pong amanhã', 'alguém afim de jogar um pingas amanhã? Se quiserem, eu vou criar um campeonato pra nós depois.', 1, 1, 4);
+INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario, id_modalidade_esportiva) VALUES ('Ping-pong amanhã', 'alguém afim de jogar um pingas amanhã? Se quiserem, eu vou criar um campeonato pra nós depois.', 1, 1, 4);
 INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario) VALUES ('Meta diária criativa', 'Boa tarde, alguém pode me dar uma sugestão de meta diária criativa para fazer?', 1, 2);
 INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario, id_modalidade_esportiva) VALUES ('meta de futebol', 'muito feliz que consegui completar minha meta de futebol!', 1, 3, 1);
 INSERT INTO publicacao (titulo, descricao, id_canal, id_usuario, id_modalidade_esportiva) VALUES ('fut domingo', 'Tava afim de participar de algum campeonato de futebol no próximo domingo, alguém topa?', 1, 4, 1);
